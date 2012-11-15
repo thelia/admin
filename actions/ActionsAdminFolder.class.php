@@ -22,7 +22,10 @@ class ActionsAdminFolder extends ActionsAdminBase
         {
             /*listdos actions*/
             case 'addFolder':
-                $addFolderError = FolderAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
+                FolderAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
+                break;
+            case 'deleteFolder':
+                FolderAdmin::getInstance($request->request->get('folder_id'))->delete();
                 break;
             
             /*association : RO REVIEW*/

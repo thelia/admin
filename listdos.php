@@ -43,12 +43,6 @@ try {
 switch($action){
     default:break;
     //folder
-    case 'deleteFolder':
-        FolderAdmin::getInstance($folder_id)->delete($parent);
-        break;
-    case 'addFolder':
-        $addFolderError = FolderAdmin::getInstance()->add($title, $parent);
-        break;
     case 'modClassementFolder':
         FolderAdmin::getInstance($folder_id)->modifyOrder($type, $parent);
         break;
@@ -65,9 +59,6 @@ switch($action){
         break;
     case 'changeClassementContent':
         ContentAdmin::getInstance($content_id)->changeOrder($newClassement, $parent);
-        break;
-    case 'addContent':
-        $addContentError = ContentAdmin::getInstance()->add($id, $title, $parent);
         break;
 }
  */
@@ -300,7 +291,8 @@ $(document).ready(function(){
     });
 
     //delete a folder
-    $('.js-folder-delete').click(function(){
+    $('.js-folder-delete').click(function()
+    {
         $('#explainText').html("<?php echo trad('DeleteFolderWarning','admin'); ?>");
         $('#deleteLink').attr('href','listdos.php?parent=<?php echo $parent; ?>&action=deleteFolder&folder_id='+$(this).attr('folder-id'));
     });

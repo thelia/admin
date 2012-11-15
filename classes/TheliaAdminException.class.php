@@ -26,6 +26,8 @@ class TheliaAdminException extends Exception
     const DEVISE_NOT_FOUND = 104;
     const PROMO_NOT_FOUND = 105;
     const VARIABLE_NOT_FOUND = 106;
+    const FOLDER_NOT_FOUND = 107;
+    const CONTENT_NOT_FOUND = 108;
     
     const CLIENT_EDIT_ERROR = 200;
     const CLIENT_ADRESS_EDIT_ERROR = 201;
