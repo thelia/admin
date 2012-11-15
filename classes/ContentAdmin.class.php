@@ -91,13 +91,14 @@ class ContentAdmin extends Contenu {
         $this->dossier = $folder;
         $contentdesc->lang = ActionsLang::instance()->get_id_langue_courante();
         
-        if($error === false){
+        if($contentdesc->titre !== '')
+        {
             $this->datemodif = date('Y-m-d H:i:s');
             $this->dossier = $folder;
             $this->id = parent::add();
             
-            $productdesc->contenu = $this->id;
-            $contentdesc->add();
+            $contentdesc->contenu = $this->id;
+            $contentdesc->id = $contentdesc->add();
             
             $contentdesc->reecrire();
 

@@ -20,7 +20,7 @@ class ActionsAdminContent extends ActionsAdminBase
     public function action(Request $request){
         switch($request->get('action')){
             case "modifier" : 
-                $contentAdmin = ContentAdmin::getInstanceByRef($request->request->get('ref'));
+                $contentAdmin = ContentAdmin::getInstance($request->request->get('id'));
                 $contentAdmin->modify(
                         $request->request->get('lang', ActionsLang::instance()->get_id_langue_courante()),
                         $request->request->get('prix', 0),
@@ -48,7 +48,7 @@ class ActionsAdminContent extends ActionsAdminBase
                 );
                 break;
             case "modifyAttachementPosition":
-                ContentAdmin::getInstanceByRef($request->query->get('ref'))->changeAttachementPosition(
+                ContentAdmin::getInstance($request->query->get('id'))->changeAttachementPosition(
                         $request->query->get('attachement'),
                         $request->query->get('attachement_id'),
                         $request->query->get('direction'),
@@ -57,13 +57,15 @@ class ActionsAdminContent extends ActionsAdminBase
                 );
                 break;
             case "deleteAttachement":
-                //contenu_modifier.php?ref=chh0001&action=deleteAttachement&attachement=image&attachement_id=19&lang=1
-                ContentAdmin::getInstanceByRef($request->query->get('ref'))->deleteAttachement(
+                ContentAdmin::getInstance($request->query->get('id'))->deleteAttachement(
                         $request->query->get('attachement'),
                         $request->query->get('attachement_id'),
                         $request->query->get('lang'),
                         $request->query->get('tab')
                 );
+                break;
+            case "addContent":
+                ContentAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
                 break;
         }
     }
