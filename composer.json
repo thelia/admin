@@ -1,0 +1,7 @@
+{
+    "require":{
+        "symfony/http-foundation" : "2.1.*"
+    },
+    "minimum-stability": "stable"
+}
+
