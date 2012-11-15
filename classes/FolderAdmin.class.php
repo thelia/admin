@@ -1,6 +1,6 @@
 <?php
 
-class FolderAdmin extends Rubrique
+class FolderAdmin extends Dossier
 {
     protected $imageFile;
     protected $documentFile;
@@ -9,8 +9,8 @@ class FolderAdmin extends Rubrique
     {
         parent::__construct($id);
         
-        $this->setImageFile(new ImageFile('rubrique', $this->id));
-        $this->setDocumentFile(new DocumentFile('rubrique', $this->id));
+        $this->setImageFile(new ImageFile('dossier', $this->id));
+        $this->setDocumentFile(new DocumentFile('dossier', $this->id));
     }
 
     /**
@@ -85,7 +85,7 @@ class FolderAdmin extends Rubrique
         
         parent::delete();
         
-        redirige("parcourir.php?parent=" . $parent);
+        redirige("listdos.php?parent=" . $parent);
     }
     
     public function display($display){
@@ -104,14 +104,14 @@ class FolderAdmin extends Rubrique
             $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
-            $rubriquedesc = new Rubriquedesc();
-            $rubriquedesc->rubrique = $this->id;
-            $rubriquedesc->lang = ActionsLang::instance()->get_id_langue_courante();
-            $rubriquedesc->titre = $title;
-            $rubriquedesc->chapo = '';
-            $rubriquedesc->description = '';
-            $rubriquedesc->postscriptum = '';
-            $rubriquedesc->id = $rubriquedesc->add();
+            $dossierdesc = new Dossierdesc();
+            $dossierdesc->dossier = $this->id;
+            $dossierdesc->lang = ActionsLang::instance()->get_id_langue_courante();
+            $dossierdesc->titre = $title;
+            $dossierdesc->chapo = '';
+            $dossierdesc->description = '';
+            $dossierdesc->postscriptum = '';
+            $dossierdesc->id = $dossierdesc->add();
             
             $caracteristique = new Caracteristique();
             $qCarac= "select * from $caracteristique->table";
@@ -119,16 +119,16 @@ class FolderAdmin extends Rubrique
             while($rCarac && $theCarac = $caracteristique->fetch_object($rCarac))
             {
                 $rubcaracteristique = new Rubcaracteristique();
-                $rubcaracteristique->rubrique = $this->id;
+                $rubcaracteristique->dossier = $this->id;
                 $rubcaracteristique->caracteristique = $theCarac->id;
                 $rubcaracteristique->add();
             }
 
-            $rubriquedesc->reecrire();
+            $dossierdesc->reecrire();
 
             ActionsModules::instance()->appel_module("ajoutrub", $this);
             
-            redirige("rubrique_modifier.php?id=" . $this->id);
+            redirige("dossier_modifier.php?id=" . $this->id);
         }
         
         return 1;
@@ -144,25 +144,25 @@ class FolderAdmin extends Rubrique
     public function modifyOrder($type, $parent){
         $this->changer_classement($this->id, $type);
         
-        redirige('parcourir.php?parent='.$parent);
+        redirige('listdos.php?parent='.$parent);
     }
     
     public function changeOrder($newClassement, $parent){
         $this->modifier_classement($this->id, $newClassement);
         
-        redirige('parcourir.php?parent='.$parent);
+        redirige('listdos.php?parent='.$parent);
     }
 
     public function getList($parent, $critere, $order, $alpha)
     {
         $return = array();
         
-	$rubriquedesc = new Rubriquedesc();
+	$dossierdesc = new Dossierdesc();
 
 	if($alpha == "alpha"){
-		$query = "select r.id, r.ligne, r.classement from ".Rubrique::TABLE." r LEFT JOIN ".Rubriquedesc::TABLE." rd ON rd.rubrique=r.id and lang=" . ActionsLang::instance()->get_id_langue_courante() . " where r.parent=\"$parent\" order by rd.$critere $order";
+		$query = "select r.id, r.ligne, r.classement from ".Dossier::TABLE." r LEFT JOIN ".Dossierdesc::TABLE." rd ON rd.dossier=r.id and lang=" . ActionsLang::instance()->get_id_langue_courante() . " where r.parent=\"$parent\" order by rd.$critere $order";
 	}else{
-		$query = "select id, ligne, classement from ".Rubrique::TABLE." where parent=\"$parent\" order by $critere $order";
+		$query = "select id, ligne, classement from ".Dossier::TABLE." where parent=\"$parent\" order by $critere $order";
 	}
 
 	$resul = $this->query($query);
@@ -170,17 +170,17 @@ class FolderAdmin extends Rubrique
 	$i=0;
 
 	while($resul && $row = $this->fetch_object($resul)){
-		$rubriquedesc = new Rubriquedesc();
-		$rubriquedesc->charger($row->id);
+		$dossierdesc = new Dossierdesc();
+		$dossierdesc->charger($row->id);
 
-		if (! $rubriquedesc->affichage_back_office_permis()) continue;
+		if (! $dossierdesc->affichage_back_office_permis()) continue;
 
 		$return[] = array(
                         "id" => $row->id,
                         "ligne" => $row->ligne,
                         "classement" => $row->classement,
-                        "titre" => $rubriquedesc->titre,
-                        "langue_courante" => $rubriquedesc->est_langue_courante(),
+                        "titre" => $dossierdesc->titre,
+                        "langue_courante" => $dossierdesc->est_langue_courante(),
                         "parent" => $parent
                     );
 
@@ -220,7 +220,7 @@ class FolderAdmin extends Rubrique
             return $return;
         
         $associatedFeature = new Rubcaracteristique();
-	$qList = "SELECT * FROM " . Rubcaracteristique::TABLE . " WHERE rubrique='$this->id'";
+	$qList = "SELECT * FROM " . Rubcaracteristique::TABLE . " WHERE dossier='$this->id'";
 	$rList = $associatedFeature->query($qList);
 	while($rList && $theAssociatedFeature = $associatedFeature->fetch_object($rList))
         {
@@ -236,14 +236,14 @@ class FolderAdmin extends Rubrique
     {
         $this->addAttachement('image', 'photo', array("jpg", "gif", "png", "jpeg"), "uploadimage");
         
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab');
     }
     
     public function addDocument()
     {
         $this->addAttachement('document', 'doc', array(), "uploaddocument");
         
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab');
     }
     
     protected function addAttachement($attachement, $nom_arg, $extensions_valides = array(), $point_d_entree= null)
@@ -264,7 +264,7 @@ class FolderAdmin extends Rubrique
             $test = chemin_rub($parent);
             for($i = 0; $i < count($test); $i++)
             {
-                if($test[$i]->rubrique == $this->id)
+                if($test[$i]->dossier == $this->id)
                 {
                     $folderIsMovedInItselfOrASubfolder = 1;
                     break;
@@ -273,11 +273,11 @@ class FolderAdmin extends Rubrique
             
             if(!$folderIsMovedInItselfOrASubfolder)
             {
-                $qUpdateClassement = "SELECT * FROM " . Rubrique::TABLE . " WHERE parent='$this->parent' AND id<>'$this->id' ORDER BY classement ASC";
+                $qUpdateClassement = "SELECT * FROM " . Dossier::TABLE . " WHERE parent='$this->parent' AND id<>'$this->id' ORDER BY classement ASC";
                 $rUpdateClassement = $this->query($qUpdateClassement);
 
                 $newClassement = 1;
-                while($rUpdateClassement && $theFolder = $this->fetch_object($rUpdateClassement, 'Rubrique'))
+                while($rUpdateClassement && $theFolder = $this->fetch_object($rUpdateClassement, 'Dossier'))
                 {
                     $theFolder->classement = $newClassement;
                     $theFolder->maj();
@@ -296,7 +296,7 @@ class FolderAdmin extends Rubrique
         
         ActionsModules::instance()->appel_module("modrub", $this);
         
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=sectionInformationTab');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=sectionInformationTab');
     }
     
     public function editDescription($langId, $titre, $chapo, $description, $postscriptum, $url)
@@ -306,25 +306,25 @@ class FolderAdmin extends Rubrique
         if(!$this->id || !$lang->id)
             return;
         
-        $rubriquedesc = new Rubriquedesc();
-        if(!$rubriquedesc->charger($this->id, $lang->id))
+        $dossierdesc = new Dossierdesc();
+        if(!$dossierdesc->charger($this->id, $lang->id))
         {
             CacheBase::getCache()->reset_cache();
-            $rubriquedesc->rubrique = $this->id;
-            $rubriquedesc->lang = $lang->id;
-            $rubriquedesc->id = $rubriquedesc->add();
+            $dossierdesc->dossier = $this->id;
+            $dossierdesc->lang = $lang->id;
+            $dossierdesc->id = $dossierdesc->add();
         }
         
-        $rubriquedesc->titre = $titre;
-        $rubriquedesc->chapo = $chapo;
-        $rubriquedesc->description = $description;
-        $rubriquedesc->postscriptum = $postscriptum;
-        $rubriquedesc->maj();
-        $rubriquedesc->reecrire(($url)?:$lang->code . "-" . $rubriquedesc->rubrique . "-" . $rubriquedesc->titre . ".html");
+        $dossierdesc->titre = $titre;
+        $dossierdesc->chapo = $chapo;
+        $dossierdesc->description = $description;
+        $dossierdesc->postscriptum = $postscriptum;
+        $dossierdesc->maj();
+        $dossierdesc->reecrire(($url)?:$lang->code . "-" . $dossierdesc->dossier . "-" . $dossierdesc->titre . ".html");
         
         ActionsModules::instance()->appel_module("modrub", $this);
         
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=generalDescriptionTab&lang=' . $lang->id);
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=generalDescriptionTab&lang=' . $lang->id);
     }
     
     public function getNumberOfImages()
@@ -346,14 +346,14 @@ class FolderAdmin extends Rubrique
     {
         $this->updateAttachement('image', $images, $lang);
         
-         redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
+         redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
     }
     
     public function updateDocument(array $documents, $lang)
     {
         $this->updateAttachement('document', $documents, $lang);
 
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
     }
     
     protected function updateAttachement($attachement, $files, $lang)
@@ -375,13 +375,13 @@ class FolderAdmin extends Rubrique
     public function deleteImage($id, $lang)
     {
         $this->deleteAttachement("image", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
     }
     
     public function deleteDocument($id, $lang)
     {
         $this->deleteAttachement("document", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
     }
     
     public function deleteAttachement($attachement, $id)
@@ -393,13 +393,13 @@ class FolderAdmin extends Rubrique
     public function modifyImageOrder($id, $will, $lang)
     {
         $this->modifyAttachementOrder("image", $id, $will);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
     }
     
     public function modifyDocumentOrder($id, $will, $lang)
     {
         $this->modifyAttachementOrder("document", $id, $will);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
+        redirige('dossier_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
     }
     
     public function modifyAttachementOrder($attachement, $id, $will)

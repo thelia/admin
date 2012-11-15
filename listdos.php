@@ -53,7 +53,7 @@ switch($action){
 
 <body>
     <?php
-        $menu = "catalogue";
+        $menu = "contenu";
         $breadcrumbs = Breadcrumb::getInstance()->getFolderList($parent);
         require_once("entete.php");
     ?>
@@ -125,13 +125,7 @@ switch($action){
                     <thead>
                         <tr>
                             <th></th>
-                            <th><?php echo trad('ref','admin'); ?></th>
                             <th><?php echo trad('Titre_contenu', 'admin'); ?></th>
-                            <th><?php echo trad('Stock', 'admin'); ?></th>
-                            <th><?php echo trad('Prix', 'admin'); ?></th>
-                            <th><?php echo trad('Prix_promo', 'admin'); ?></th>
-                            <th><?php echo trad('Promotion', 'admin'); ?></th>
-                            <th><?php echo trad('Nouveaute', 'admin'); ?></th>
                             <th><?php echo trad('En_ligne', 'admin'); ?></th>
                             <th><?php echo trad('Classement', 'admin'); ?></th>
                             <th></th>
@@ -144,13 +138,8 @@ switch($action){
                                         <img src="../fonctions/redimlive.php?nomorig=<?php echo $contenu["image"]["fichier"];?>&type=contenu&width=51&height=51&exact=1" title="<?php echo $contenu["ref"]; ?>">
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $contenu["ref"]; ?></td>
                                 <td><?php echo $contenu["titre"]; ?></td>
-                                <td><?php echo $contenu["stock"]; ?></td>
-                                <td><?php echo $contenu["prix"]; ?></td>
-                                <td><?php echo $contenu["prix2"]; ?></td>
-                                <td><input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changePromo" class="contentCheckbox" <?php if($contenu["promo"]) echo 'checked="checked"' ?>></td>
-                                <td><input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changeNew" class="contentCheckbox" <?php if($contenu["nouveaute"]) echo 'checked="checked"' ?>></td>
+                                
                                 <td><input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changeDisplay" class="contentCheckbox" <?php if($contenu["ligne"]) echo 'checked="checked"' ?>></td>
                                 <td>
                                     <a href="listdos.php?parent=<?php echo $parent; ?>&content_id=<?php echo $contenu["id"]; ?>&type=M&action=modClassementContent"><i class="icon-arrow-up"></i></a>

@@ -21,14 +21,11 @@ class ContentAdmin extends Contenu {
         }
     }
     
-    public function __construct($id = 0, $ref = '') {
+    public function __construct($id = 0) {
         parent::__construct();
         
         if($id > 0){
             $this->charger_id($id);
-        }
-        else if($ref != ''){
-            $this->charger($ref);
         }
         
         $this->extends[] = new AttachementAdmin();
@@ -46,15 +43,6 @@ class ContentAdmin extends Contenu {
     public static function getInstance($id = 0){
         return new ContentAdmin($id);
     }
-    
-    /**
-     * 
-     * @param string $ref
-     * @return \ContentAdmin
-     */
-    public static function getInstanceByRef($ref){
-        return new ContentAdmin(0, $ref);
-    }
 
     public function changeColumn($column, $value){
         $this->$column = $value;
@@ -68,78 +56,38 @@ class ContentAdmin extends Contenu {
 
         parent::delete();
         
-        redirige('parcourir.php?parent='.$parent);
+        redirige('listdos.php?parent='.$parent);
     }
     
     public function modifyOrder($type, $parent){
-        $this->changer_classement($this->ref, $type);
+        //$this->changer_classement($this->ref, $type);
         
-        redirige('parcourir.php?parent='.$parent);
+        redirige('listdos.php?parent='.$parent);
     }
     
     public function changeOrder($newClassement, $parent){
         $this->modifier_classement($this->id, $newClassement);
         
-        redirige('parcourir.php?parent='.$parent);
+        redirige('listdos.php?parent='.$parent);
     }
     
     public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
     {
         $this->getAttachement($attachement)->modclassement($id, $type);
-        redirige("contenu_modifier.php?ref=".$this->ref."&rubrique=".$this->rubrique."&lang=".$lang."&tab=".$tab);
+        redirige("contenu_modifier.php?id=".$this->id."&dossier=".$this->dossier."&lang=".$lang."&tab=".$tab);
     }
     
     public function deleteAttachement($attachement, $id, $lang, $tab)
     {
         $this->getAttachement($attachement)->supprimer($id);
-        redirige("contenu_modifier.php?ref=".$this->ref."&rubrique=".$this->rubrique."&lang=".$lang."&tab=".$tab);
+        redirige("contenu_modifier.php?id=".$this->id."&dossier=".$this->dossier."&lang=".$lang."&tab=".$tab);
     }
     
-    public static function cleanRef($ref)
-    {
-        $ref = str_replace(" ", "", $ref);
-        $ref = str_replace("/", "", $ref);
-        $ref = str_replace("+", "", $ref);
-        $ref = str_replace(".", "-", $ref);
-        $ref = str_replace(",", "-", $ref);
-        $ref = str_replace(";", "-", $ref);
-        $ref = str_replace("'", "", $ref);
-        $ref = str_replace("\n", "", $ref);
-        $ref = str_replace("\"", "", $ref);
-        
-        return $ref;
-    }
-    
-    public static function cleanPrice($price)
-    {
-        return str_replace(',','.',$price);
-    }
-    
-    /**
-     * 
-     * try to crate a new content. The $ref parameter must be a unique value in the table and title can not be empty
-     * 
-     * if everything is ok, this method redirect to the content modification page. 
-     * Else a table with detail error is return.
-     * 
-     * @param string $ref
-     * @param string $title
-     * @param string $category
-     * @return boolean|array
-     */
-    public function add($ref, $title, $category){
+    public function add($title, $category){
         $error = false;
         $errorTab = array(
-            "ref" => false,
             "title" => false
         );
-        
-        $ref = self::cleanRef($ref);
-        
-        if($ref == '' || self::exist_ref($ref)){
-            $error = true;
-            $errorTab["ref"] = true;
-        }
         
         if($title == ''){
             $error = true;
@@ -147,9 +95,8 @@ class ContentAdmin extends Contenu {
         }
         
         if($error === false){
-            $this->ref = $ref;
             $this->datemodif = date('Y-m-d H:i:s');
-            $this->rubrique = $category;
+            $this->dossier = $category;
             $this->id = parent::add();
             
             $contentdesc = new Contenudesc();
@@ -163,7 +110,7 @@ class ContentAdmin extends Contenu {
 
             ActionsModules::instance()->appel_module("ajoutprod", $this);
             
-            redirige('contenu_modifier.php?ref='.$this->ref.'&rubrique='.$this->rubrique);
+            redirige('contenu_modifier.php?id='.$this->id.'&dossier='.$this->dossier);
         }
         
         return ($error)?$errorTab:false;
@@ -226,9 +173,9 @@ class ContentAdmin extends Contenu {
         
         if ($urlsuiv)
         {
-            redirige('parcourir.php?parent='.$this->rubrique);
+            redirige('listdos.php?parent='.$this->dossier);
         } else {
-            redirige('contenu_modifier.php?ref='.$this->ref.'&rubrique='.$this->rubrique.'&tab='.$tab.'&lang='.$lang);
+            redirige('contenu_modifier.php?id='.$this->id.'&dossier='.$this->dossier.'&tab='.$tab.'&lang='.$lang);
         }
         
         
@@ -288,12 +235,12 @@ class ContentAdmin extends Contenu {
     }
     
     public function checkRewrite($category){
-        if($this->rubrique != $category) {
-            $query = "select max(classement) as maxClassement from ".Contenu::TABLE." where rubrique='" . $category . "'";
+        if($this->dossier != $category) {
+            $query = "select max(classement) as maxClassement from ".Contenu::TABLE." where dossier='" . $category . "'";
             $resul = $this->query($query);
             $this->classement =  $this->get_result($resul, 0, "maxClassement") + 1;
 
-            $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->rubrique);
+            $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->dossier);
             $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $category);
 
             $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
@@ -308,7 +255,7 @@ class ContentAdmin extends Contenu {
                 $tmpreec->maj();
             }
             
-            $this->rubrique = $category;
+            $this->dossier = $category;
         }
     }
     
@@ -336,7 +283,7 @@ class ContentAdmin extends Contenu {
     {
         if(! $this->id) return false;
         
-        $query = "SELECT d.id from ".Declidisp::TABLE." d LEFT JOIN ".Rubdeclinaison::TABLE." r ON d.declinaison = r.declinaison WHERE r.rubrique=".$this->rubrique;
+        $query = "SELECT d.id from ".Declidisp::TABLE." d LEFT JOIN ".Rubdeclinaison::TABLE." r ON d.declinaison = r.declinaison WHERE r.dossier=".$this->dossier;
         $resul = $this->query($query);
 
 
@@ -355,20 +302,20 @@ class ContentAdmin extends Contenu {
      * 
      * Return an array of content for the current category
      * 
-     * @param string $rubrique id of the current category
+     * @param string $dossier id of the current category
      * @param string $critere order by clause
      * @param string $order ASC or DESC
      * @param string $alpha if order is alpha pu "alpha"
      * @return Array
      */
-    public function getList($rubrique, $critere, $order, $alpha) {
+    public function getList($dossier, $critere, $order, $alpha) {
         
         $return = array();
 
 	if($alpha == "alpha"){
-		$query = "select p.id, p.ref, p.rubrique, p.stock, p.prix, p.prix2, p.promo, p.ligne, p.nouveaute, p.classement from ".Contenu::TABLE." p LEFT JOIN ".Contenudesc::TABLE." pd ON pd.contenu = p.id and lang="  . ActionsLang::instance()->get_id_langue_courante() . " where p.rubrique=\"$rubrique\" order by pd.$critere $order";
+		$query = "select c.id, c.dossier, c.ligne, c.classement from ".Contenu::TABLE." p LEFT JOIN ".Contenudesc::TABLE." pd ON cd.contenu = c.id and lang="  . ActionsLang::instance()->get_id_langue_courante() . " where c.dossier=\"$dossier\" order by cd.$critere $order";
 	}else{
-		$query = "select id, ref, rubrique, stock, prix, prix2, promo, ligne, nouveaute, classement from ".Contenu::TABLE." where rubrique=\"$rubrique\" order by $critere $order";
+		$query = "select id, dossier, ligne, classement from ".Contenu::TABLE." where dossier=\"$dossier\" order by $critere $order";
 	}
                 
 	$resul = $this->query($query);
@@ -388,15 +335,8 @@ class ContentAdmin extends Contenu {
 		$row_image = $image->fetch_object($resul_image, 'image');
                 
                 $return[] = array(
-                    "ref" => $row->ref,
                     "id" => $row->id,
-                    "rubrique" => $row->rubrique,
-                    "stock" => $row->stock,
-                    "prix" => $row->prix,
-                    "prix2" => $row->prix2,
-                    "promo" => $row->promo,
-                    "ligne" => $row->ligne,
-                    "nouveaute" => $row->nouveaute,
+                    "dossier" => $row->dossier,
                     "classement" => $row->classement,
                     "titre" => $contenudesc->titre,
                     "langue_courante" => $contenudesc->est_langue_courante(),
@@ -424,12 +364,12 @@ class ContentAdmin extends Contenu {
             $contenu->charger_id($row->accessoire);
             $contenudesc->charger($contenu->id);
 
-            $rubadesc = new Rubriquedesc();
-            $rubadesc->charger($contenu->rubrique);
+            $rubadesc = new Dossierdesc();
+            $rubadesc->charger($contenu->dossier);
 
             $return[] = array(
                 "contenu" => $contenudesc->titre,
-                "rubrique" => $rubadesc->titre,
+                "dossier" => $rubadesc->titre,
                 "id" => $row->id
             );
 	}
