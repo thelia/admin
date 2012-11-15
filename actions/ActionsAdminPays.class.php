@@ -47,11 +47,17 @@ class ActionsAdminPays extends ActionsAdminBase
     {
         $langs = $request->request->get("lang");
         $return = array();
-        foreach($langs as $lang)
+        foreach($langs as $id => $value)
         {
-            $return
+            $return[$id] = array(
+                "id" => $id,
+                "titre"=> $request->request->get("titre[".$id."]", null, true),
+                "chapo"=> $request->request->get("chapo[".$id."]", null, true),
+                "description"=> $request->request->get("description[".$id."]", null, true),
+            );
         }
         
+        return $return;
     }
 }
 ?>

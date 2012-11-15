@@ -54,7 +54,35 @@ class PaysAdmin extends Pays
     
     public function modify($isocode, $isoalpha2, $isoalpha3, $tva, $zone, $descs)
     {
+        $this->isocode = $isocode;
+        $this->isoalpha2 = $isoalpha2;
+        $this->isoalpha3 = $isoalpha3;
+        $this->tva = $tva;
+        $this->zone = $zone;
         
+        $this->maj();
+        
+        foreach($descs as $desc)
+        {
+            $paysdesc = new Paysdesc();
+            
+            $paysdesc->charger($this->id, $desc["id"]);
+            
+            $paysdesc->lang = $desc["id"];
+            $paysdesc->titre = $desc["titre"];
+            $paysdesc->chapo = $desc["chapo"];
+            $paysdesc->description = $desc["description"];
+            $paysdesc->pays = $this->id;
+            
+            if($paysdesc->id)
+            {
+                $paysdesc->maj();
+            } else {
+                $paysdesc->add();
+            }
+        }
+        
+        redirige("pays.php");
     }
     
     

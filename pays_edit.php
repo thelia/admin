@@ -11,7 +11,8 @@ $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $pays = new Pays($request->query->get("id"));
 ?>
 <form method="post" action="pays.php">
-    <input type="text" name="action" value="editCountry">
+    <input type="hidden" name="action" value="editCountry">
+    <input type="hidden" name="id" value="<?php echo $pays->id; ?>"
     <p>
         <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
     </p> 
