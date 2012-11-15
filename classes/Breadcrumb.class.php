@@ -74,6 +74,31 @@ class Breadcrumb
     
     /**
      * 
+     * generate Breadcrumb for "contenus" part
+     * 
+     * @param int $parent
+     */
+    public function getFolderList($parent, $edit = true)
+    {
+        $this->addValue("listdos.php", trad('Gestion_contenu', 'admin'));
+        
+        foreach(FolderAdmin::getInstance()->getBreadcrumbList($parent) as $breadcrumb)
+        {
+            if ($breadcrumb->dossier == $parent)
+            {
+                $this->addValue("" , $breadcrumb->titre, ($edit === true)?"dossier_modifier.php?id=".$breadcrumb->dossier:"");
+            } else {
+                $this->addValue("listdos.php?parent=".$breadcrumb->dossier, $breadcrumb->titre );
+            }
+           
+            
+        }
+        
+        return $this->getBreadcrumb();
+    }
+    
+    /**
+     * 
      * breadcrumb for the homapage
      * 
      * @return array
