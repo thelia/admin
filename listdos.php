@@ -51,9 +51,6 @@ switch($action){
         break;
     
     //Content
-    case 'deleteContent':
-        ContentAdmin::getInstance($content_id)->delete($parent);
-        break;
     case 'modClassementContent':
         ContentAdmin::getInstance($content_id)->modifyOrder($type, $parent);
         break;

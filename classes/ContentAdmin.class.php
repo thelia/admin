@@ -49,14 +49,18 @@ class ContentAdmin extends Contenu {
         $this->maj();
     }
     
-    public function delete($parent,$id = 0){
-        if($id > 0){
-            $this->charger_id($id);
+    public function delete()
+    {
+        if($this->id > 0)
+        {
+            parent::delete();
         }
-
-        parent::delete();
+        else
+        {
+            throw new TheliaAdminException("Content does not Exist",  TheliaAdminException::CONTENT_NOT_FOUND);
+        }
         
-        redirige('listdos.php?parent='.$parent);
+        redirige("listdos.php?parent=" . $this->dossier);
     }
     
     public function modifyOrder($type, $parent){

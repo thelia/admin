@@ -25,7 +25,7 @@ class ActionsAdminFolder extends ActionsAdminBase
                 FolderAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
                 break;
             case 'deleteFolder':
-                FolderAdmin::getInstance($request->request->get('folder_id'))->delete();
+                FolderAdmin::getInstance($request->query->get('folder_id'))->delete();
                 break;
             
             /*association : RO REVIEW*/
@@ -87,58 +87,6 @@ class ActionsAdminFolder extends ActionsAdminBase
                 break;
         }
     }
-    
-    /**
-     * 
-     * search caracteristique in request and return an array. Indexes are the id of each caracteristique and value are the caracdisp selected
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return Array
-     */
-    /*protected function getCaracteristique(Request $request, \ProductAdmin $product)
-    {        
-        $return = array();
-        
-        if($product->id == ''){
-            return $return;
-        }
-        
-        $query = 'select caracteristique from '.Rubcaracteristique::TABLE.' where rubrique='.$product->rubrique;
-        
-        foreach($product->query_liste($query) as $caracteristique)
-        {
-            if(false !== $carac = $request->request->get('caract'.$caracteristique->caracteristique, false)){                
-                $return[$caracteristique->caracteristique] = $carac;
-            }
-        }
-        
-        return $return;
-    }
-    
-    /**
-     * 
-     * search declinaison in request and return an array.
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return Array
-     */
-    /*protected function getDeclinaison(Request $request, \ProductAdmin $product)
-    {
-        $return = array();
-        
-        if($product->id == ''){
-            return $return;
-        }
-        
-        $query = "select dc.id from ".Declidisp::TABLE." dc left join ".Rubdeclinaison::TABLE." rd on rd.declinaison=dc.declinaison where rd.rubrique=".$product->rubrique;
-        
-        $return = $this->extractResult($request, $product->query_liste($query), array(
-            "stock" => "stock",
-            "surplus" => "surplus"
-        ));
-        
-        return $return;
-    }*/
     
     protected function getImages(Request $request, \FolderAdmin $folder)
     {

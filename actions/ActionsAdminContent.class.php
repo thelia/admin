@@ -69,6 +69,9 @@ class ActionsAdminContent extends ActionsAdminBase
             case "addContent":
                 ContentAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
                 break;
+            case 'deleteContent':
+                ContentAdmin::getInstance($request->query->get('content_id'))->delete();
+                break;
         }
     }
     

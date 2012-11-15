@@ -77,14 +77,15 @@ class FolderAdmin extends Dossier
         $this->documentFile->setLang($lang);
     }
     
-    public function delete($parent, $id = 0){
-        
-        if($this->$id > 0){
+    public function delete()
+    {
+        if($this->id > 0)
+        {
             parent::delete();
         }
         else
         {
-            throw new TheliaAdminException("Attachement file does not Exist",  TheliaAdminException::FOLDER_NOT_FOUND);
+            throw new TheliaAdminException("Folder does not Exist",  TheliaAdminException::FOLDER_NOT_FOUND);
         }
         
         redirige("listdos.php?parent=" . $this->parent);
