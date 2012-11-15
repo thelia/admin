@@ -2,7 +2,7 @@
 require_once("pre.php");
 require_once("auth.php");
         
-if(! est_autorise("acces_catalogue")) exit; 
+if(! est_autorise("acces_contenu")) exit; 
 
 if(!isset($parent)) $parent="";
 if(!isset($id)) $id="";
@@ -124,7 +124,6 @@ switch($action){
                     </caption>
                     <thead>
                         <tr>
-                            <th></th>
                             <th><?php echo trad('Titre_contenu', 'admin'); ?></th>
                             <th><?php echo trad('En_ligne', 'admin'); ?></th>
                             <th><?php echo trad('Classement', 'admin'); ?></th>
@@ -134,10 +133,6 @@ switch($action){
                     <tbody>
                         <?php foreach(ContentAdmin::getInstance()->getList($parent, 'classement', 'ASC', '') as $contenu): ?>
                             <tr>
-                                <td><?php if($contenu["image"]["fichier"]): ?>
-                                        <img src="../fonctions/redimlive.php?nomorig=<?php echo $contenu["image"]["fichier"];?>&type=contenu&width=51&height=51&exact=1" title="<?php echo $contenu["ref"]; ?>">
-                                    <?php endif; ?>
-                                </td>
                                 <td><?php echo $contenu["titre"]; ?></td>
                                 
                                 <td><input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changeDisplay" class="contentCheckbox" <?php if($contenu["ligne"]) echo 'checked="checked"' ?>></td>

@@ -337,6 +337,7 @@ class ContentAdmin extends Contenu {
                 $return[] = array(
                     "id" => $row->id,
                     "dossier" => $row->dossier,
+                    "ligne" => $row->ligne,
                     "classement" => $row->classement,
                     "titre" => $contenudesc->titre,
                     "langue_courante" => $contenudesc->est_langue_courante(),
