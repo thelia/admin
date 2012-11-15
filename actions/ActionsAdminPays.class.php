@@ -49,7 +49,7 @@ class ActionsAdminPays extends ActionsAdminBase
         $return = array();
         foreach($langs as $lang)
         {
-            
+            $return
         }
         
     }
