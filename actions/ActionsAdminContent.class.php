@@ -64,6 +64,8 @@ class ActionsAdminContent extends ActionsAdminBase
                         $request->query->get('tab')
                 );
                 break;
+            
+            /*listdos actions*/
             case "addContent":
                 ContentAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
                 break;
