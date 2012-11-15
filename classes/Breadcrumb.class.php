@@ -97,6 +97,21 @@ class Breadcrumb
         return $this->getBreadcrumb();
     }
     
+    public function getContentListe($id, $title)
+    {
+        $this->addValue("listdos.php", trad('Gestion_contenu', 'admin'));
+        
+        foreach(FolderAdmin::getInstance()->getBreadcrumbList($id) as $breadcrumb)
+        {
+  
+            $this->addValue("listdos.php?parent=".$breadcrumb->dossier, $breadcrumb->titre );
+        }
+        
+        $this->addValue("", $title);
+        
+        return $this->getBreadcrumb();
+    }
+    
     /**
      * 
      * breadcrumb for the homapage
@@ -121,6 +136,8 @@ class Breadcrumb
         
         return $this->getBreadcrumb();
     }
+    
+    
 
     public function getSimpleList($title, $url = "")
     {
