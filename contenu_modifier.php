@@ -62,7 +62,7 @@ require_once("entete.php");
                 <li class="<?php if ($tab == 'documentTab') echo "active"; ?>"><a href="#documentTab" data-toggle="tab"><?php echo trad('GESTION_DOCUMENTS', 'admin'); ?></a></li>
                 <li class="<?php if ($tab == 'moduleTab') echo "active"; ?>"><a href="#moduleTab" data-toggle="tab"><?php echo strtoupper(trad('Modules', 'admin')); ?></a></li>
             </ul>
-            <form method="post" action="contenu_modifier.php" id="formulaire">
+            <form method="post" action="contenu_modifier.php" enctype="multipart/form-data" id="formulaire">
                 <input type="hidden" name="id" value="<?php echo $contenu->id; ?>">
                 <input type="hidden" name="dossier" value="<?php echo $contenu->dossier; ?>">
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>">
