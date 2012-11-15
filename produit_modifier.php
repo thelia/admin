@@ -177,6 +177,7 @@ require_once("entete.php");
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
+                                        <div class="littletable">
                                         <table class="table table-striped table-condensed">
                                             <tbody>
                                                 <tr>
@@ -185,10 +186,11 @@ require_once("entete.php");
                                                 </tr>
                                                 <tr>
                                                     <td><?php echo trad('Derniere_modif', 'admin'); ?></td>
-                                                    <td>le <?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($produit->datemodif)); ?></td>
+                                                    <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($produit->datemodif)); ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

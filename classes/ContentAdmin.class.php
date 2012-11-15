@@ -17,6 +17,7 @@ class ContentAdmin extends Contenu {
         
         if($find === false)
         {
+            return parent::__callStatic($name, $arguments);
             throw new BadMethodCallException("Method ".$name." not found in " . __CLASS__);
         }
     }
@@ -123,7 +124,7 @@ class ContentAdmin extends Contenu {
         return $this->get_result($this->query($qRanking), 0, 'maxRanking');
     }
     
-    public function modify($lang, $price, $price2, $ecotaxe, $promo, $folder, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
+    public function modify($lang, $folder, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $images, $documents, $tab)
     {
         if($this->id == '')
         {
@@ -142,22 +143,11 @@ class ContentAdmin extends Contenu {
         }
         
         $this->datemodif = date('Y-m-d H:i:s');
-        $this->prix = self::cleanPrice($price);
-        $this->prix2 = self::cleanPrice($price2);
-        $this->ecotaxe = self::cleanPrice($ecotaxe);
         
         $this->checkRewrite($folder);
         
-        
-        $this->promo = ($promo == 'on')?1:0;
-        $this->nouveaute = ($new == 'on')?1:0;
         $this->ligne = ($online == 'on')?1:0;
-        
-        $this->perso = $perso;
-        $this->poids = $weight;
-        $this->checkStock($stock, $declinaison);
-        $this->checkCaracteristique($caracteristique);
-        $this->tva = self::cleanPrice($tva);
+
         
         $contenudesc->chapo = str_replace("\n", "<br />", $chapo);
         $contenudesc->titre = $title;
@@ -186,58 +176,6 @@ class ContentAdmin extends Contenu {
         
     }
 
-    protected function checkCaracteristique($caracteristique)
-    {
-        
-        
-        foreach($caracteristique as $index => $value)
-        {
-            $this->query("delete from $caracval->table where contenu=" . $this->id . " and caracteristique=" . $index);
-            if ( is_array($value) )
-            {
-                foreach ($value as $caracdisp)
-                {
-                    $caracval = new Caracval(); 
-                    $caracval->contenu = $this->id;
-                    $caracval->caracteristique = $index;
-                    $caracval->caracdisp = $caracdisp;
-                    $caracval->add();
-                }
-            } else {
-                $caracval = new Caracval();
-                $caracval->contenu = $this->id;
-                $caracval->caracteristique = $index;
-                $caracval->valeur = $value;
-                $caracval->add();
-            }
-        }
-    }
-    
-    protected function checkStock($stock, $declinaison){
-        $this->stock = $stock;
-        
-        $nb = 0;
-        
-        foreach($declinaison as $index => $value)
-        {
-            $stock = new Stock();
-            if(! $stock->charger($index, $this->id))
-            {
-                $stock->declidisp = $index;
-                $stock->contenu = $this->id;
-                $nb += $stock->valeur = $value["stock"];
-                $stock->surplus = $value["surplus"];
-                $stock->add();
-            } else {
-               $nb +=  $stock->valeur = $value["stock"];
-               $stock->surplus = $value["surplus"];
-               
-               $stock->maj();
-            }   
-        }
-        
-        if($nb > 0) $this->stock = $nb;
-    }
     
     public function checkRewrite($folder){
         if($this->dossier != $folder) {
@@ -264,44 +202,6 @@ class ContentAdmin extends Contenu {
         }
     }
     
-    /**
-     * 
-     * delete in caracval table all the record for this content id
-     * 
-     * @return boolean if id paramter is false or empty
-     */
-    protected function cleanCaracteristique()
-    {
-        if(! $this->id) return false;
-        
-        $query = "delete from ".Caracval::TABLE." where contenu=".$this->id;
-        $this->query($query);
-    }
-    
-    /**
-     * 
-     * save in stock table if needed this content with 0 to all column (valeur and surplus)
-     * 
-     * @return boolean if id paramter is false or empty
-     */
-    protected function associateDeclinaison()
-    {
-        if(! $this->id) return false;
-        
-        $query = "SELECT d.id from ".Declidisp::TABLE." d LEFT JOIN ".Rubdeclinaison::TABLE." r ON d.declinaison = r.declinaison WHERE r.dossier=".$this->dossier;
-        $resul = $this->query($query);
-
-
-   	while($resul && $row = $this->fetch_object($resul)){
-
-                $stock = new Stock();
-                $stock->declidisp=$row->id;
-                $stock ->contenu=$this->id;
-                $stock->valeur=0;
-                $stock->surplus=0;
-                $stock->add();
-	}
-    }
     
     /**
      * 
@@ -352,34 +252,6 @@ class ContentAdmin extends Contenu {
                 );
 	}
                 
-        return $return;
-    }
-    
-    public function getAccessoryList(){
-        $return = array();
-        
-        $query = "select * from ".Accessoire::TABLE." where contenu=".$this->id." order by classement";
-	$resul = $this->query($query);
-        
-        
-
-	while($resul && $row = $this->fetch_object($resul)){
-            $contenu = new Contenu();
-            $contenudesc = new Contenudesc();
-	
-            $contenu->charger_id($row->accessoire);
-            $contenudesc->charger($contenu->id);
-
-            $rubadesc = new Dossierdesc();
-            $rubadesc->charger($contenu->dossier);
-
-            $return[] = array(
-                "contenu" => $contenudesc->titre,
-                "dossier" => $rubadesc->titre,
-                "id" => $row->id
-            );
-	}
-        
         return $return;
     }
 }
