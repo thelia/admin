@@ -20,6 +20,11 @@ class ActionsAdminFolder extends ActionsAdminBase
     public function action(Request $request){
         switch($request->get('action'))
         {
+            /*listdos actions*/
+            case 'addFolder':
+                $addFolderError = FolderAdmin::getInstance()->add($title, $parent);
+                break;
+            
             /*association : RO REVIEW*/
             case 'deleteAssociatedContent':
                 AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));

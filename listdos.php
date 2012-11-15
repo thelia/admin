@@ -2,7 +2,11 @@
 require_once("pre.php");
 require_once("auth.php");
         
-if(! est_autorise("acces_catalogue")) exit; 
+if(! est_autorise("acces_contenu"))
+    exit; 
+
+use Symfony\Component\HttpFoundation\Request;
+$request = Request::createFromGlobals();
 
 if(!isset($parent)) $parent="";
 if(!isset($id)) $id="";
@@ -12,8 +16,32 @@ if(!isset($action)) $action = "";
 $addContentError = false;
 $addFolderError = false;
 
+$errorCode = 0;
+$addError = 0;
+
+$editError = array();
+
+try {
+    ActionsAdminFolder::getInstance()->action($request);
+    ActionsAdminContent::getInstance()->action($request);
+} catch (TheliaAdminException $e) {
+    $errorCode = $e->getCode();
+    switch ($errorCode)
+    {
+        case TheliaAdminException::FOLDER_ADD_ERROR:
+            $addFolderError = 1;
+            $errorData = $e->getData();
+            break;
+        case TheliaAdminException::CONTENT_ADD_ERROR:
+            $addContentError = 1;
+            $errorData = $e->getData();
+            break;
+    }
+}
+
+/*
 switch($action){
-    
+    default:break;
     //folder
     case 'deleteFolder':
         FolderAdmin::getInstance($folder_id)->delete($parent);
@@ -39,9 +67,10 @@ switch($action){
         ContentAdmin::getInstance($content_id)->changeOrder($newClassement, $parent);
         break;
     case 'addContent':
-        $addContentError = ContentAdmin::getInstance()->add($ref, $title, $parent);
+        $addContentError = ContentAdmin::getInstance()->add($id, $title, $parent);
         break;
 }
+ */
 
 
 ?>
@@ -124,7 +153,6 @@ switch($action){
                     </caption>
                     <thead>
                         <tr>
-                            <th></th>
                             <th><?php echo trad('Titre_contenu', 'admin'); ?></th>
                             <th><?php echo trad('En_ligne', 'admin'); ?></th>
                             <th><?php echo trad('Classement', 'admin'); ?></th>
@@ -134,10 +162,6 @@ switch($action){
                     <tbody>
                         <?php foreach(ContentAdmin::getInstance()->getList($parent, 'classement', 'ASC', '') as $contenu): ?>
                             <tr>
-                                <td><?php if($contenu["image"]["fichier"]): ?>
-                                        <img src="../fonctions/redimlive.php?nomorig=<?php echo $contenu["image"]["fichier"];?>&type=contenu&width=51&height=51&exact=1" title="<?php echo $contenu["ref"]; ?>">
-                                    <?php endif; ?>
-                                </td>
                                 <td><?php echo $contenu["titre"]; ?></td>
                                 
                                 <td><input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changeDisplay" class="contentCheckbox" <?php if($contenu["ligne"]) echo 'checked="checked"' ?>></td>
@@ -148,7 +172,7 @@ switch($action){
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="contenu_modifier.php?ref=<?php echo($contenu["ref"]); ?>&dossier=<?php echo $contenu["dossier"]; ?>"><i class="icon-edit"></i></a>
+                                        <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="contenu_modifier.php?id=<?php echo($contenu["id"]); ?>&dossier=<?php echo $contenu["dossier"]; ?>"><i class="icon-edit"></i></a>
                                         <a class="btn btn-mini js-content-delete" title="<?php echo trad('supprimer', 'admin'); ?>" data-toggle="modal" href="#delObject" content-id="<?php echo $contenu["id"]; ?>" ><i class="icon-trash"></i></a>
                                     </div>
                                 </td>
@@ -227,13 +251,7 @@ switch($action){
             <input type="hidden" name="parent" value="<?php echo $parent; ?>" />
                 <table class="table table-striped" id="contentCreation">
                     <tbody>
-                        <tr class="<?php if($addContentError["ref"]){ ?>error<?php } ?>">
-                            <td><?php echo trad('Reference', 'admin'); ?> *</td>
-                            <td>
-                                <input type="text" value="<?php echo $ref ?>" name="ref"  />
-                            </td>
-                        </tr>
-                        <tr class="<?php if($addContentError["title"]){ ?>error<?php } ?>">
+                        <<tr class="<?php if($addContentError["title"]){ ?>error<?php } ?>">
                             <td><?php echo trad('Titre', 'admin'); ?> *</td>
                             <td>
                                 <input type="text" value="<?php echo $title ?>" name="title"  />

@@ -157,6 +157,7 @@ class ProductAdmin extends Produit {
             $productdesc = new Produitdesc();
             $productdesc->titre = $title;
             $productdesc->lang = ActionsLang::instance()->get_id_langue_courante();
+            $productdesc->produit = $this->id;
             $productdesc->add();
             
             $this->cleanCaracteristique();

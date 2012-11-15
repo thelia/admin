@@ -38,7 +38,11 @@ class TheliaAdminException extends Exception
     const VARIABLE_ALREADY_EXISTS = 221;
     const VARIABLE_ADD_ERROR = 222;
     
+    const FOLDER_ADD_ERROR = 232;
+    
+    const CONTENT_ADD_ERROR = 242;
+    
     const PROMO_EDIT_ERROR = 300;
     const PROMO_ADD_ERROR = 302;
-
+    
 }
