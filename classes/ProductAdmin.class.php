@@ -152,6 +152,7 @@ class ProductAdmin extends Produit {
             $this->ref = $ref;
             $this->datemodif = date('Y-m-d H:i:s');
             $this->rubrique = $category;
+            $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
             $productdesc = new Produitdesc();
@@ -172,7 +173,13 @@ class ProductAdmin extends Produit {
         return ($error)?$errorTab:false;
         
     }
-
+    
+    public function getMaxRanking($parent)
+    {
+        $qRanking = "SELECT MAX(classement) AS maxRanking FROM " . self::TABLE . " WHERE rubrique='$parent'";
+        
+        return $this->get_result($this->query($qRanking), 0, 'maxRanking');
+    }
     
     public function modify($lang, $price, $price2, $ecotaxe, $promo, $category, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {

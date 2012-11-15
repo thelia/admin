@@ -87,16 +87,15 @@ class ContentAdmin extends Contenu {
     {
         $contentdesc = new Contenudesc();
         $contentdesc->titre = $title;
-        $this->datemodif = date('Y-m-d H:i:s');
-        $this->dossier = $folder;
-        $contentdesc->lang = ActionsLang::instance()->get_id_langue_courante();
         
         if($contentdesc->titre !== '')
         {
             $this->datemodif = date('Y-m-d H:i:s');
             $this->dossier = $folder;
+            $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
+            $contentdesc->lang = ActionsLang::instance()->get_id_langue_courante();
             $contentdesc->contenu = $this->id;
             $contentdesc->id = $contentdesc->add();
             
@@ -108,11 +107,17 @@ class ContentAdmin extends Contenu {
         }
         else
         {
-            throw new TheliaAdminException("impossible to add new folder", TheliaAdminException::CONTENT_ADD_ERROR, null, $this);
+            throw new TheliaAdminException("impossible to add new content", TheliaAdminException::CONTENT_ADD_ERROR, null, $contentdesc);
         }
         
     }
-
+    
+    public function getMaxRanking($parent)
+    {
+        $qRanking = "SELECT MAX(classement) AS maxRanking FROM " . self::TABLE . " WHERE dossier='$parent'";
+        
+        return $this->get_result($this->query($qRanking), 0, 'maxRanking');
+    }
     
     public function modify($lang, $price, $price2, $ecotaxe, $promo, $folder, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {

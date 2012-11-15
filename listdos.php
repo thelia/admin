@@ -201,6 +201,7 @@ switch($action){
         <div class="modal hide fade" id="folderAddModal" tabindex="-1" role="dialog" aria-hidden="true">
         <form method="POST" action="listdos.php">
             <input type="hidden" name="action" value="addFolder" />
+            <input type="hidden" name="parent" value="<?php echo $parent; ?>" />
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 ><?php echo trad('AJOUTER_DOSSIER', 'admin'); ?></h3>
@@ -216,7 +217,7 @@ switch($action){
 
                 <table class="table table-striped" id="folderCreation">
                     <tbody>
-                        <tr class="<?php if($addFolderError && empty($title)){ ?>error<?php } ?>">
+                        <tr class="<?php if($addFolderError && $errorData->titre===''){ ?>error<?php } ?>">
                             <td><?php echo trad('Titre', 'admin'); ?> *</td>
                             <td>
                                 <input type="text" value="<?php echo $title ?>" name="title"  />
@@ -239,6 +240,7 @@ switch($action){
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel"><?php echo trad('AJOUTER_CONTENU', 'admin'); ?></h3>
             </div>
+            <form method="POST" action="listdos.php">
             <div class="modal-body">
             <?php if($addContentError){ ?>
                 <div class="alert alert-block alert-error fade in" id="contentError">
@@ -246,12 +248,12 @@ switch($action){
                 <p><?php echo trad('check_information', 'admin'); ?></p>
                 </div>
             <?php } ?>
-            <form method="POST" action="listdos.php">
+            
             <input type="hidden" name="action" value="addContent" />
             <input type="hidden" name="parent" value="<?php echo $parent; ?>" />
                 <table class="table table-striped" id="contentCreation">
                     <tbody>
-                        <<tr class="<?php if($addContentError["title"]){ ?>error<?php } ?>">
+                        <tr class="<?php if($addContentError && $errorData->titre===''){ ?>error<?php } ?>">
                             <td><?php echo trad('Titre', 'admin'); ?> *</td>
                             <td>
                                 <input type="text" value="<?php echo $title ?>" name="title"  />

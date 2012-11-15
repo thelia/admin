@@ -188,6 +188,7 @@ switch($action){
         <div class="modal hide fade" id="categoryAddModal" tabindex="-1" role="dialog" aria-hidden="true">
         <form method="POST" action="parcourir.php">
             <input type="hidden" name="action" value="addCategory" />
+            <input type="hidden" name="parent" value="<?php echo $parent; ?>" />
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 ><?php echo trad('AJOUTER_RUBRIQUE', 'admin'); ?></h3>

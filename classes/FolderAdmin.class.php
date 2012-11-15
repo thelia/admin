@@ -93,8 +93,12 @@ class FolderAdmin extends Dossier
         $this->maj();
     }
     
-    public function add($title, $parent){
-        if($title != '')
+    public function add($title, $parent)
+    {
+        $dossierdesc = new Dossierdesc();
+        $dossierdesc->titre = $title;
+        
+        if($dossierdesc->titre !== '')
         {
             if(!is_numeric($parent) && $parent<1)
                 $parent = 0;
@@ -104,35 +108,22 @@ class FolderAdmin extends Dossier
             $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
-            $dossierdesc = new Dossierdesc();
             $dossierdesc->dossier = $this->id;
             $dossierdesc->lang = ActionsLang::instance()->get_id_langue_courante();
-            $dossierdesc->titre = $title;
             $dossierdesc->chapo = '';
             $dossierdesc->description = '';
             $dossierdesc->postscriptum = '';
             $dossierdesc->id = $dossierdesc->add();
             
-            $caracteristique = new Caracteristique();
-            $qCarac= "select * from $caracteristique->table";
-            $rCarac = $caracteristique->query($qCarac);
-            while($rCarac && $theCarac = $caracteristique->fetch_object($rCarac))
-            {
-                $rubcaracteristique = new Rubcaracteristique();
-                $rubcaracteristique->dossier = $this->id;
-                $rubcaracteristique->caracteristique = $theCarac->id;
-                $rubcaracteristique->add();
-            }
-
             $dossierdesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutrub", $this);
+            ActionsModules::instance()->appel_module("ajoutdos", $dossierdesc);
             
             redirige("dossier_modifier.php?id=" . $this->id);
         }
         else
         {
-            throw new TheliaAdminException("impossible to add new folder", TheliaAdminException::FOLDER_ADD_ERROR, null, $this);
+            throw new TheliaAdminException("impossible to add new folder", TheliaAdminException::FOLDER_ADD_ERROR, null, $dossierdesc);
         }
     }
     
