@@ -130,8 +130,10 @@ class FolderAdmin extends Dossier
             
             redirige("dossier_modifier.php?id=" . $this->id);
         }
-        
-        return 1;
+        else
+        {
+            throw new TheliaAdminException("impossible to add new folder", TheliaAdminException::FOLDER_ADD_ERROR, null, $this);
+        }
     }
     
     public function getMaxRanking($parent)

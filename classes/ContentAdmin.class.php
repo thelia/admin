@@ -83,42 +83,37 @@ class ContentAdmin extends Contenu {
         redirige("contenu_modifier.php?id=".$this->id."&dossier=".$this->dossier."&lang=".$lang."&tab=".$tab);
     }
     
-    public function add($title, $category){
-        $error = false;
-        $errorTab = array(
-            "title" => false
-        );
-        
-        if($title == ''){
-            $error = true;
-            $errorTab["title"] = true;
-        }
+    public function add($title, $folder)
+    {
+        $contentdesc = new Contenudesc();
+        $contentdesc->titre = $title;
+        $this->datemodif = date('Y-m-d H:i:s');
+        $this->dossier = $folder;
+        $contentdesc->lang = ActionsLang::instance()->get_id_langue_courante();
         
         if($error === false){
             $this->datemodif = date('Y-m-d H:i:s');
-            $this->dossier = $category;
+            $this->dossier = $folder;
             $this->id = parent::add();
             
-            $contentdesc = new Contenudesc();
-            $contentdesc->titre = $title;
-            $contentdesc->lang = ActionsLang::instance()->get_id_langue_courante();
+            $productdesc->contenu = $this->id;
             $contentdesc->add();
-            
-            $this->cleanCaracteristique();
             
             $contentdesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutprod", $this);
+            ActionsModules::instance()->appel_module("ajoutcont", $this);
             
             redirige('contenu_modifier.php?id='.$this->id.'&dossier='.$this->dossier);
         }
-        
-        return ($error)?$errorTab:false;
+        else
+        {
+            throw new TheliaAdminException("impossible to add new folder", TheliaAdminException::CONTENT_ADD_ERROR, null, $this);
+        }
         
     }
 
     
-    public function modify($lang, $price, $price2, $ecotaxe, $promo, $category, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
+    public function modify($lang, $price, $price2, $ecotaxe, $promo, $folder, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {
         if($this->id == '')
         {
@@ -141,7 +136,7 @@ class ContentAdmin extends Contenu {
         $this->prix2 = self::cleanPrice($price2);
         $this->ecotaxe = self::cleanPrice($ecotaxe);
         
-        $this->checkRewrite($category);
+        $this->checkRewrite($folder);
         
         
         $this->promo = ($promo == 'on')?1:0;
@@ -234,14 +229,14 @@ class ContentAdmin extends Contenu {
         if($nb > 0) $this->stock = $nb;
     }
     
-    public function checkRewrite($category){
-        if($this->dossier != $category) {
-            $query = "select max(classement) as maxClassement from ".Contenu::TABLE." where dossier='" . $category . "'";
+    public function checkRewrite($folder){
+        if($this->dossier != $folder) {
+            $query = "select max(classement) as maxClassement from ".Contenu::TABLE." where dossier='" . $folder . "'";
             $resul = $this->query($query);
             $this->classement =  $this->get_result($resul, 0, "maxClassement") + 1;
 
             $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->dossier);
-            $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $category);
+            $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $folder);
 
             $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
 
@@ -255,7 +250,7 @@ class ContentAdmin extends Contenu {
                 $tmpreec->maj();
             }
             
-            $this->dossier = $category;
+            $this->dossier = $folder;
         }
     }
     
@@ -300,9 +295,9 @@ class ContentAdmin extends Contenu {
     
     /**
      * 
-     * Return an array of content for the current category
+     * Return an array of content for the current folder
      * 
-     * @param string $dossier id of the current category
+     * @param string $dossier id of the current folder
      * @param string $critere order by clause
      * @param string $order ASC or DESC
      * @param string $alpha if order is alpha pu "alpha"
