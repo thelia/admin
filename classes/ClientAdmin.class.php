@@ -58,6 +58,9 @@ class ClientAdmin extends Client
     {
         $searchTerm = $this->escape_string(trim($searchTerm));
         
+        if($searchTerm==='')
+            return array();
+        
         return $this->query_liste("SELECT * FROM " . self::TABLE . " WHERE nom LIKE '%$searchTerm%' OR prenom LIKE '%$searchTerm%' OR entreprise LIKE '%$searchTerm%' OR ville LIKE '%$searchTerm%' OR email LIKE '%$searchTerm%' LIMIT 100");
     }
     

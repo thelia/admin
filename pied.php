@@ -19,7 +19,6 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/general.js"></script>
-    <script src="ajax/recherche/recherche.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function(){
            $(".config_menu a").click(function(){

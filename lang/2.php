@@ -483,10 +483,15 @@
 			//recherche
 			'Resultats_recherche' => 'Search results',
 			'RESULTATS_CLIENTS' => 'CUSTOMER RESULTS',
+			'AUCUN_RESULTATS_CLIENTS' => 'NO CUSTOMERS FOUND',
 			'RESULTATS_COMMANDE' => 'ORDER RESULTS',
+			'AUCUN_RESULTATS_COMMANDES' => 'NO ORDER FOUND',
 			'Num_commande' => 'Order N°',
 			'Date' => 'Date',
 			'RESULTATS_PRODUITS' => 'PRODUCTS RESULTS',
+			'AUCUN_RESULTATS_PRODUITS' => 'NO PRODUCT FOUND',
+			'RESULTATS_CONTENUS' => 'CONTENTS RESULTS',
+			'AUCUN_RESULTATS_CONTENUS' => 'NO CONTENT FOUND',
 			'Reference' => 'Reference',
 
 			//rubcaracteristique

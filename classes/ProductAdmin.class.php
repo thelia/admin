@@ -421,12 +421,17 @@ class ProductAdmin extends Produit {
     
     public function getSearchList($searchTerm)
     {   
+        $searchTerm = $this->escape_string(trim($searchTerm));
+        
         $return = array();
 	
+        if($searchTerm==='')
+            return $return;
+        
         $query = "SELECT p.id, p.ref, p.rubrique, ROUND(IF(p.promo=1, p.prix2, p.prix), 2) AS prix, p.promo, p.nouveaute, p.ligne, pd.titre
             FROM " . Produit::TABLE . " p
                 LEFT JOIN " . Produitdesc::TABLE . " pd
-                    ON p.id=pd.produit
+                    ON p.id=pd.produit AND pd.lang='" . ActionsLang::instance()->get_id_langue_courante() . "'
             WHERE p.ref LIKE '%$searchTerm%'
                 OR pd.titre LIKE '%$searchTerm%'
                 OR pd.description LIKE '%$searchTerm%'";
@@ -434,23 +439,15 @@ class ProductAdmin extends Produit {
 	$resul = $this->query($query);
 	while($resul && $row = $this->fetch_object($resul))
         {
-		$image = new Image();
-		$query_image = "SELECT * FROM ".Image::TABLE." WHERE produit='" . $row->id . "' ORDER BY classement LIMIT 1";
-		$resul_image = $image->query($query_image);
-		$row_image = $image->fetch_object($resul_image, 'image');
-                
-                $return[] = array(
-                    "ref" => $row->ref,
-                    "id" => $row->id,
-                    "rubrique" => $row->rubrique,
-                    "prix" => $row->prix,
-                    "promo" => $row->promo,
-                    "nouveaute" => $row->nouveaute,
-                    "ligne" => $row->ligne,
-                    "titre" => $row->titre,
-                    "image" => array(
-                        "fichier" => $row_image->fichier
-                    )
+            $return[] = array(
+                "ref" => $row->ref,
+                "id" => $row->id,
+                "rubrique" => $row->rubrique,
+                "prix" => $row->prix,
+                "promo" => $row->promo,
+                "nouveaute" => $row->nouveaute,
+                "ligne" => $row->ligne,
+                "titre" => $row->titre
                 );
 	}
                 
