@@ -109,6 +109,8 @@ class OrderAdmin extends Commande
             $date = strftime("%d/%m/%y %H:%M:%S", strtotime($theOrder->date));
 
             $thisOrderArray['ref']  = $theOrder->ref;
+            $thisOrderArray['transaction']  = $theOrder->transaction;
+            $thisOrderArray['facture']  = $theOrder->facture;
             $thisOrderArray['date'] = $date;
             $thisOrderArray['client'] = array(
                 "entreprise" => $client->entreprise,

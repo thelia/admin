@@ -146,6 +146,8 @@
 			//commande
 			'LISTE_COMMANDES' => 'ORDERS LIST',
 			'Num_commande' => 'Order N°',
+			'Num_transaction' => 'Transaction N°',
+			'Num_facture' => 'Invoice N°',
 			'Date_Heure' => 'Date & Time',
 			'Montant' => 'Amount',
 			'Statut' => 'Status',

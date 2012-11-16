@@ -113,6 +113,91 @@ foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')
                 <tr>
                     
                     <th class="span2"><?php echo trad('Num_commande', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('Num_facture', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('Num_transaction', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('Date_Heure', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('Nom', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('Montant', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('Statut', 'admin'); ?></th>
+                    <th class="span1"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $commande)
+{
+    switch($commande['statut'])
+    {
+        case '1':
+            $trClass = 'warning';
+            break;
+        case '4':
+            $trClass = 'success';
+            break;
+        case '5':
+            $trClass = 'error';
+            break;
+        default:
+            $trClass = 'info';
+            break;
+    }
+?>
+                    <tr class="<?php echo $trClass; ?>">
+                        <td>
+                            <?php echo $commande['ref'] ; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['facture']?:''; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['transaction']?:''; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['date']; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['client']['prenom']; ?>
+                            <?php echo $commande['client']['nom']; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['total']; ?>
+                            <?php echo $commande['devise']; ?>
+                        </td>
+                        <td>
+                            <?php echo $commande['titre']; ?>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="commande_details.php?ref=<?php echo $commande['ref']; ?>"><i class="icon-edit"></i></a>
+                                <?php if($commande['statut'] != Commande::ANNULE): ?>
+                                <a class="btn btn-mini js-delete-order" title="<?php echo trad('Annuler', 'admin'); ?>" data-toggle="modal" href="#deleteOrderModal" order-ref="<?php echo $commande["ref"]; ?>" ><i class="icon-remove-sign"></i></a>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+<?php
+}
+?>
+            </tbody>   
+        </table>
+        </div>
+    </div>
+</div>
+
+<!--PRODUITS-->
+<div class="row-fluid">
+    <div class="span12">
+        <h3><?php echo strtoupper(trad('RESULTATS_PRODUITS', 'admin')); ?></h3>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="bigtable">
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    
+                    <th class="span2"><?php echo trad('Num_commande', 'admin'); ?></th>
                     <th class="span2"><?php echo trad('Date_Heure', 'admin'); ?></th>
                     <th class="span3"><?php echo trad('Nom', 'admin'); ?></th>
                     <th class="span2"><?php echo trad('Montant', 'admin'); ?></th>

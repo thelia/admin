@@ -143,6 +143,8 @@
 			//commande
 			'LISTE_COMMANDES' => 'LISTA DE LOS PEDIDOS',
 			'Num_commande' => 'N° de pedido',
+			'Num_transaction' => 'N° de la transacción',
+			'Num_facture' => 'N° de la factura',
 			'Date_Heure' => 'Fecha & Hora',
 			'Montant' => 'Importe',
 			'Statut' => 'Estado',
