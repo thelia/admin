@@ -153,7 +153,6 @@ require_once("entete.php");
                         </div>
                         </div>
                         <?php foreach (ContentAdmin::getInstance($contenu->id)->getImageList($lang) as $image): ?>
-                        <hr>
                         <div class="row-fluid">
                             <div class="span3">
                                 <img src="<?php echo  $image["fichier"] ?>">
@@ -204,7 +203,6 @@ require_once("entete.php");
                             </div>
                         </div>
                         <?php foreach(ContentAdmin::getInstance($contenu->id)->getDocumentList($lang) as $document): ?>
-                        <hr>
                         <div class="row-fluid">
                             <div class="span3">
                                 <p><a target="_blank" href="<?php echo $document["fichier"]; ?>"><?php echo $document["nomFichier"]; ?></a></p>

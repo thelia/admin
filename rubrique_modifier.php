@@ -450,7 +450,6 @@ for($i=0; $i<count($AVlist); $i++)
                         for($i=0; $i<count($Plist); $i++)
                         {
                 ?>
-                                                            <hr />
                                                             <div class="row-fluid">
                                                                 <div class="span3">
 
@@ -591,7 +590,6 @@ for($i=0; $i<count($AVlist); $i++)
                         for($i=0; $i<count($Dlist); $i++)
                         {
                 ?>
-                                                            <hr />
                                                             <div class="row-fluid">
                                                                 <div class="span3">
 
