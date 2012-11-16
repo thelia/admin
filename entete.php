@@ -139,4 +139,12 @@ $statAdmin = new StatAdmin();
       </div>
     </div>
     <div class="bg-image">
-    <div id="wrapper" class="container"> <!--div id="subwrapper"> -->
+    <?php
+    $cataloguePage = array(
+        "produit_modifier",
+        "rubrique_modifier",
+        "contenu_modifier",
+        "dossier_modifier"
+    )
+    ?>
+        <div id="wrapper" class="container <?php if(preg_match("`([^\/]*).php`", $_SERVER['PHP_SELF'], $page) && in_array($page[1], $cataloguePage)) echo "catalogue"; ?>"> <!--div id="subwrapper"> -->
