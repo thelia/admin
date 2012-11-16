@@ -611,7 +611,7 @@
                         'date_Septembre' => 'Septembre',
                         'date_Octobre' => 'Octobre',
                         'date_Novembre' => 'Novembre',
-                        'date_decembre' => 'Décembre'
+                        'date_Decembre' => 'Décembre'
 		);
 
 ?>
