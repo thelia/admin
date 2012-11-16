@@ -197,58 +197,42 @@ foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'),
             <thead>
                 <tr>
                     
-                    <th class="span2"><?php echo trad('Num_commande', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('Date_Heure', 'admin'); ?></th>
-                    <th class="span3"><?php echo trad('Nom', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('Montant', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('Statut', 'admin'); ?></th>
+                    <th class="span3"><?php echo trad('Reference', 'admin'); ?></th>
+                    <th class="span3"><?php echo trad('Titre', 'admin'); ?></th>
+                    <th class="span3"><?php echo trad('Prix', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('En_promotion', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('Nouveaute', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('En_ligne', 'admin'); ?></th>
                     <th class="span1"></th>
                 </tr>
             </thead>
             <tbody>
 <?php
-foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $commande)
+foreach(ProductAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $produit)
 {
-    switch($commande['statut'])
-    {
-        case '1':
-            $trClass = 'warning';
-            break;
-        case '4':
-            $trClass = 'success';
-            break;
-        case '5':
-            $trClass = 'error';
-            break;
-        default:
-            $trClass = 'info';
-            break;
-    }
 ?>
-                    <tr class="<?php echo $trClass; ?>">
+                    <tr>
                         <td>
-                            <?php echo $commande['ref'] ; ?>
+                            <?php echo $produit['ref'] ; ?>
                         </td>
                         <td>
-                            <?php echo $commande['date']; ?>
+                            <?php echo $produit['titre']; ?>
                         </td>
                         <td>
-                            <?php echo $commande['client']['prenom']; ?>
-                            <?php echo $commande['client']['nom']; ?>
+                            <?php echo $produit['prix']; ?>
                         </td>
                         <td>
-                            <?php echo $commande['total']; ?>
-                            <?php echo $commande['devise']; ?>
+                            <input type="checkbox" product-id="<?php echo $produit["id"]; ?>" product-action="changePromo" class="js-change-product" <?php if($produit["promo"]) echo 'checked="checked"' ?> />
                         </td>
                         <td>
-                            <?php echo $commande['titre']; ?>
+                            <input type="checkbox" product-id="<?php echo $produit["id"]; ?>" product-action="changeNew" class="js-change-product" <?php if($produit["nouveaute"]) echo 'checked="checked"' ?> />
+                        </td>
+                        <td>
+                            <input type="checkbox" product-id="<?php echo $produit["id"]; ?>" product-action="changeDisplay" class="js-change-product" <?php if($produit["ligne"]) echo 'checked="checked"' ?> />
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="commande_details.php?ref=<?php echo $commande['ref']; ?>"><i class="icon-edit"></i></a>
-                                <?php if($commande['statut'] != Commande::ANNULE): ?>
-                                <a class="btn btn-mini js-delete-order" title="<?php echo trad('Annuler', 'admin'); ?>" data-toggle="modal" href="#deleteOrderModal" order-ref="<?php echo $commande["ref"]; ?>" ><i class="icon-remove-sign"></i></a>
-                                <?php endif; ?>
+                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="produit_modifier.php?ref=<?php echo $produit['ref']; ?>"><i class="icon-edit"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -316,6 +300,17 @@ jQuery(function($)
     $('.js-delete-order').click(function(){
        $('#orderCancellationInfo').html('Ref. ' + $(this).attr('order-ref'));
        $('#orderCancellationLink').attr('href', 'commande.php?action=supprcmd&ref=' + $(this).attr('order-ref') + '&statut=*&page=1');
+    });
+    
+    $(".js-change-product").click(function(){
+        $.ajax({
+            url : 'ajax/produit.php',
+            data : {
+                product_id : $(this).attr('product-id'),
+                action : $(this).attr('product-action'),
+                display : $(this).is(':checked')
+            }
+        });
     });
 });
 

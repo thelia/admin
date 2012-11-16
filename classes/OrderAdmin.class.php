@@ -86,6 +86,8 @@ class OrderAdmin extends Commande
         
         $qOrders = "SELECT * FROM " . self::TABLE . "
             WHERE ref like '%$searchTerm%'
+                OR facture like '%$searchTerm%'
+                OR transaction like '%$searchTerm%'
                 " . (count($clientFoundList)>0?" OR client IN (" . implode(',', $clientFoundList) . ")":'') . "
                 " . (strtotime($searchTerm)?" OR date LIKE '" . date('Y-m-d', strtotime($searchTerm)) . "%'":'') . "
             LIMIT 100";
