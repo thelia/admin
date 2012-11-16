@@ -4,6 +4,8 @@ class ContentAdmin extends Contenu {
      
     protected $extends = array();
     
+    protected $oldFolder = 0;
+    
     public function __call($name, $arguments) {
         $find = false;
         foreach($this->extends as $extend)
@@ -62,12 +64,6 @@ class ContentAdmin extends Contenu {
         }
         
         redirige("listdos.php?parent=" . $this->dossier);
-    }
-    
-    public function modifyOrder($type, $parent){
-        //$this->changer_classement($this->ref, $type);
-        
-        redirige('listdos.php?parent='.$parent);
     }
     
     public function changeOrder($newClassement, $parent){
@@ -142,9 +138,18 @@ class ContentAdmin extends Contenu {
             $contenudesc->id = $contenudesc->add();
         }
         
+        $this->oldFolder = $this->dossier;
+        
         $this->datemodif = date('Y-m-d H:i:s');
         
-        $this->checkRewrite($folder);
+       
+        
+        if($this->dossier != $folder){
+            $this->checkRewrite($folder);
+            $this->modifyOrder($folder);
+        }
+        
+        
         
         $this->ligne = ($online == 'on')?1:0;
 
@@ -175,15 +180,32 @@ class ContentAdmin extends Contenu {
         
         
     }
-
     
+    /**
+     * 
+     * if folder change, order must be change in old and new folder
+     * 
+     * @param int $folder
+     */
+    public function modifyOrder($folder)
+    {
+        //in old folder
+        $this->modifier_classement($this->id, $this->getMaxRanking($this->oldFolder) + 1);
+
+        //in new folder
+        $this->classement = $this->getMaxRanking($folder) + 1;        
+    }
+    
+    /**
+     * 
+     * if folder change, the rewriting must be check
+     * 
+     * @param int $folder
+     */
     public function checkRewrite($folder){
         if($this->dossier != $folder) {
-            $query = "select max(classement) as maxClassement from ".Contenu::TABLE." where dossier='" . $folder . "'";
-            $resul = $this->query($query);
-            $this->classement =  $this->get_result($resul, 0, "maxClassement") + 1;
-
-            $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->dossier);
+            
+            $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->oldFolder);
             $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $folder);
 
             $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";

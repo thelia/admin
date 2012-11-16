@@ -42,10 +42,9 @@ abstract class FichierAdminBase {
             $obj = new $this->class();
             
             $query = "SELECT o.id, o.classement, o.fichier from ".$obj->table.' o where o.'.$this->typeobjet.' = '.$this->idobjet." order by o.classement";
+          
             
-            $resul = $obj->query($query);
-            
-            while($query && $row = $obj->fetch_object($resul))
+            foreach($obj->query_liste($query) as $row)
             {
                 $objdesc = new $this->classdesc($row->id, $this->lang);
                 
