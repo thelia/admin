@@ -282,4 +282,29 @@ class ContentAdmin extends Contenu {
                 
         return $return;
     }
+    
+    public function getSearchList($searchTerm)
+    {   
+        $return = array();
+	
+        $query = "SELECT c.id, c.dossier, c.ligne, cd.titre
+            FROM " . Contenu::TABLE . " c
+                LEFT JOIN " . Contenudesc::TABLE . " cd
+                    ON c.id=cd.contenu  AND cd.lang='" . ActionsLang::instance()->get_id_langue_courante() . "'
+            WHERE cd.titre LIKE '%$searchTerm%'
+                OR cd.description LIKE '%$searchTerm%'";
+                
+	$resul = $this->query($query);
+	while($resul && $row = $this->fetch_object($resul))
+        {
+            $return[] = array(
+                "id" => $row->id,
+                "dossier" => $row->dossier,
+                "ligne" => $row->ligne,
+                "titre" => $row->titre
+                );
+	}
+                
+        return $return;
+    }
 }

@@ -487,6 +487,7 @@
 			'Num_commande' => 'Order N°',
 			'Date' => 'Date',
 			'RESULTATS_PRODUITS' => 'PRODUCTS RESULTS',
+			'RESULTATS_CONTENUS' => 'CONTENTS RESULTS',
 			'Reference' => 'Reference',
 
 			//rubcaracteristique

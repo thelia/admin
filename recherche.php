@@ -199,10 +199,10 @@ foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'),
                     
                     <th class="span3"><?php echo trad('Reference', 'admin'); ?></th>
                     <th class="span3"><?php echo trad('Titre', 'admin'); ?></th>
-                    <th class="span3"><?php echo trad('Prix', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('En_promotion', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('Nouveaute', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('En_ligne', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('Prix', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('En_promotion', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('Nouveaute', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('En_ligne', 'admin'); ?></th>
                     <th class="span1"></th>
                 </tr>
             </thead>
@@ -232,7 +232,52 @@ foreach(ProductAdmin::getInstance()->getSearchList($request->query->get('motcle'
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="produit_modifier.php?ref=<?php echo $produit['ref']; ?>"><i class="icon-edit"></i></a>
+                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="produit_modifier.php?ref=<?php echo $produit['ref']; ?>&rubrique=<?php echo $produit['rubrique']; ?>"><i class="icon-edit"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+<?php
+}
+?>
+            </tbody>   
+        </table>
+        </div>
+    </div>
+</div>
+
+<!--CONTENUS-->
+<div class="row-fluid">
+    <div class="span12">
+        <h3><?php echo strtoupper(trad('RESULTATS_CONTENUS', 'admin')); ?></h3>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="bigtable">
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    
+                    <th class="span3"><?php echo trad('Titre', 'admin'); ?></th>
+                    <th class="span2"><?php echo trad('En_ligne', 'admin'); ?></th>
+                    <th class="span1"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+foreach(ContentAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $contenu)
+{
+?>
+                    <tr>
+                        <td>
+                            <?php echo $contenu['titre']; ?>
+                        </td>
+                        <td>
+                            <input type="checkbox" product-id="<?php echo $contenu["id"]; ?>" product-action="changeDisplay" class="js-change-content" <?php if($contenu["ligne"]) echo 'checked="checked"' ?> />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini" title="<?php echo trad('editer', 'admin'); ?>" href="contenu_modifier.php?id=<?php echo $contenu['id']; ?>&dossier=<?php echo $contenu['dossier']; ?>"><i class="icon-edit"></i></a>
                             </div>
                         </td>
                     </tr>

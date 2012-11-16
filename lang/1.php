@@ -487,6 +487,7 @@
 			'RESULTATS_COMMANDE' => 'RESULTATS COMMANDE',
 			'Date' => 'Date',
 			'RESULTATS_PRODUITS' => 'RESULTATS PRODUITS',
+			'RESULTATS_CONTENUS' => 'RESULTATS CONTENUS',
 			'Reference' => 'Référence',
 
 			//rubcaracteristique

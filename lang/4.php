@@ -476,6 +476,7 @@
 			'RESULTATS_COMMANDE' => 'RESULTATI ORDINI',
 			'Date' => 'Data',
 			'RESULTATS_PRODUITS' => 'RESULTATI PRODOTTI',
+			'RESULTATS_CONTENUS' => 'RESULTATI CONTENUTI',
 			'Reference' => 'Referenza',
 
 			//rubcaracteristique

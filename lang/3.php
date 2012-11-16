@@ -484,6 +484,7 @@
 			'Num_commande' => 'N° pedido',
 			'Date' => 'Fecha',
 			'RESULTATS_PRODUITS' => 'RESULTADOS PRODUCTOS',
+			'RESULTATS_CONTENUS' => 'RESULTADOS CONTENIDOS',
 			'Reference' => 'Referencia',
 
 			//rubcaracteristique
