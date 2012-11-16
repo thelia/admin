@@ -59,8 +59,10 @@ require_once("entete.php");
             </thead>
             <tbody>
 <?php
+$clientFoundList = array();
 foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')) as $client)
 {
+    $clientFoundList[] = $client->id;
 ?>
                     <tr>
                         <td>
@@ -120,7 +122,7 @@ foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')
             </thead>
             <tbody>
 <?php
-foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle')) as $client)
+foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $commande)
 {
 ?>
                     <tr>

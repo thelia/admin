@@ -77,4 +77,11 @@ class OrderAdmin extends Commande
         
         return $return;
     }
+    
+    public function getSearchList($searchTerm, $clientFoundList)
+    {
+        $searchTerm = $this->escape_string(trim($searchTerm));
+        
+        return $this->query_liste("SELECT * FROM " . self::TABLE . " WHERE client IN (" . implode(',', $clientFoundList) . ") AND ref like '%$searchTerm%' LIMIT 100");
+    }
 }
