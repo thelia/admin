@@ -67,7 +67,7 @@
 							<?php	if(est_autorise("acces_commandes")){ ?>
 							<li class="dropdown <?php activemenu($menu, "commande");?>" id="menucommande" data-toggle="dropdown">
 								<a href="#" data-toggle="dropdown" ><?php echo trad('Commandes', 'admin'); ?><span class="caret"></span></a>
-								<ul class="dropdown-menu" role="menu">
+								<ul class="dropdown-menu config_menu" role="menu">
                                                                     <li role="menuitem"><a data-target="commande.php" href="#">Toutes <span class="badge badge-important"><?php echo $statAdmin->getNbCommand(); ?></span></a></li>
                                                                     <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::NONPAYE; ?>" href="#">Non Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandToPaid(); ?></span></a></li>
                                                                     <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::NONPAYE; ?>" href="#">Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandPaid(); ?></span></a></li>
@@ -91,7 +91,7 @@
 							<?php	if(est_autorise("acces_configuration")){ ?>
 							<li class="dropdown <?php activemenu($menu, "configuration");?>" data-toggle="dropdown" id="menuconfiguration">
                                                             <a href="#" data-toggle="dropdown"><?php echo trad('Configuration', 'admin'); ?><span class="caret"></span></a>
-                                                            <ul class="dropdown-menu" role="menu" id="config_menu">
+                                                            <ul class="dropdown-menu config_menu" role="menu">
                                                                 <li class="dropdown-submenu" role="menuitem">
                                                                     <a href="#"><?php echo trad('GESTION_CATALOGUE_PRODUIT', 'admin'); ?></a>
                                                                     <ul class="dropdown-menu" role="menu">

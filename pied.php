@@ -22,7 +22,7 @@
     <script src="ajax/recherche/recherche.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-           $("#config_menu a").click(function(){
+           $(".config_menu a").click(function(){
               var target = $(this).attr("data-target");
               if(target){
                   location.href = target;
