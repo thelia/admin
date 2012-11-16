@@ -38,9 +38,9 @@ function afficher_liste_plugins($type, $label) {
                 </td>
                 <td>
                     <?php if($plugin->actif): ?>
-                        <a href="plugins.php?action=desactiver&nom=<?php echo $plugin->nom ?>&actif=0"><?php echo trad('Desactiver', 'admin'); ?></a>
+                        <a href="plugins.php?action=desactiver&nom=<?php echo $plugin->nom ?>"><?php echo trad('Desactiver', 'admin'); ?></a>
                     <?php elseif($plugin->activable): ?>
-                        <a href="plugins.php?action=activer&nom=<?php echo $plugin->nom ?>&actif=1"><?php echo trad('Activer', 'admin'); ?></a>
+                        <a href="plugins.php?action=activer&nom=<?php echo $plugin->nom ?>"><?php echo trad('Activer', 'admin'); ?></a>
                     <?php else: ?>
                         <?php if (! empty($plugin->xml->thelia)): ?>
                             <?php echo trad('Nécessite Thelia %s', 'admin', $plugin->xml->thelia); ?>

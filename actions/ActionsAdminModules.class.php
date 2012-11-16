@@ -7,6 +7,9 @@
  * @author Franck Allimant <franck@cqfdev.fr>
  * @version $Id$
  */
+
+use Symfony\Component\HttpFoundation\Request;
+
 require_once(__DIR__ . '/../../lib/pclzip.lib.php');
 
 class ActionsAdminModules extends ActionsModules {
@@ -26,6 +29,37 @@ class ActionsAdminModules extends ActionsModules {
 
 		return self::$instance;
 	}
+        
+        public function action(Request $request)
+        {
+            switch($request->get("action"))
+            {
+                case "supprimer":
+                    $this->supprimer($request->query->get("nom"));
+                    break;
+
+                case 'activer':
+                    $this->activer($request->query->get("nom"));
+                    break;
+
+                case 'desactiver':
+                    $this->desactiver($request->query->get("nom"));
+                    break;
+
+                case 'ajouter' :
+                        if(isset($_FILES['plugin'])) {
+                                if ($_FILES['plugin']['error'] == UPLOAD_ERR_OK) {
+                                        $plugin = $_FILES['plugin']['tmp_name'];
+                                        $plugin_name = $_FILES['plugin']['name'];
+
+                                        $this->installer($plugin, $plugin_name);
+                                } else {
+                                        throw new TheliaException(trad("L'envoi du fichier a échoué", 'admin'), TheliaException::MODULE_ECHEC_UPLOAD);
+                                }
+                        }
+                break;
+            }
+        }
 
 	/**
 	 * @method string Retourne le titre du module, en fonction du contenu du fichier XML
@@ -198,6 +232,8 @@ class ActionsAdminModules extends ActionsModules {
 		else {
 			throw new TheliaException(trad("Module %s incompatible avec votre version de Thelia", 'admin', $nom_module), TheliaException::MODULE_INCOMPATIBLE);
 		}
+                
+                redirige("plugins.php");
 	}
 
 	/**
@@ -266,6 +302,8 @@ class ActionsAdminModules extends ActionsModules {
 			if ($existe_toujours)
 				throw new TheliaException(trad("Echec de la suppression du répertoire du module %s", 'admin', $nom_module) , TheliaException::MODULE_ERR_SUPPRESSION_REPERTOIRE);
 		}
+                
+                redirige("plugins.php");
 	}
 
 	/**
@@ -283,21 +321,22 @@ class ActionsAdminModules extends ActionsModules {
 			$path_zip = "$this->plugins_base_dir/$fichier_zip";
 
 			if (@copy($uploadedfile, $path_zip)) {
-
+                                
 				$archive = new PclZip($path_zip);
 
 				$resul = $archive->extract(PCLZIP_OPT_PATH, $this->plugins_base_dir);
 
 				@unlink($path_zip);
-
+                                
 				if ($resul == 0) {
 					throw new TheliaException(trad("Echec à l'installation du module %s. Erreur ZIP: %s", 'admin', $nom_module, $archive->errorInfo(true)), TheliaException::MODULE_ECHEC_INSTALL);
 				}
-
+                                
 				// Vérifier qu'on peut instancier le plugin. Retrouver tout d'abord le repertoire du plugin
 				$tmp = preg_split ("/[\/\\\:]/", $resul[0]['stored_filename']);
-
+                                
 				$module_name = $tmp[0];
+                                
 
 				try {
 
