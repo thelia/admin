@@ -80,8 +80,52 @@ class OrderAdmin extends Commande
     
     public function getSearchList($searchTerm, $clientFoundList)
     {
+        $return = array();
+
         $searchTerm = $this->escape_string(trim($searchTerm));
         
-        return $this->query_liste("SELECT * FROM " . self::TABLE . " WHERE client IN (" . implode(',', $clientFoundList) . ") AND ref like '%$searchTerm%' LIMIT 100");
+        $qOrders = "SELECT * FROM " . self::TABLE . "
+            WHERE ref like '%$searchTerm%'
+                " . (count($clientFoundList)>0?" OR client IN (" . implode(',', $clientFoundList) . ")":'') . "
+                " . (strtotime($searchTerm)?" OR date LIKE '" . date('Y-m-d', strtotime($searchTerm)) . "%'":'') . "
+            LIMIT 100";
+  	$rOrders = $this->query($qOrders);
+        
+  	while($rOrders && $theOrder = $this->fetch_object($rOrders, 'Commande'))
+        {   
+            $thisOrderArray = array();
+
+            $client = new Client();
+            $client->charger_id($theOrder->client);
+
+            $statutdesc = new Statutdesc();
+            $statutdesc->charger($theOrder->statut);
+
+            $devise = new Devise();
+            $devise->charger($theOrder->devise);
+
+            $total = formatter_somme($theOrder->total(true, true));
+
+            $date = strftime("%d/%m/%y %H:%M:%S", strtotime($theOrder->date));
+
+            $thisOrderArray['ref']  = $theOrder->ref;
+            $thisOrderArray['date'] = $date;
+            $thisOrderArray['client'] = array(
+                "entreprise" => $client->entreprise,
+                "ref" => $client->ref,
+                "nom" => $client->nom,
+                "prenom" => $client->prenom
+            );
+            $thisOrderArray['total'] = $total;
+            $thisOrderArray['devise'] = $devise->symbole;
+            $thisOrderArray['titre'] = $statutdesc->titre;
+            $thisOrderArray['statut'] = $theOrder->statut;
+            $thisOrderArray['id'] = $theOrder->id;
+            
+            $return[] = $thisOrderArray;
+
+	}
+        
+        return $return;
     }
 }
