@@ -1,55 +1,12 @@
 <?php
 
-class SMTPAdmin extends Variable
+class SMTPAdmin extends Smtpconfig
 {
     
-    public function __construct($id = '') {
+    public function __construct() {
         parent::__construct();
-        if($id > 0)
-        {
-            if(!$this->charger_id($id))
-            {
-                throw new TheliaAdminException("Variable not found",  TheliaAdminException::VARIABLE_NOT_FOUND);
-            }
-        }
-    }
-    /**
-     * 
-     * @return \VariableAdmin
-     */
-    public static function getInstance($id = '')
-    {
-        return new SMTPAdmin($id);
-    }
-    
-    public function delete() {
-        if($this->id > 0)
-        {
-            parent::delete();
-
-            ActionsModules::instance()->appel_module("delvariable", $this);
-        }
         
-        redirige("variable.php");
-    }
-    
-    public function getList()
-    {
-        $return = array();
-        $query = "SELECT * FROM " .Variable::TABLE . " WHERE cache=0";
-        
-        foreach($this->query_liste($query) as $variable)
-        {
-            $return[] = array(
-                "id" => $variable->id,
-                "nom" => $variable->nom,
-                "valeur" => $variable->valeur,
-                "protege" => $variable->protege,
-                "cache" => $variable->cache
-            );
-        }
-        
-        return $return;
+        $this->charger(1);
     }
     
     public function add($nom, $valeur)
@@ -75,25 +32,23 @@ class SMTPAdmin extends Variable
     
     public function edit($request)
     {
-        foreach($this->getList() as $variable)
+        $this->serveur = $request->request->get("serveur");
+        $this->port = $request->request->get("port");
+        $this->username = $request->request->get("username");
+        $this->password = $request->request->get("password");
+        $this->secure = $request->request->get("secure");
+        $this->active = $request->request->get("active");
+        
+        if($this->id > 0)
         {
-            if($this->charger_id($variable['id']))
-            {
-                $this->valeur = $request->request->get("valeur_" . $this->id);
-                $this->maj();
-                
-                ActionsModules::instance()->appel_module("modvariable", $this);
-            }
+            $this->maj();
+        }
+        else
+        {
+            $this->id = 1;
+            $this->add();
         }
             
-        redirige("variable.php");
-    }
-    
-    public static function testVariableExists($variableName)
-    {
-        $variable = new Variable($variableName);
-        
-        return $variable->id;
-        
+        redirige("smtp.php");
     }
 }
