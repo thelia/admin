@@ -272,6 +272,38 @@ require_once("entete.php");
         <a class="btn btn-primary" id="changeLangLink"><?php echo trad('Oui', 'admin'); ?></a>
     </div>
 </div>
+
+<!-- picture delation -->
+<div class="modal hide" id="deletePictureModal" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
+    </div>
+    <div class="modal-body">
+        <p><?php echo trad('DeletePictureWarning', 'admin'); ?></p>
+        <img id="pictureDelationUrl" class="span11" />
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
+        <a class="btn btn-primary" id="pictureDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
+    </div>
+</div>
+
+<!-- document delation -->
+<div class="modal hide" id="deleteDocumentModal" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
+    </div>
+    <div class="modal-body">
+        <p><?php echo trad('DeletePictureWarning', 'admin'); ?></p>
+        <p id="documentFileName"></p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
+        <a class="btn btn-primary" id="documentDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
+    </div>
+</div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -290,6 +322,16 @@ $(document).ready(function(){
     });
     $('a[data-toggle="tab"]').on('show',function(e){
         $("input[name=tab]").val($(e.target).attr('href').substring(1));
+    });
+    
+    $(".js-delete-picture").click(function(){
+        $("#pictureDelationUrl").attr("src",$(this).attr('picture-file'));
+        $("#pictureDelationLink").attr("href","contenu_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
+    });
+    
+    $(".js-delete-document").click(function(){
+        $("#documentFileName").html($(this).attr('document-file'));
+        $("#documentDelationLink").attr("href","contenu_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
     });
 });
 </script>
