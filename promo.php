@@ -467,8 +467,8 @@ var Thelia_promo = {
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
                             $('<select />').attr('id', 'promo_edit_type').addClass('input-medium').append(
-                                $('<option />').attr("value","<?php echo Promo::TYPE_SOMME; ?>").html("<?php echo htmlentities(trad('somme', 'admin'), ENT_QUOTES); ?>"),
-                                $('<option />').attr("value","<?php echo Promo::TYPE_POURCENTAGE; ?>").html("<?php echo htmlentities(trad('pourcentage', 'admin', ENT_QUOTES)); ?>")
+                                $('<option />').attr("value","<?php echo Promo::TYPE_SOMME; ?>").html("<?php echo htmlentities(trad('somme', 'admin'), ENT_QUOTES, 'UTF-8'); ?>"),
+                                $('<option />').attr("value","<?php echo Promo::TYPE_POURCENTAGE; ?>").html("<?php echo htmlentities(trad('pourcentage', 'admin', ENT_QUOTES, 'UTF-8')); ?>")
                             ).val(type)
                         )
                     ),
@@ -488,8 +488,8 @@ var Thelia_promo = {
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
                             $('<select />').attr('id', 'promo_edit_actif').addClass('input-mini').append(
-                                $('<option />').attr("value","1").html("<?php echo htmlentities(trad('oui', 'admin'), ENT_QUOTES); ?>"),
-                                $('<option />').attr("value","0").html("<?php echo htmlentities(trad('non', 'admin'), ENT_QUOTES); ?>")
+                                $('<option />').attr("value","1").html("<?php echo htmlentities(trad('oui', 'admin'), ENT_QUOTES, 'UTF-8'); ?>"),
+                                $('<option />').attr("value","0").html("<?php echo htmlentities(trad('non', 'admin'), ENT_QUOTES, 'UTF-8'); ?>")
                             ).val(actif)
                         )
                     ),
@@ -498,7 +498,7 @@ var Thelia_promo = {
                     /*limite*/
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
-                            $('<label />').html('<?php echo htmlentities(trad('Limitee_a', 'admin'), ENT_QUOTES); ?>'),
+                            $('<label />').html('<?php echo htmlentities(trad('Limitee_a', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
                             $('<div />').addClass('input-append').append(
                                 $('<input />').attr('type', 'text').attr('id', 'promo_edit_nombre_limite').addClass('input-mini').val(limite==0?'':limite).focus(function()
                                 {
@@ -508,14 +508,14 @@ var Thelia_promo = {
                                     $('<input />').attr('type', 'radio').attr('id', 'promo_edit_limit_fixed').attr('name', 'limite').addClass('js-promo-edit-limite').val(1).attr('checked', limite!=0?true:false)
                                 )
                             ),
-                            $('<label />').html('<?php echo htmlentities(trad('Illimite', 'admin'), ENT_QUOTES); ?>'),
+                            $('<label />').html('<?php echo htmlentities(trad('Illimite', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
                             $('<input />').attr('type', 'radio').attr('name', 'limite').addClass('js-promo-edit-limite').val(0).attr('checked', limite==0?true:false)
                         )
                     ),
                     /*date expi*/
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
-                            $('<label />').html('<?php echo htmlentities(trad('Expire_le', 'admin'), ENT_QUOTES); ?>'),
+                            $('<label />').html('<?php echo htmlentities(trad('Expire_le', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
                             $('<div />').addClass('input-prepend').addClass('input-append').append(
                                 $('<button />').attr('type', 'button').addClass('btn').append(
                                     $('<i />').addClass('icon-calendar')
@@ -527,11 +527,11 @@ var Thelia_promo = {
                                 $('<input />').attr('type', 'text').attr('id', 'promo_edit_date_expi').addClass('input-small').val(date_expi==0?'':date_expi).datepicker({
                                     changeYear: true,
                                     yearRange: '0Y:+5Y',
-                                    dayNamesMin: ['<?php echo htmlentities(trad('date_D', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_L', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_M', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Me', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_J', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_V', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_S', 'admin'), ENT_QUOTES); ?>'],
+                                    dayNamesMin: ['<?php echo htmlentities(trad('date_D', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_L', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_M', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Me', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_J', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_V', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_S', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
                                     dateFormat:'dd-mm-yy',
-                                    monthNames: ['<?php echo htmlentities(trad('date_Janvier', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Fevrier', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Mars', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Avril', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Mai', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Juin', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Juillet', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Aout', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Septembre', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Octobre', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Novembre', 'admin'), ENT_QUOTES); ?>','<?php echo htmlentities(trad('date_Decembre', 'admin'), ENT_QUOTES); ?>'],
-                                    nextText: "<?php echo htmlentities(trad('date_Suivant', 'admin'), ENT_QUOTES); ?>",
-                                    prevText: "<?php echo htmlentities(trad('date_Precedent', 'admin'), ENT_QUOTES); ?>",
+                                    monthNames: ['<?php echo htmlentities(trad('date_Janvier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Fevrier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mars', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Avril', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mai', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juin', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juillet', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Aout', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Septembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Octobre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Novembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Decembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
+                                    nextText: "<?php echo htmlentities(trad('date_Suivant', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
+                                    prevText: "<?php echo htmlentities(trad('date_Precedent', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
                                     firstDay: 1,
                                     minDate: 'd'
                                 }).focus(function()
@@ -542,21 +542,21 @@ var Thelia_promo = {
                                     $('<input />').attr('type', 'radio').attr('id', 'promo_edit_expiration_fixed').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(1).attr('checked', date_expi!=0?true:false)
                                 )
                             ),
-                            $('<label />').html('<?php echo htmlentities(trad('N_expire_pas', 'admin'), ENT_QUOTES); ?>'),
+                            $('<label />').html('<?php echo htmlentities(trad('N_expire_pas', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
                             $('<input />').attr('type', 'radio').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(0).attr('checked', date_expi==0?true:false)
                         )
                     ),
                     /*buttons*/
                     $('<td />').append(
                         $('<div />').addClass('btn-group').append(
-                            $('<button />').attr('title', '<?php echo htmlentities(trad('modifier', 'admin'), ENT_QUOTES); ?>').addClass('btn').addClass('btn-mini').append(
+                            $('<button />').attr('title', '<?php echo htmlentities(trad('modifier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').addClass('btn').addClass('btn-mini').append(
                                 $('<i />').addClass('icon-check')
                             ).click(function()
                             {
                                 /*validation*/
                                 valid_callback(Thelia_promo.getRowResult());
                             }),
-                            $('<button />').attr('title', '<?php echo htmlentities(trad('annuler', 'admin'), ENT_QUOTES); ?>').addClass('btn').addClass('btn-mini').append(
+                            $('<button />').attr('title', '<?php echo htmlentities(trad('annuler', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').addClass('btn').addClass('btn-mini').append(
                                 $('<i />').addClass('icon-remove-sign')
                             ).click(function()
                             {
