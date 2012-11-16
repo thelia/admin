@@ -141,6 +141,8 @@
 			//commande
 			'LISTE_COMMANDES' => 'LISTE DES COMMANDES',
 			'Num_commande' => 'N° de commande',
+			'Num_transaction' => 'N° de transaction',
+			'Num_facture' => 'N° de facture',
 			'Date_Heure' => 'Date & Heure',
 			'Montant' => 'Montant',
 			'Statut' => 'Statut',

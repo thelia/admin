@@ -140,6 +140,8 @@
 			//commande
 			'LISTE_COMMANDES' => 'ELENCO DEGLI ORDINI',
 			'Num_commande' => 'Numero del ordine',
+			'Num_transaction' => 'Numero della transazione',
+			'Num_facture' => 'Numero della fattura',
 			'Date_Heure' => 'Data e ore',
 			'Montant' => 'Importo',
 			'Statut' => 'Stato',

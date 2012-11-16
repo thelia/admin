@@ -1,7 +1,7 @@
 <?php
 require_once("pre.php");
 require_once("auth.php");
-require_once("liste/client.php");
+
 //error_reporting(E_ALL);
 if(! est_autorise("acces_clients"))
     exit;
@@ -72,7 +72,7 @@ if(!empty($action))
 if(!isset($page)) $page=0;
 if($page=="") $page=1;
 
-$query = "SELECT COUNT(*) AS total FROM " . Client::TABLE;
+$query = ClientAdmin::getInstance()->getRequest('count');
 
 $pagination = new PaginationAdmin($query, $page);
 
@@ -121,8 +121,7 @@ require_once("entete.php");
                 </thead>
                 <tbody>
 <?php
-$clientList = liste_clients('ASC', 'nom', $pagination->getStarted(), $pagination->getViewPerPage());
-foreach($clientList as $client)
+foreach(ClientAdmin::getInstance()->getList('ASC', 'nom', $pagination->getStarted(), $pagination->getViewPerPage()) as $client)
 {
 ?>
                     <tr>

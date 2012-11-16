@@ -1,3 +1,5 @@
+    <link rel="shortcut icon" href="favicon.ico" />
+    
     <meta charset="utf-8">
     <title>Thelia - Back Office</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

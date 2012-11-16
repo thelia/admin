@@ -146,6 +146,8 @@
 			//commande
 			'LISTE_COMMANDES' => 'ORDERS LIST',
 			'Num_commande' => 'Order N°',
+			'Num_transaction' => 'Transaction N°',
+			'Num_facture' => 'Invoice N°',
 			'Date_Heure' => 'Date & Time',
 			'Montant' => 'Amount',
 			'Statut' => 'Status',
@@ -461,8 +463,8 @@
 			'Utilisation' => 'Use',
 			'LISTE_CODES_PROMOS' => 'COUPON CODES LIST',
 			'Limitee_a' => 'Limited to',
-			'Expire_le' => 'Expire on',
-			'N_expire_pas' => 'Do not expire',
+			'Expire_le' => 'Expires on',
+			'N_expire_pas' => 'Does not expire',
                         'promo_alredy_exists' => 'Already exists',
 
 			//promo_modifier

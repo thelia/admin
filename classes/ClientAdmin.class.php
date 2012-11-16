@@ -61,6 +61,70 @@ class ClientAdmin extends Client
         return $this->query_liste("SELECT * FROM " . self::TABLE . " WHERE nom LIKE '%$searchTerm%' OR prenom LIKE '%$searchTerm%' OR entreprise LIKE '%$searchTerm%' OR ville LIKE '%$searchTerm%' OR email LIKE '%$searchTerm%' LIMIT 100");
     }
     
+    public function getRequest($type = 'list', $order='ASC', $critere='nom', $debut=0, $nbres=30)
+    {
+        if($type == 'count')
+        {
+            $will = "COUNT(*)";
+        }
+        else
+        {
+            $will = "*";
+        }
+        
+        return "SELECT $will
+                    FROM " . $this->table . "
+                    WHERE 1
+                    ORDER BY $critere $order
+                    LIMIT $debut, $nbres";
+    }
+    
+    public function getList($order, $critere, $debut, $nbres)
+    {
+        $query = $this->getRequest('list', $order, $critere, $debut, $nbres);
+        $resul = $this->query($query);
+        
+        $retour = array();
+        
+        while($resul && $row = $this->fetch_object($resul))
+        {
+            $thisClient = array();
+            
+            $thisClient['ref'] = $row->ref;
+            $thisClient['entreprise'] = $row->entreprise;
+            $thisClient['nom'] = $row->nom;
+            $thisClient['prenom'] = $row->prenom;
+            
+            $thisClient['email'] = $row->email;
+            
+            $commande = new Commande();
+            $devise = new Devise();
+    
+            $querycom = "SELECT id FROM $commande->table WHERE client=$row->id AND statut NOT IN(".Commande::NONPAYE.",".Commande::ANNULE.") ORDER BY date DESC LIMIT 0,1";
+            $resulcom = $commande->query($querycom);
+                
+            if($commande->num_rows($resulcom)>0)
+            {
+                $idcom = $commande->get_result($resulcom,0,"id");
+                $commande->charger($idcom);
+    
+                $devise->charger($commande->devise);
+    
+                $thisClient['date'] = strftime("%d/%m/%Y %H:%M:%S", strtotime($commande->date));
+                $thisClient['somme'] = formatter_somme($commande->total(true, true)) . ' ' . $devise->symbole;
+            }
+            else
+            {
+                $thisClient['date'] = '';
+                $thisClient['somme'] = '';
+            }
+            
+            $retour[] = $thisClient;
+        }
+        
+        return $retour;
+    }
+    
     /**
      * 
      * @param float $pourcentage
@@ -183,7 +247,7 @@ class ClientAdmin extends Client
         {
             $this->maj();
 
-            ActionsModules::instance()->appel_module("modcli", $client);
+            ActionsModules::instance()->appel_module("modcli", $this);
         }
         else
         {
