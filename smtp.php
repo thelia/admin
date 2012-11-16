@@ -5,9 +5,13 @@ require_once("../fonctions/divers.php");
 if (!est_autorise("acces_configuration"))
     exit;
 $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
+$smtp = new SMTPAdmin();
+
 try
 {
-    ActionsAdminSMTP::getInstance()->action($request);
+    if($request->request->get("action") == 'edit')
+        $smtp->edit($request);
 } catch(TheliaAdminException $e) {
     $errorCode = $e->getCode();
     switch ($errorCode)
@@ -32,14 +36,8 @@ require_once("entete.php");
 ?>
     <div class="row-fluid">
         <div class="span12">
-            <h3><?php echo trad('LISTE_VARIABLES', 'admin'); ?>
-            <div class="btn-group">
-                <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#addVariableModal" data-toggle="modal">
-                    <i class="icon-plus-sign icon-white"></i>
-                </a>
-            </div>
-            </h3>
-            <form method="POST" action="variable.php">
+            <h3><?php echo trad('LISTE_VARIABLES', 'admin'); ?></h3>
+            <form method="POST" action="smtp.php">
                 <input type="hidden" name="action" value="edit" />
             <p>
                 <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
@@ -54,16 +52,68 @@ require_once("entete.php");
                 </thead>
                 <tbody>
                     <tr>
-                        <td><?php echo $variable["nom"]; ?></td>
+                        <td><?php echo trad('Serveur', 'admin'); ?></td>
                         <td>
-                            <input class="span11 js-edit" type="text" name="valeur_<?php echo $variable["id"]; ?>" variable-original="<?php echo htmlentities($variable["valeur"], ENT_QUOTES); ?>" variable-id="<?php echo $variable["id"]; ?>" id="js_edit_<?php echo $variable["id"]; ?>" value="<?php echo htmlentities($variable["valeur"], ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="serveur" valeur-original="<?php echo htmlentities($smtp->serveur, ENT_QUOTES); ?>" ligne-id="1" id="js_edit_1" value="<?php echo htmlentities($smtp->serveur, ENT_QUOTES); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" variable-id="<?php echo $variable["id"]; ?>" id="js_cancel_edit_<?php echo $variable["id"]; ?>"><i class="icon-remove"></i></a>
-                            <?php if($variable["protege"] == 0) { ?>
-                                <a class="btn btn-mini js-delete-variable" title="<?php echo trad('supprimer', 'admin'); ?>" href="#deleteVariableModal" data-toggle="modal" variable-id="<?php echo $variable["id"]; ?>" variable-nom="<?php echo $variable["nom"]; ?>"><i class="icon-trash"></i></a>
-                            <?php } ?>
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="1" id="js_cancel_edit_1"><i class="icon-remove"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Port', 'admin'); ?></td>
+                        <td>
+                            <input class="span12 js-edit" type="text" name="port" valeur-original="<?php echo htmlentities($smtp->port, ENT_QUOTES); ?>" ligne-id="2" id="js_edit_2" value="<?php echo htmlentities($smtp->port, ENT_QUOTES); ?>" />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="2" id="js_cancel_edit_2"><i class="icon-remove"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Nom_utilisateur', 'admin'); ?></td>
+                        <td>
+                            <input class="span12 js-edit" type="text" name="username" valeur-original="<?php echo htmlentities($smtp->username, ENT_QUOTES); ?>" ligne-id="3" id="js_edit_3" value="<?php echo htmlentities($smtp->username, ENT_QUOTES); ?>" />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="3" id="js_cancel_edit_3"><i class="icon-remove"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Mdp', 'admin'); ?></td>
+                        <td>
+                            <input class="span12 js-edit" type="password" name="password" valeur-original="<?php echo htmlentities($smtp->password, ENT_QUOTES); ?>" ligne-id="4" id="js_edit_4" value="<?php echo htmlentities($smtp->password, ENT_QUOTES); ?>" />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="4" id="js_cancel_edit_4"><i class="icon-remove"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Protocole_securise', 'admin'); ?></td>
+                        <td>
+                            <input class="span12 js-edit" type="text" name="secure" valeur-original="<?php echo htmlentities($smtp->secure, ENT_QUOTES); ?>" ligne-id="5" id="js_edit_5" value="<?php echo htmlentities($smtp->secure, ENT_QUOTES); ?>" />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="5" id="js_cancel_edit_5"><i class="icon-remove"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Actif', 'admin'); ?></td>
+                        <td>
+                            <input class="span12 js-edit" type="text" name="active" valeur-original="<?php echo htmlentities($smtp->active, ENT_QUOTES); ?>" ligne-id="6" id="js_edit_6" value="<?php echo htmlentities($smtp->active, ENT_QUOTES); ?>" />
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-mini js-cancel-edit" title="<?php echo trad('undo_changes', 'admin'); ?>" ligne-id="6" id="js_cancel_edit_6"><i class="icon-remove"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -76,60 +126,7 @@ require_once("entete.php");
         </div>
     </div>
     
-    <div class="modal hide fade in" id="deleteVariableModal">
-        <div class="modal-header"> <a class="close" data-dismiss="modal">×</a>
-            <h3><?php echo trad('SUPPRESSION_VARIABLE', 'admin'); ?></h3>
-        </div>
-        <div class="modal-body">
-            <p><?php echo trad('DeleteVariableWarning', 'admin'); ?></p>
-            <p id="variableDelationInfo"></p>
-        </div>
-        <div class="modal-footer">
-            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-            <a class="btn btn-primary" id="variableDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-        </div>
-    </div>
     
-    <div class="modal hide fade in" id="addVariableModal">
-        <form method="post" action="variable.php">
-        <input type="hidden" name="action" value="add">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3><?php echo trad('CREATION_VARIABLE', 'admin'); ?></h3>
-        </div>
-        <div class="modal-body">
-            
-<?php if($addError){ ?>
-                    <div class="alert alert-block alert-error fade in">
-                        <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
-                    <p><?php echo trad('check_information', 'admin'); ?></p>
-                    </div>
-<?php } ?>
-            
-            <table class="table table-striped">
-                <tbody>
-                    <tr class="<?php if($addError && ($errorData->nom==='' || VariableAdmin::testVariableExists($errorData->nom))){ ?>error<?php } ?>">
-                        <td>
-                            <?php echo trad('Nom2', 'admin'); ?> *
-                            <?php if($addError && VariableAdmin::testVariableExists($errorData->nom)){ ?>
-                            <br /><?php echo trad('variable_already_exists', 'admin'); ?>
-                            <?php } ?>
-                        </td>
-                        <td><input type="text" name="nom" value="<?php echo ($addError)?$errorData->nom:''; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td><?php echo trad('Valeur', 'admin'); ?></td>
-                        <td><input type="text" name="valeur" value="<?php echo ($addError)?$errorData->valeur:''; ?>"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
-            <button type="submit" class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
-        </div>
-        </form>
-    </div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 jQuery(function($)
@@ -143,23 +140,12 @@ jQuery(function($)
             {
                 $(this).addClass('disabled')
             
-                $('#js_edit_' + $(this).attr('variable-id')).val($('#js_edit_' + $(this).attr('variable-id')).attr('variable-original'));
+                $('#js_edit_' + $(this).attr('ligne-id')).val($('#js_edit_' + $(this).attr('ligne-id')).attr('valeur-original'));
             }
         });
     $('.js-edit').keyup(function(){
-        $('#js_cancel_edit_' + $(this).attr('variable-id')).removeClass('disabled');
+        $('#js_cancel_edit_' + $(this).attr('ligne-id')).removeClass('disabled');
     });
-    
-    /*modal*/
-    $(document).ready(function(){
-        $(".js-delete-variable").click(function(){
-            $("#variableDelationInfo").html($(this).attr("variable-nom"));
-            $("#variableDelationLink").attr("href","variable.php?action=delete&id=" + $(this).attr("variable-id"));
-        })
-    });
-<?php if($addError){ ?>
-    $('#addVariableModal').modal();
-<?php } ?>
 });
 </script>
 </body>
