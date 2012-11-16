@@ -461,8 +461,8 @@
 			'Utilisation' => 'Use',
 			'LISTE_CODES_PROMOS' => 'COUPON CODES LIST',
 			'Limitee_a' => 'Limited to',
-			'Expire_le' => 'Expire on',
-			'N_expire_pas' => 'Do not expire',
+			'Expire_le' => 'Expires on',
+			'N_expire_pas' => 'Does not expire',
                         'promo_alredy_exists' => 'Already exists',
 
 			//promo_modifier

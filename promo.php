@@ -242,10 +242,10 @@ foreach(PromoAdmin::getInstance()->getList($pagination->getStarted(), $paginatio
                             <tr class="<?php if($addError && $errorData->type===''){ ?>error<?php } ?>">
                                 <td><?php echo trad('Type', 'admin'); ?> *</td>
                                 <td>
-                                    <label><?php echo trad('somme', 'admin'); ?></label>
-                                    <input name="type" type="radio" value="<?php echo Promo::TYPE_SOMME ?>" <?php if($addError && $errorData->type==Promo::TYPE_SOMME){ ?>checked="checked"<?php } ?> />
-                                    <label><?php echo trad('pourcentage', 'admin'); ?></label>
-                                    <input name="type" type="radio" value="<?php echo Promo::TYPE_POURCENTAGE ?>" <?php if($addError && $errorData->type==Promo::TYPE_POURCENTAGE){ ?>checked="checked"<?php } ?> />
+                                    <label class="radio"><?php echo trad('somme', 'admin'); ?>
+                                    <input name="type" type="radio" value="<?php echo Promo::TYPE_SOMME ?>" <?php if($addError && $errorData->type==Promo::TYPE_SOMME){ ?>checked="checked"<?php } ?> /></label>
+                                    <label class="radio"><?php echo trad('pourcentage', 'admin'); ?>
+                                    <input name="type" type="radio" value="<?php echo Promo::TYPE_POURCENTAGE ?>" <?php if($addError && $errorData->type==Promo::TYPE_POURCENTAGE){ ?>checked="checked"<?php } ?> /></label>
                                 </td>
                             </tr>
                             <tr class="<?php if($addError && $errorData->valeur===''){ ?>error<?php } ?>">
@@ -263,39 +263,41 @@ foreach(PromoAdmin::getInstance()->getList($pagination->getStarted(), $paginatio
                             <tr class="<?php if($addError && $errorData->actif===''){ ?>error<?php } ?>">
                                 <td><?php echo trad('Code_actif', 'admin'); ?> *</td>
                                 <td>
-                                    <label><?php echo trad('Oui', 'admin'); ?></label>
-                                    <input name="actif" type="radio" value="1" <?php if($addError && $errorData->actif==='1'){ ?>checked="checked"<?php } ?> />
-                                    <label><?php echo trad('Non', 'admin'); ?></label>
-                                    <input name="actif" type="radio" value="0" <?php if($addError && $errorData->actif==='0'){ ?>checked="checked"<?php } ?> />
+                                    <label class="radio"><?php echo trad('Oui', 'admin'); ?>
+                                        <input name="actif" type="radio" value="1" <?php if($addError && $errorData->actif==='1'){ ?>checked="checked"<?php } ?> />
+                                    </label>
+                                    <label class="radio"><?php echo trad('Non', 'admin'); ?>
+                                        <input name="actif" type="radio" value="0" <?php if($addError && $errorData->actif==='0'){ ?>checked="checked"<?php } ?> />
+                                    </label>
                                 </td>
                             </tr>
                             <tr class="<?php if($addError && $errorData->limite === ''){ ?>error<?php } ?>">
                                 <td><?php echo trad('Utilisation', 'admin'); ?> *</td>
                                 <td>
-                                    <label><?php echo trad('Limitee_a', 'admin'); ?></label>
-                                    <div class="input-append">
-                                        <input type="text" id="limit_value" class="input-mini" name="nombre_limite" value="<?php echo ($addError && $errorData->limite>0)?$errorData->limite:''; ?>" />
+                                    <label><?php echo trad('Limitee_a', 'admin'); ?>
+                                    <div class="input-prepend">
                                         <span class="add-on">
                                             <input name="limite" id="limit_fixed_radio" type="radio"  value="1" <?php if($addError && $errorData->form_use_type==='1'){ ?>checked="checked"<?php } ?> />
                                         </span>
-                                    </div>
-                                    <label><?php echo trad('Illimite', 'admin'); ?></label>
-                                    <input name="limite" type="radio"  value="0" <?php if($addError && $errorData->form_use_type==='0'){ ?>checked="checked"<?php } ?> />
+                                        <input type="text" id="limit_value" class="input-mini" name="nombre_limite" value="<?php echo ($addError && $errorData->limite>0)?$errorData->limite:''; ?>" />
+                                    </div></label>
+                                    <label class="radio"><?php echo trad('Illimite', 'admin'); ?>
+                                    <input name="limite" type="radio"  value="0" <?php if($addError && $errorData->form_use_type==='0'){ ?>checked="checked"<?php } ?> /></label>
                                 </td>
                             </tr>
                             <tr class="<?php if($addError && $errorData->datefin === ''){ ?>error<?php } ?>">
                                 <td><?php echo trad('Date_expi', 'admin'); ?> *</td>
                                 <td>
-                                    <label><?php echo trad('Expire_le', 'admin'); ?></label>
+                                    <label><?php echo trad('Expire_le', 'admin'); ?>
                                     <div class="input-prepend input-append">
-                                        <button class="btn" id="expiration_calendar_button" type="button"><i class="icon-calendar"></i></button>
-                                        <input type="text" id="expiration_value" class="input-small" name="date_expi" value="<?php echo ($addError && $errorData->form_expiration_type==='1')?$errorData->datefin:''; ?>" />
                                         <span class="add-on">
                                             <input name="expiration" id="expiration_fixed_radio" type="radio"  value="1" <?php if($addError && $errorData->form_expiration_type==='1'){ ?>checked="checked"<?php } ?> />
                                         </span>
-                                    </div>
-                                    <label><?php echo trad('N_expire_pas', 'admin'); ?></label>
-                                    <input name="expiration" type="radio"  value="0" <?php if($addError && $errorData->form_expiration_type==='0'){ ?>checked="checked"<?php } ?> />
+                                        <input type="text" id="expiration_value" class="input-small" name="date_expi" value="<?php echo ($addError && $errorData->form_expiration_type==='1')?$errorData->datefin:''; ?>" />
+                                        <button class="btn" id="expiration_calendar_button" type="button"><i class="icon-calendar"></i></button>
+                                    </div></label>
+                                    <label class="radio"><?php echo trad('N_expire_pas', 'admin'); ?>
+                                    <input name="expiration" type="radio"  value="0" <?php if($addError && $errorData->form_expiration_type==='0'){ ?>checked="checked"<?php } ?> /></label>
                                 </td>
                             </tr>
                         </tbody>
@@ -498,52 +500,57 @@ var Thelia_promo = {
                     /*limite*/
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
-                            $('<label />').html('<?php echo htmlentities(trad('Limitee_a', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
-                            $('<div />').addClass('input-append').append(
-                                $('<input />').attr('type', 'text').attr('id', 'promo_edit_nombre_limite').addClass('input-mini').val(limite==0?'':limite).focus(function()
-                                {
-                                    $('#promo_edit_limit_fixed').attr('checked', true);
-                                }),
-                                $('<span />').addClass('add-on').append(
-                                    $('<input />').attr('type', 'radio').attr('id', 'promo_edit_limit_fixed').attr('name', 'limite').addClass('js-promo-edit-limite').val(1).attr('checked', limite!=0?true:false)
+                            $('<label />').html('<?php echo htmlentities(trad('Limitee_a', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').append(
+                                $('<div />').addClass('input-prepend').append(
+                                    $('<span />').addClass('add-on').append(
+                                        $('<input />').attr('type', 'radio').attr('id', 'promo_edit_limit_fixed').attr('name', 'limite').addClass('js-promo-edit-limite').val(1).attr('checked', limite!=0?true:false)
+                                    ),
+                                    $('<input />').attr('type', 'text').attr('id', 'promo_edit_nombre_limite').addClass('input-mini').val(limite==0?'':limite).focus(function()
+                                    {
+                                        $('#promo_edit_limit_fixed').attr('checked', true);
+                                    })
+                                    
                                 )
                             ),
-                            $('<label />').html('<?php echo htmlentities(trad('Illimite', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
-                            $('<input />').attr('type', 'radio').attr('name', 'limite').addClass('js-promo-edit-limite').val(0).attr('checked', limite==0?true:false)
+                            $('<label />').addClass('radio').html('<?php echo htmlentities(trad('Illimite', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').append(
+                                $('<input />').attr('type', 'radio').attr('name', 'limite').addClass('js-promo-edit-limite').val(0).attr('checked', limite==0?true:false)
+                            )
                         )
                     ),
                     /*date expi*/
                     $('<td />').append(
                         $('<div />').addClass('control-group').append(
-                            $('<label />').html('<?php echo htmlentities(trad('Expire_le', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
-                            $('<div />').addClass('input-prepend').addClass('input-append').append(
-                                $('<button />').attr('type', 'button').addClass('btn').append(
-                                    $('<i />').addClass('icon-calendar')
-                                ).click(function()
-                                {
-                                    if($('#promo_edit_date_expi').datepicker('widget').is(':hidden'))
-                                        $('#promo_edit_date_expi').datepicker('show');
-                                }),
-                                $('<input />').attr('type', 'text').attr('id', 'promo_edit_date_expi').addClass('input-small').val(date_expi==0?'':date_expi).datepicker({
-                                    changeYear: true,
-                                    yearRange: '0Y:+5Y',
-                                    dayNamesMin: ['<?php echo htmlentities(trad('date_D', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_L', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_M', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Me', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_J', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_V', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_S', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
-                                    dateFormat:'dd-mm-yy',
-                                    monthNames: ['<?php echo htmlentities(trad('date_Janvier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Fevrier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mars', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Avril', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mai', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juin', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juillet', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Aout', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Septembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Octobre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Novembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Decembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
-                                    nextText: "<?php echo htmlentities(trad('date_Suivant', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
-                                    prevText: "<?php echo htmlentities(trad('date_Precedent', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
-                                    firstDay: 1,
-                                    minDate: 'd'
-                                }).focus(function()
-                                {
-                                    $('#promo_edit_expiration_fixed').attr('checked', true);
-                                }),
-                                $('<span />').addClass('add-on').append(
-                                    $('<input />').attr('type', 'radio').attr('id', 'promo_edit_expiration_fixed').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(1).attr('checked', date_expi!=0?true:false)
+                            $('<label />').html('<?php echo htmlentities(trad('Expire_le', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').append(
+                                $('<div />').addClass('input-prepend').addClass('input-append').append(
+                                    $('<span />').addClass('add-on').append(
+                                        $('<input />').attr('type', 'radio').attr('id', 'promo_edit_expiration_fixed').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(1).attr('checked', date_expi!=0?true:false)
+                                    ),
+                                    $('<input />').attr('type', 'text').attr('id', 'promo_edit_date_expi').addClass('input-small').val(date_expi==0?'':date_expi).datepicker({
+                                        changeYear: true,
+                                        yearRange: '0Y:+5Y',
+                                        dayNamesMin: ['<?php echo htmlentities(trad('date_D', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_L', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_M', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Me', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_J', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_V', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_S', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
+                                        dateFormat:'dd-mm-yy',
+                                        monthNames: ['<?php echo htmlentities(trad('date_Janvier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Fevrier', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mars', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Avril', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Mai', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juin', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Juillet', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Aout', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Septembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Octobre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Novembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>','<?php echo htmlentities(trad('date_Decembre', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'],
+                                        nextText: "<?php echo htmlentities(trad('date_Suivant', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
+                                        prevText: "<?php echo htmlentities(trad('date_Precedent', 'admin'), ENT_QUOTES, 'UTF-8'); ?>",
+                                        firstDay: 1,
+                                        minDate: 'd'
+                                    }).focus(function()
+                                    {
+                                        $('#promo_edit_expiration_fixed').attr('checked', true);
+                                    }),
+                                    $('<button />').attr('type', 'button').addClass('btn').append(
+                                        $('<i />').addClass('icon-calendar')
+                                    ).click(function()
+                                    {
+                                        if($('#promo_edit_date_expi').datepicker('widget').is(':hidden'))
+                                            $('#promo_edit_date_expi').datepicker('show');
+                                    })
                                 )
                             ),
-                            $('<label />').html('<?php echo htmlentities(trad('N_expire_pas', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'),
-                            $('<input />').attr('type', 'radio').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(0).attr('checked', date_expi==0?true:false)
+                            $('<label />').addClass('radio').html('<?php echo htmlentities(trad('N_expire_pas', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').append(
+                                $('<input />').attr('type', 'radio').attr('name', 'expiration').addClass('js-promo-edit-expiration').val(0).attr('checked', date_expi==0?true:false)
+                            )
                         )
                     ),
                     /*buttons*/
