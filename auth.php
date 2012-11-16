@@ -32,6 +32,6 @@
         require_once(__DIR__ . "/lang/" . $_SESSION["util"]->lang . ".php");
 
         ActionsAdminModules::instance()->inclure_lang_admin($_SESSION["util"]->lang);
-            ActionsAdminModules::instance()->inclure_module_admin("pre");
+        ActionsAdminModules::instance()->inclure_module_admin("pre");
 
 ?>

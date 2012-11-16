@@ -114,7 +114,7 @@ $statAdmin = new StatAdmin();
                                                                 <li class="dropdown-submenu" role="menuitem">
                                                                     <a href="#"><?php echo trad('PARAMETRES_SYSTEME', 'admin'); ?></a>
                                                                     <ul class="dropdown-menu" role="menu" >
-                                                                        <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Activation_plugins', 'admin'); ?></a></li>
+                                                                        <li role="menuitem"><a data-target="plugins.php" href="#"><?php echo trad('Activation_plugins', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="variable.php" href="#"><?php echo trad('Gestion_variables', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_administrateurs', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_cache', 'admin'); ?></a></li>
