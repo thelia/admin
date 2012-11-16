@@ -1,7 +1,7 @@
 <?php
 require_once("pre.php");
 require_once("auth.php");
-require_once("liste/commande.php");
+
 require_once("../fonctions/divers.php");
 if (!est_autorise("acces_catalogue"))
     exit;
@@ -122,6 +122,7 @@ foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')
             </thead>
             <tbody>
 <?php
+echo 1;
 foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $commande)
 {
 ?>
