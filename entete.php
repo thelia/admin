@@ -1,23 +1,25 @@
 <?php
-	$version = new Variable("version");
-	function activemenu($menu,$verif){
-		if($menu==$verif){
-			print 'active';
-		}
-	}
-        
-        $statAdmin = new StatAdmin();
+function activemenu($menu,$verif){
+        if($menu==$verif){
+                print 'active';
+        }
+}
+
+$statAdmin = new StatAdmin();
 ?>
 
 <div class="topbar">
     <div class="container">
   <p>Thelia Version <?php echo rtrim(preg_replace("/(.)/", "$1.", Variable::lire('version')), "."); ?></p>
   <?php	if(est_autorise("acces_rechercher")){ ?>
-    <form class="form-search">
+    <form class="form-search" method="GET" action="recherche.php">
         <div class="pull-right">
             <div class="control-group">
                 <div class="input-append">
-                    <input type="text" class="input-medium search-query" id="motcle" name="motcle" /><button class="btn"><i class="icon-search"></i></button>
+                    <input type="text" class="input-medium search-query" id="motcle" name="motcle" />
+                    <button class="btn">
+                        <i class="icon-search"></i>
+                    </button>
                 </div>
             </div>
         </div>

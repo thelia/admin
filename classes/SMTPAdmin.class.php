@@ -9,27 +9,6 @@ class SMTPAdmin extends Smtpconfig
         $this->charger(1);
     }
     
-    public function add($nom, $valeur)
-    {
-        $this->nom = $nom;
-        $this->valeur = $valeur;
-        $this->protege = 0;
-        $this->cache = 0;
-        
-        if($this->nom!=="" && !self::testVariableExists($this->nom))
-        {
-            parent::add();
-            
-            ActionsModules::instance()->appel_module("addvariable", $variable);
-            
-            redirige("variable.php");
-        }
-        else
-        {
-            throw new TheliaAdminException("impossible to add new promo", TheliaAdminException::SMTP_EDIT_ERROR, null, $this);
-        }
-    }
-    
     public function edit($request)
     {
         $this->serveur = $request->request->get("serveur");

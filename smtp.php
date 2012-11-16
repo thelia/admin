@@ -54,7 +54,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Serveur', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="text" name="serveur" valeur-original="<?php echo htmlentities($smtp->serveur, ENT_QUOTES); ?>" ligne-id="1" id="js_edit_1" value="<?php echo htmlentities($smtp->serveur, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="serveur" valeur-original="<?php echo htmlentities($smtp->serveur, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="1" id="js_edit_1" value="<?php echo htmlentities($smtp->serveur, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -65,7 +65,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Port', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="text" name="port" valeur-original="<?php echo htmlentities($smtp->port, ENT_QUOTES); ?>" ligne-id="2" id="js_edit_2" value="<?php echo htmlentities($smtp->port, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="port" valeur-original="<?php echo htmlentities($smtp->port, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="2" id="js_edit_2" value="<?php echo htmlentities($smtp->port, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -76,7 +76,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Nom_utilisateur', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="text" name="username" valeur-original="<?php echo htmlentities($smtp->username, ENT_QUOTES); ?>" ligne-id="3" id="js_edit_3" value="<?php echo htmlentities($smtp->username, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="username" valeur-original="<?php echo htmlentities($smtp->username, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="3" id="js_edit_3" value="<?php echo htmlentities($smtp->username, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -87,7 +87,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Mdp', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="password" name="password" valeur-original="<?php echo htmlentities($smtp->password, ENT_QUOTES); ?>" ligne-id="4" id="js_edit_4" value="<?php echo htmlentities($smtp->password, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="password" name="password" valeur-original="<?php echo htmlentities($smtp->password, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="4" id="js_edit_4" value="<?php echo htmlentities($smtp->password, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -98,7 +98,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Protocole_securise', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="text" name="secure" valeur-original="<?php echo htmlentities($smtp->secure, ENT_QUOTES); ?>" ligne-id="5" id="js_edit_5" value="<?php echo htmlentities($smtp->secure, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="secure" valeur-original="<?php echo htmlentities($smtp->secure, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="5" id="js_edit_5" value="<?php echo htmlentities($smtp->secure, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -109,7 +109,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo trad('Actif', 'admin'); ?></td>
                         <td>
-                            <input class="span12 js-edit" type="text" name="active" valeur-original="<?php echo htmlentities($smtp->active, ENT_QUOTES); ?>" ligne-id="6" id="js_edit_6" value="<?php echo htmlentities($smtp->active, ENT_QUOTES); ?>" />
+                            <input class="span12 js-edit" type="text" name="active" valeur-original="<?php echo htmlentities($smtp->active, ENT_QUOTES, 'UTF-8'); ?>" ligne-id="6" id="js_edit_6" value="<?php echo htmlentities($smtp->active, ENT_QUOTES, 'UTF-8'); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
