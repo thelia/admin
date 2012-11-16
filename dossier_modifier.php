@@ -18,7 +18,7 @@ $errorCode = 0;
 $errorMessage = '';
 
 try {
-    ActionsAdminContent::getInstance()->action($request);
+    ActionsAdminFolder::getInstance()->action($request);
 } catch (TheliaAdminException $e) {
     $errorCode = $e->getCode();
     $errorMessage = $e->getMessage();
@@ -62,7 +62,7 @@ require_once("entete.php");
                 <li class="<?php if ($tab == 'documentTab') echo "active"; ?>"><a href="#documentTab" data-toggle="tab"><?php echo trad('GESTION_DOCUMENTS', 'admin'); ?></a></li>
                 <li class="<?php if ($tab == 'moduleTab') echo "active"; ?>"><a href="#moduleTab" data-toggle="tab"><?php echo strtoupper(trad('Modules', 'admin')); ?></a></li>
             </ul>
-            <form method="post" action="contenu_modifier.php" enctype="multipart/form-data" id="formulaire">
+            <form method="post" action="dossier_modifier.php" enctype="multipart/form-data" id="formulaire">
                 <input type="hidden" name="id" value="<?php echo $dossier->id; ?>">
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>">
                 <input type="hidden" name="action" value="modifier">
@@ -135,10 +135,6 @@ require_once("entete.php");
                                         <td><?php echo trad('En_ligne', 'admin'); ?></td>
                                         <td><input type="checkbox" name="ligne" <?php if ($dossier->ligne): ?>checked="checked" <?php endif; ?>></td>
                                     </tr>
-                                    <tr>
-                                        <td><?php echo trad('Derniere_modif', 'admin'); ?></td>
-                                        <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($dossier->datemodif)); ?></td>
-                                    </tr>
                                 </table>
                             </div>    
                         </div>
@@ -202,7 +198,7 @@ require_once("entete.php");
                                 <?php endfor;?>
                             </div>
                         </div>
-                        <?php foreach(FolderAdmin::getInstance($contenu->id)->getDocumentList($lang) as $document): ?>
+                        <?php foreach(FolderAdmin::getInstance($dossier->id)->getDocumentList($lang) as $document): ?>
                         <hr>
                         <div class="row-fluid">
                             <div class="span3">
@@ -253,6 +249,9 @@ require_once("entete.php");
                         </div>
                     </div>
                 </div>
+                <p>
+                    <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
+                </p>
             </form>
         </div>
     </div>
@@ -324,12 +323,12 @@ $(document).ready(function(){
     
     $(".js-delete-picture").click(function(){
         $("#pictureDelationUrl").attr("src",$(this).attr('picture-file'));
-        $("#pictureDelationLink").attr("href","contenu_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
+        $("#pictureDelationLink").attr("href","dossier_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
     });
     
     $(".js-delete-document").click(function(){
         $("#documentFileName").html($(this).attr('document-file'));
-        $("#documentDelationLink").attr("href","contenu_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
+        $("#documentDelationLink").attr("href","dossier_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
     });
 });
 </script>

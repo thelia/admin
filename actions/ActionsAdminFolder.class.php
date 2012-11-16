@@ -28,62 +28,39 @@ class ActionsAdminFolder extends ActionsAdminBase
                 FolderAdmin::getInstance($request->query->get('folder_id'))->delete();
                 break;
             
-            /*association : RO REVIEW*/
-            case 'deleteAssociatedContent':
-                AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));
+            case "modifier" : 
+                $folderAdmin = FolderAdmin::getInstance($request->request->get('id'));
+                $folderAdmin->modify(
+                        $request->request->get('lang', ActionsLang::instance()->get_id_langue_courante()),
+                        $request->request->get('dossier'),
+                        $request->request->get('ligne'),
+                        $request->request->get('titre'),
+                        $request->request->get('chapo'),
+                        $request->request->get('description'),
+                        $request->request->get('postscriptum'),
+                        $request->request->get('urlsuiv'),
+                        $request->request->get('urlreecrite'),
+                        $this->getImages($request, $folderAdmin),
+                        $this->getDocuments($request, $folderAdmin),
+                        $request->request->get('tab')
+                );
                 break;
-            case 'addAssociatedContent':
-                AssociatedContentAdmin::getInstance()->add($request->query->get('contenu'), 0, $request->query->get('id'));
+            case "modifyAttachementPosition":
+                FolderAdmin::getInstance($request->query->get('id'))->changeAttachementPosition(
+                        $request->query->get('attachement'),
+                        $request->query->get('attachement_id'),
+                        $request->query->get('direction'),
+                        $request->query->get('lang'),
+                        $request->query->get('tab')
+                );
                 break;
-
-            case 'deleteAssociatedFeature':
-                AssociatedFeatureAdmin::getInstance()->delete($request->query->get('associatedFeature'));
-                break;
-            case 'addAssociatedFeature':
-                AssociatedFeatureAdmin::getInstance()->add($request->query->get('feature'), $request->query->get('id'));
-                break;
-
-            case 'deleteAssociatedVariant':
-                AssociatedVariantAdmin::getInstance()->delete($request->query->get('associatedVariant'));
-                break;
-            case 'addAssociatedVariant':
-                AssociatedVariantAdmin::getInstance()->add($request->query->get('variant'), $request->query->get('id'));
-                break;
-
-            /*information & description*/
-            case 'changeInformation':
-                FolderAdmin::getInstance($request->request->get('id'))->editInformation($request->request->get('ligne'), $request->request->get('parent'), $request->request->get('lien'));
-                break;
-            case 'changeDescription':
-                FolderAdmin::getInstance($request->request->get('id'))->editDescription($request->request->get('lang'), $request->request->get('titre'), $request->request->get('chapo'), $request->request->get('description'), $request->request->get('postscriptum'), $request->request->get('url'));
-                break;
-
-            /*attachement : picture*/
-            case 'addPicture':
-                FolderAdmin::getInstance($request->request->get('id'))->addPicture();
-                break;
-            case 'editPicture':
-                FolderAdmin::getInstance($request->request->get('id'))->updateImage($this->getImages($request, FolderAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
-                break;
-            case 'deletePicture':
-                FolderAdmin::getInstance($request->query->get('id'))->deleteImage($request->query->get('picture'), $request->query->get('lang'));
-                break;
-            case 'modifyPictureClassement':
-                FolderAdmin::getInstance($request->query->get('id'))->modifyImageOrder($request->query->get('picture'), $request->query->get('will'), $request->query->get('lang'));
-                break;
-            
-            /*attachement : document*/
-            case 'addDocument':
-                FolderAdmin::getInstance($request->request->get('id'))->addDocument();
-                break;
-            case 'editDocument':
-                FolderAdmin::getInstance($request->request->get('id'))->updateDocument($this->getDocuments($request, FolderAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
-                break;
-            case 'deleteDocument':
-                FolderAdmin::getInstance($request->query->get('id'))->deleteDocument($request->query->get('document'), $request->query->get('lang'));
-                break;
-            case 'modifyDocumentClassement':
-                FolderAdmin::getInstance($request->query->get('id'))->modifyDocumentOrder($request->query->get('document'), $request->query->get('will'), $request->query->get('lang'));
+            case "deleteAttachement":
+                FolderAdmin::getInstance($request->query->get('id'))->deleteAttachement(
+                        $request->query->get('attachement'),
+                        $request->query->get('attachement_id'),
+                        $request->query->get('lang'),
+                        $request->query->get('tab')
+                );
                 break;
         }
     }
@@ -96,7 +73,7 @@ class ActionsAdminFolder extends ActionsAdminBase
             return $return;
         }
         
-        $query = 'select id from '.Image::TABLE.' where rubrique='.$folder->id;
+        $query = 'select id from '.Image::TABLE.' where dossier='.$folder->id;
 
         
         $return = $this->extractResult($request, $folder->query_liste($query), array(
@@ -116,7 +93,7 @@ class ActionsAdminFolder extends ActionsAdminBase
             return array();
         }
         
-        $query = "select id from ".Document::TABLE.' where rubrique='.$folder->id;
+        $query = "select id from ".Document::TABLE.' where dossier='.$folder->id;
         
         $return = $this->extractResult($request, $folder->query_liste($query), array(
             "titre" => "document_titre_",
