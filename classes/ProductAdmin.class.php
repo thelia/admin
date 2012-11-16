@@ -152,7 +152,7 @@ class ProductAdmin extends Produit {
             $this->ref = $ref;
             $this->datemodif = date('Y-m-d H:i:s');
             $this->rubrique = $category;
-            $this->classement = $this->getMaxRanking($parent) + 1;
+            $this->classement = $this->getMaxRanking($category) + 1;
             $this->id = parent::add();
             
             $productdesc = new Produitdesc();

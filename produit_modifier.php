@@ -364,6 +364,7 @@ require_once("entete.php");
                                         <img src="<?php echo  $image["fichier"] ?>">
                                         <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#deletePictureModal" data-toggle="modal" picture-file="<?php echo $image["fichier"]; ?>" picture-id="<?php echo $image['id'] ?>"><i class="icon-trash"></i></a>
                                     </div>
+                                    <br />
                                     <div class="span8">
                                         <table class="table table-striped">
                                             <tbody>
