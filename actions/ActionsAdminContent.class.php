@@ -61,6 +61,12 @@ class ActionsAdminContent extends ActionsAdminBase
             case 'deleteContent':
                 ContentAdmin::getInstance($request->query->get('content_id'))->delete();
                 break;
+            case 'modClassementContent':
+                ContentAdmin::getInstance($request->query->get("content_id"))->modifyOrder($request->query->get("type"), $request->query->get("parent"));
+                break;
+            case 'changeClassementContent':
+                ContentAdmin::getInstance($request->request->get("content_id"))->changeOrder($request->request->get("newClassement"), $request->request->get("parent"));
+                break;
         }
     }
     

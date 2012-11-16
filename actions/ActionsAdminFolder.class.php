@@ -27,6 +27,12 @@ class ActionsAdminFolder extends ActionsAdminBase
             case 'deleteFolder':
                 FolderAdmin::getInstance($request->query->get('folder_id'))->delete();
                 break;
+            case 'modClassementFolder':
+                FolderAdmin::getInstance($request->query->get("folder_id"))->modifyOrder($request->query->get("type"), $request->query->get("parent"));
+                break;
+            case 'changeClassementFolder':
+                FolderAdmin::getInstance($request->request->get("folder_id"))->changeOrder($request->request->get("newClassement"), $request->request->get("parent"));
+                break;
             
             case "modifier" : 
                 $folderAdmin = FolderAdmin::getInstance($request->request->get('id'));
@@ -62,6 +68,7 @@ class ActionsAdminFolder extends ActionsAdminBase
                         $request->query->get('tab')
                 );
                 break;
+            
         }
     }
     
