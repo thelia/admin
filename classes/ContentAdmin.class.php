@@ -285,7 +285,12 @@ class ContentAdmin extends Contenu {
     
     public function getSearchList($searchTerm)
     {   
+        $searchTerm = $this->escape_string(trim($searchTerm));
+        
         $return = array();
+        
+        if($searchTerm==='')
+            return $return;
 	
         $query = "SELECT c.id, c.dossier, c.ligne, cd.titre
             FROM " . Contenu::TABLE . " c

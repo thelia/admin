@@ -36,13 +36,21 @@ require_once("entete.php");
 ?>
 
 <!--CLIENT-->
+<?php
+$clientResult = ClientAdmin::getInstance()->getSearchList($request->query->get('motcle'));
+?>
 <div class="row-fluid">
     <div class="span12">
-        <h3><?php echo strtoupper(trad('RESULTATS_CLIENTS', 'admin')); ?></h3>
+        <h3><?php echo strtoupper(trad((count($clientResult) > 0?'RESULTATS_CLIENTS':'AUCUN_RESULTATS_CLIENTS'), 'admin')); ?></h3>
     </div>
 </div>
 <div class="row-fluid">
     <div class="span12">
+<?php
+$clientFoundIdList = array();
+if(count($clientResult) > 0)
+{
+?>
         <div class="bigtable">
         <table class="table table-striped" >
             <thead>
@@ -59,10 +67,9 @@ require_once("entete.php");
             </thead>
             <tbody>
 <?php
-$clientFoundList = array();
-foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')) as $client)
-{
-    $clientFoundList[] = $client->id;
+    foreach($clientResult as $client)
+    {
+        $clientFoundIdList[] = $client->id;
 ?>
                     <tr>
                         <td>
@@ -91,22 +98,32 @@ foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')
                         </td>
                     </tr>
 <?php
-}
+    }
 ?>
             </tbody>   
         </table>
         </div>
+<?php
+}
+?>
     </div>
 </div>
 
 <!--COMMANDES-->
+<?php
+$orderResult = OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundIdList);
+?>
 <div class="row-fluid">
     <div class="span12">
-        <h3><?php echo strtoupper(trad('RESULTATS_COMMANDE', 'admin')); ?></h3>
+        <h3><?php echo strtoupper(trad((count($orderResult) > 0?'RESULTATS_COMMANDE':'AUCUN_RESULTATS_COMMANDES'), 'admin')); ?></h3>
     </div>
 </div>
 <div class="row-fluid">
     <div class="span12">
+<?php
+if(count($orderResult) > 0)
+{
+?>
         <div class="bigtable">
         <table class="table table-striped" >
             <thead>
@@ -124,23 +141,23 @@ foreach(ClientAdmin::getInstance()->getSearchList($request->query->get('motcle')
             </thead>
             <tbody>
 <?php
-foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $commande)
-{
-    switch($commande['statut'])
+    foreach($orderResult as $commande)
     {
-        case '1':
-            $trClass = 'warning';
-            break;
-        case '4':
-            $trClass = 'success';
-            break;
-        case '5':
-            $trClass = 'error';
-            break;
-        default:
-            $trClass = 'info';
-            break;
-    }
+        switch($commande['statut'])
+        {
+            case '1':
+                $trClass = 'warning';
+                break;
+            case '4':
+                $trClass = 'success';
+                break;
+            case '5':
+                $trClass = 'error';
+                break;
+            default:
+                $trClass = 'info';
+                break;
+        }
 ?>
                     <tr class="<?php echo $trClass; ?>">
                         <td>
@@ -176,22 +193,32 @@ foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'),
                         </td>
                     </tr>
 <?php
-}
+    }
 ?>
             </tbody>   
         </table>
         </div>
+<?php
+}
+?>
     </div>
 </div>
 
 <!--PRODUITS-->
+<?php
+$productResult = ProductAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundIdList);
+?>
 <div class="row-fluid">
     <div class="span12">
-        <h3><?php echo strtoupper(trad('RESULTATS_PRODUITS', 'admin')); ?></h3>
+        <h3><?php echo strtoupper(trad((count($productResult) > 0?'RESULTATS_PRODUITS':'AUCUN_RESULTATS_PRODUITS'), 'admin')); ?></h3>
     </div>
 </div>
 <div class="row-fluid">
     <div class="span12">
+<?php
+if(count($productResult) > 0)
+{
+?>
         <div class="bigtable">
         <table class="table table-striped" >
             <thead>
@@ -208,8 +235,8 @@ foreach(OrderAdmin::getInstance()->getSearchList($request->query->get('motcle'),
             </thead>
             <tbody>
 <?php
-foreach(ProductAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $produit)
-{
+    foreach($productResult as $produit)
+    {
 ?>
                     <tr>
                         <td>
@@ -237,43 +264,53 @@ foreach(ProductAdmin::getInstance()->getSearchList($request->query->get('motcle'
                         </td>
                     </tr>
 <?php
-}
+    }
 ?>
             </tbody>   
         </table>
         </div>
+<?php
+}
+?>
     </div>
 </div>
 
 <!--CONTENUS-->
+<?php
+$contentResult = ContentAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundIdList);
+?>
 <div class="row-fluid">
     <div class="span12">
-        <h3><?php echo strtoupper(trad('RESULTATS_CONTENUS', 'admin')); ?></h3>
+        <h3><?php echo strtoupper(trad((count($contentResult) > 0?'RESULTATS_CONTENUS':'AUCUN_RESULTATS_CONTENUS'), 'admin')); ?></h3>
     </div>
 </div>
 <div class="row-fluid">
     <div class="span12">
+<?php
+if(count($contentResult) > 0)
+{
+?>
         <div class="bigtable">
         <table class="table table-striped" >
             <thead>
                 <tr>
                     
-                    <th class="span3"><?php echo trad('Titre', 'admin'); ?></th>
-                    <th class="span2"><?php echo trad('En_ligne', 'admin'); ?></th>
+                    <th class="span9"><?php echo trad('Titre', 'admin'); ?></th>
+                    <th class="span1"><?php echo trad('En_ligne', 'admin'); ?></th>
                     <th class="span1"></th>
                 </tr>
             </thead>
             <tbody>
 <?php
-foreach(ContentAdmin::getInstance()->getSearchList($request->query->get('motcle'), $clientFoundList) as $contenu)
-{
+    foreach($contentResult as $contenu)
+    {
 ?>
                     <tr>
                         <td>
                             <?php echo $contenu['titre']; ?>
                         </td>
                         <td>
-                            <input type="checkbox" product-id="<?php echo $contenu["id"]; ?>" product-action="changeDisplay" class="js-change-content" <?php if($contenu["ligne"]) echo 'checked="checked"' ?> />
+                            <input type="checkbox" content-id="<?php echo $contenu["id"]; ?>" content-action="changeDisplay" class="js-change-content" <?php if($contenu["ligne"]) echo 'checked="checked"' ?> />
                         </td>
                         <td>
                             <div class="btn-group">
@@ -282,11 +319,14 @@ foreach(ContentAdmin::getInstance()->getSearchList($request->query->get('motcle'
                         </td>
                     </tr>
 <?php
-}
+    }
 ?>
             </tbody>   
         </table>
         </div>
+<?php
+}
+?>
     </div>
 </div>
 
@@ -353,6 +393,17 @@ jQuery(function($)
             data : {
                 product_id : $(this).attr('product-id'),
                 action : $(this).attr('product-action'),
+                display : $(this).is(':checked')
+            }
+        });
+    });
+    
+    $(".js-change-content").click(function(){
+        $.ajax({
+            url : 'ajax/contenu.php',
+            data : {
+                content_id : $(this).attr('content-id'),
+                action : $(this).attr('content-action'),
                 display : $(this).is(':checked')
             }
         });

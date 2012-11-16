@@ -421,8 +421,13 @@ class ProductAdmin extends Produit {
     
     public function getSearchList($searchTerm)
     {   
+        $searchTerm = $this->escape_string(trim($searchTerm));
+        
         $return = array();
 	
+        if($searchTerm==='')
+            return $return;
+        
         $query = "SELECT p.id, p.ref, p.rubrique, ROUND(IF(p.promo=1, p.prix2, p.prix), 2) AS prix, p.promo, p.nouveaute, p.ligne, pd.titre
             FROM " . Produit::TABLE . " p
                 LEFT JOIN " . Produitdesc::TABLE . " pd

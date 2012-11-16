@@ -80,9 +80,12 @@ class OrderAdmin extends Commande
     
     public function getSearchList($searchTerm, $clientFoundList)
     {
-        $return = array();
-
         $searchTerm = $this->escape_string(trim($searchTerm));
+        
+        $return = array();
+        
+        if($searchTerm==='' && count($clientFoundList) == 0)
+            return $return;
         
         $qOrders = "SELECT * FROM " . self::TABLE . "
             WHERE ref like '%$searchTerm%'
