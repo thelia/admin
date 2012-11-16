@@ -3,6 +3,7 @@
 class FolderAdmin extends Dossier
 {
     protected $extends = array();
+    protected $oldParent;
     
     public function __call($name, $arguments) {
         $find = false;
@@ -114,6 +115,18 @@ class FolderAdmin extends Dossier
         
         redirige('listdos.php?parent='.$parent);
     }
+    
+    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
+    {
+        $this->getAttachement($attachement)->modclassement($id, $type);
+        redirige("dossier_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
+    }
+    
+    public function deleteAttachement($attachement, $id, $lang, $tab)
+    {
+        $this->getAttachement($attachement)->supprimer($id);
+        redirige("dossier_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
+    }
 
     public function getList($parent, $critere, $order, $alpha)
     {
@@ -159,80 +172,77 @@ class FolderAdmin extends Dossier
         return $tab;
     }
     
-    public function editInformation($ligne, $parent, $lien)
+    public function modify($lang, $parent, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $images, $documents, $tab)
     {
-        if(!$this->id)
-            return;
         
-        if($parent != $this->parent)
+        if($this->id == '')
         {
-            $folderIsMovedInItselfOrASubfolder = 0;
-            $test = chemin_rub($parent);
-            for($i = 0; $i < count($test); $i++)
-            {
-                if($test[$i]->dossier == $this->id)
-                {
-                    $folderIsMovedInItselfOrASubfolder = 1;
-                    break;
-                }
-            }
-            
-            if(!$folderIsMovedInItselfOrASubfolder)
-            {
-                $qUpdateClassement = "SELECT * FROM " . Dossier::TABLE . " WHERE parent='$this->parent' AND id<>'$this->id' ORDER BY classement ASC";
-                $rUpdateClassement = $this->query($qUpdateClassement);
-
-                $newClassement = 1;
-                while($rUpdateClassement && $theFolder = $this->fetch_object($rUpdateClassement, 'Dossier'))
-                {
-                    $theFolder->classement = $newClassement;
-                    $theFolder->maj();
-                    $newClassement++;
-                }
-            
-                $this->classement = $this->getMaxRanking($parent) + 1;
-                $this->parent = $parent;
-            }
+            throw new TheliaAdminException("Folder not found", TheliaAdminException::FOLDER_NOT_FOUND);
         }
         
-        $this->lien = $lien;
-        $this->ligne = ($ligne=='on')?1:0;
-
-        parent::maj();
+        $dossierdesc = new Dossierdesc($this->id, $lang);
         
-        ActionsModules::instance()->appel_module("modrub", $this);
-        
-        redirige('dossier_modifier.php?id=' . $this->id . '&tab=sectionInformationTab');
-    }
-    
-    public function editDescription($langId, $titre, $chapo, $description, $postscriptum, $url)
-    {
-        $lang = new Lang($langId);
-        
-        if(!$this->id || !$lang->id)
-            return;
-        
-        $dossierdesc = new Dossierdesc();
-        if(!$dossierdesc->charger($this->id, $lang->id))
+        if($dossierdesc->id == '')
         {
             CacheBase::getCache()->reset_cache();
+            
             $dossierdesc->dossier = $this->id;
-            $dossierdesc->lang = $lang->id;
+            $dossierdesc->lang = $lang;
             $dossierdesc->id = $dossierdesc->add();
         }
-        
-        $dossierdesc->titre = $titre;
-        $dossierdesc->chapo = $chapo;
-        $dossierdesc->description = $description;
-        $dossierdesc->postscriptum = $postscriptum;
-        $dossierdesc->maj();
-        $dossierdesc->reecrire(($url)?:$lang->code . "-" . $dossierdesc->dossier . "-" . $dossierdesc->titre . ".html");
-        
-        ActionsModules::instance()->appel_module("modrub", $this);
-        
-        redirige('dossier_modifier.php?id=' . $this->id . '&tab=generalDescriptionTab&lang=' . $lang->id);
-    }
 
+        $this->oldParent = $this->parent;
+                
+        
+        if($this->parent != $parent){
+            $this->checkOrder($parent);
+        }
+        $this->parent = $parent;
+        
+        $this->ligne = ($online == 'on')?1:0;
+
+        
+        $dossierdesc->chapo = str_replace("\n", "<br />", $chapo);
+        $dossierdesc->titre = $title;
+        $dossierdesc->postscriptum = $postscriptum;
+        $dossierdesc->description = $description;
+        
+        $this->maj();
+        $dossierdesc->maj();
+        
+        $dossierdesc->reecrire($rewriteurl);
+        $this->setLang($lang);
+        $this->updateImage($images);
+        $this->getImageFile()->ajouter("photo", array("jpg", "gif", "png", "jpeg"), "uploadimage");
+        $this->updateDocuments($documents);
+        $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
+        
+        ActionsModules::instance()->appel_module("moddos", $this);
+        
+        if ($urlsuiv)
+        {
+            redirige('listdos.php?parent='.$this->dossier);
+        } else {
+            redirige('dossier_modifier.php?id='.$this->id.'&tab='.$tab.'&lang='.$lang);
+        }
+        
+        
+    }
+    
+    /**
+     * 
+     * if folder change, order must be change in old and new folder
+     * 
+     * @param int $folder
+     */
+    public function checkOrder($parent)
+    {
+        //in old folder
+        $this->modifier_classement($this->id, $this->getMaxRanking($this->oldParent) + 1);
+
+        //in new folder
+        $this->classement = $this->getMaxRanking($parent) + 1;        
+    }
 }
 
 ?>

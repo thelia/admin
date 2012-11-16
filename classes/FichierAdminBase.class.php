@@ -122,7 +122,6 @@ abstract class FichierAdminBase {
         
         public function ajouter($nom_arg, $extensions_valides = array(), $point_d_entree)
         {
-                Tlog::debug($_FILES);
 		for($i = 1; $i <= $this->nombre_champs_upload; $i++)
                 {
                     $fichier = $_FILES[$nom_arg . $i]['tmp_name'];

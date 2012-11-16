@@ -305,7 +305,8 @@ $(document).ready(function(){
             parent : "<?php echo $parent; ?>",
             object_name : $(this).attr('object-name'),
             object_id : $(this).attr('object-id'),
-            value : value
+            value : value,
+            target : "listdos.php"
         });
         
         $(this).prepend(form);

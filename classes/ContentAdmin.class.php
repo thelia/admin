@@ -72,6 +72,12 @@ class ContentAdmin extends Contenu {
         redirige('listdos.php?parent='.$parent);
     }
     
+    public function modifyOrder($type, $parent){
+        $this->changer_classement($this->id, $type);
+        
+        redirige('listdos.php?parent='.$parent);
+    }
+    
     public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
     {
         $this->getAttachement($attachement)->modclassement($id, $type);
@@ -146,7 +152,7 @@ class ContentAdmin extends Contenu {
         
         if($this->dossier != $folder){
             $this->checkRewrite($folder);
-            $this->modifyOrder($folder);
+            $this->checkOrder($folder);
         }
         
         
@@ -169,7 +175,7 @@ class ContentAdmin extends Contenu {
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
         
-        ActionsModules::instance()->appel_module("modprod", $this);
+        ActionsModules::instance()->appel_module("modcont", $this);
         
         if ($urlsuiv)
         {
@@ -187,7 +193,7 @@ class ContentAdmin extends Contenu {
      * 
      * @param int $folder
      */
-    public function modifyOrder($folder)
+    public function checkOrder($folder)
     {
         //in old folder
         $this->modifier_classement($this->id, $this->getMaxRanking($this->oldFolder) + 1);

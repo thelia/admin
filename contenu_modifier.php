@@ -254,6 +254,9 @@ require_once("entete.php");
                         </div>
                     </div>
                 </div>
+                <p>
+                    <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
+                </p>
             </form>
         </div>
     </div>
