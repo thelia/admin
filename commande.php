@@ -1,7 +1,6 @@
 <?php
     require_once("pre.php");
     require_once("auth.php");
-    require_once("liste/commande.php");
     
     if(! est_autorise("acces_commandes"))
         exit;
@@ -34,7 +33,7 @@
     $commande = new Commande();
     if($page=="") $page=1;
 
-    $query = "select count(id) from $commande->table where 1 $search";
+    $query = OrderAdmin::getInstance()->getRequest('count', $search);
     
     $pagination = new PaginationAdmin($query, $page);
 
@@ -81,7 +80,7 @@ require_once("entete.php");
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach(lister_commandes($critere, $order, $pagination->getStarted(), $pagination->getViewPerPage(), $search) as $commande): ?>
+                    <?php foreach(OrderAdmin::getInstance()->getList($critere, $order, $pagination->getStarted(), $pagination->getViewPerPage(), $search) as $commande): ?>
                     <tr>
                         <td><a href="commande_details.php?ref=<?php echo $commande['ref']; ?>"><?php echo $commande['ref']; ?></a></td>
                         <td><?php echo $commande['date']; ?></td>

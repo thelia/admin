@@ -32,7 +32,7 @@ class ClientAdmin extends Client
         return new ClientAdmin(0, $ref);
     }
     
-    public function deleteOrder($id)
+    public function deleteORder($id)
     {
         $commande = new Commande();
         if($commande->charger($id))
@@ -54,6 +54,13 @@ class ClientAdmin extends Client
         $this->redirect();
     }
     
+    public function getSearchList($searchTerm)
+    {
+        $searchTerm = $this->escape_string(trim($searchTerm));
+        
+        return $this->query_liste("SELECT * FROM " . self::TABLE . " WHERE nom LIKE '%$searchTerm%' OR prenom LIKE '%$searchTerm%' OR entreprise LIKE '%$searchTerm%' OR ville LIKE '%$searchTerm%' OR email LIKE '%$searchTerm%' LIMIT 100");
+    }
+    
     /**
      * 
      * @param float $pourcentage
@@ -69,11 +76,11 @@ class ClientAdmin extends Client
      * @param string $ville
      * @param int $pays
      * @param string $telfixe
-     * @param string $telport
+     * @param string $telpORt
      * @param string $email
      * @param int $type
      */
-    public function edit($pourcentage, $raison, $entreprise, $siret, $intracom, $nom, $prenom, $adresse1, $adresse2,$adresse3, $cpostal, $ville, $pays, $telfixe, $telport, $email, $type)
+    public function edit($pourcentage, $raison, $entreprise, $siret, $intracom, $nom, $prenom, $adresse1, $adresse2,$adresse3, $cpostal, $ville, $pays, $telfixe, $telpORt, $email, $type)
     {
         $this->pourcentage = $pourcentage;
         $this->raison = $raison;
@@ -89,7 +96,7 @@ class ClientAdmin extends Client
         $this->ville = $ville;
         $this->pays = $pays;
         $this->telfixe = $telfixe;
-        $this->telport = $telport;
+        $this->telpORt = $telpORt;
         if($this->email != $email)
         {
             $this->email = '';
