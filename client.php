@@ -1,5 +1,4 @@
 <?php
-require_once("pre.php");
 require_once("auth.php");
 
 //error_reporting(E_ALL);

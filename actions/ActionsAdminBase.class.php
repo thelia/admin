@@ -22,4 +22,19 @@ class ActionsAdminBase extends ActionsBase
         }
         return $return;
     }
+    
+    protected function extractArrayResult(Request $request, $first, array $mapping, $method = "query")
+    {
+        $return = array();
+        $firstParam = $request->$method->get($first);
+        
+        foreach($firstParam as $id => $value)
+        {
+            foreach($mapping as $param)
+            {   
+                $return[$id][$param] = $request->$method->get($param."[".$id."]", null, true);
+            }
+        }
+        return $return;
+    }
 }

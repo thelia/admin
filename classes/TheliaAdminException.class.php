@@ -29,6 +29,7 @@ class TheliaAdminException extends Exception
     const FOLDER_NOT_FOUND = 107;
     const CONTENT_NOT_FOUND = 108;
     const PLUGIN_NOT_FOUND = 109;
+    const ADMIN_NOT_FOUND = 110;
     
     const CLIENT_EDIT_ERROR = 200;
     const CLIENT_ADRESS_EDIT_ERROR = 201;
@@ -49,5 +50,14 @@ class TheliaAdminException extends Exception
     
     const PROMO_EDIT_ERROR = 300;
     const PROMO_ADD_ERROR = 302;
+    
+    const ADMIN_PASSWORD_NOT_MATCH = 400;
+    const ADMIN_PASSWORD_EMPTY = 401;
+    const ADMIN_DELETE_HIMSELF = 402;
+    const ADMIN_IMPOSSIBLE_DETELE_AUTH = 403;
+    const ADMIN_MULTIPLE_ERRORS = 404;
+    const ADMIN_ALREADY_EXISTS = 405;
+    const ADMIN_PROFIL_DOES_NOT_EXISTS = 406;
+    const ADMIN_LOGIN_EMPTY = 407;
     
 }

@@ -319,6 +319,16 @@
 			'Langue' => 'Language',
 			'AJOUT_ADMINISTRATEUR' => 'ADD ADMINISTRATOR',
 			'Profil' => 'Profile',
+                        'plugin_error_100' => '%s plugin\'s directory not found',
+                        'plugin_error_102' => '%s plugin\'s directory cannot be deleted',
+                        'plugin_error_103' => '%s plugin and your Thelia\'s version are not compatible ',
+                        'plugin_error_104' => '%s plugin not found in the database',
+                        'plugin_error_105' => '%s plugin\'s installation failed. Zip error : %s',
+                        'plugin_error_106' => '%s plugin\'s class not found',
+                        'plugin_error_107' => 'The file you wish to install does not seem to be a Thelia plugin.',
+                        'plugin_error_110' => 'File transfer failed',
+                        'plugin_error_111' => '%s plugin\'s requirements not matched',
+                        'plugin_error' => 'AN ERROR APPENDED',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURATION',

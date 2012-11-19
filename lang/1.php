@@ -314,6 +314,14 @@
 			'Langue' => 'Langue',
 			'AJOUT_ADMINISTRATEUR' => 'AJOUT D\'UN ADMINISTRATEUR',
 			'Profil' => 'Profil',
+                        'admin_error_400' => 'Les mots de passes ne correspondent pas',
+                        'admin_error_401' => 'Le mot de passe est vide',
+                        'admin_error_402' => 'Il n\'est pas possible de se supprimer soit même',
+                        'admin_error_403' => 'Impossible de supprimer les autorisations liés à l\'administrateur',
+                        'admin_error_405' => 'Le couple identifiant/mot de passe existe déjà',
+                        'admin_error_406' => 'Le profil d\'administrateur n\'existe pas',
+                        'admin_error_407' => 'l\'identifiant est vide',
+                        'MODIF_PASSWORD' => 'Modificaiton du mot de passe',
 
 			//droits
 			'Select_administrateur' => 'Sélectionnez un administrateur ...',
@@ -435,7 +443,7 @@
                         'plugin_error_106' => 'Aucune classe trouvée pour le module %s',
                         'plugin_error_107' => 'Le fichier que vous souhaitez installer ne semble pas contenir un module Thelia',
                         'plugin_error_110' => 'L\'envoi du fichier a échoué',
-                        'plugin_error_111' => 'Les prérequis du module %s ne sont pas vérifiées',
+                        'plugin_error_111' => 'Les prérequis du module %s ne sont pas vérifiés',
                         'plugin_error' => 'UNE ERREUR A ÉTÉ DÉTECTÉ',
                         
 

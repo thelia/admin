@@ -419,6 +419,17 @@
 			'LISTE_PLUGINS_TRANSPORTS' => 'LISTA DEI PLUGINS TRASPORTI',
 			'Suppression_plugin_echoue' => 'La soppressione del plugin ha fallito. Verificate i diritti di scrittura suk repertorio del plugin e i suoi files.',
 			'Valider' => 'Confermare',
+                        'Aucunplugin' => 'Aucun plugin de ce type n\'est présent.',
+                        'plugin_error_100' => 'Il repertorio del modulo %s e inesistente ',
+                        'plugin_error_102' => 'Fallimento della soppressione del repertorio del modulo %s',
+                        'plugin_error_103' => 'Modulo %s incompatibile con la vostra versione du Thelia',
+                        'plugin_error_104' => 'impossibile du trovare il modulo %s nella database',
+                        'plugin_error_105' => 'Fallimento a l\'installazione del modulo %s. Errore ZIP: %s',
+                        'plugin_error_106' => 'No classi trovate per il modulo %s',
+                        'plugin_error_107' => 'Il file che volete installare no sembra contenere un modulo Thelia',
+                        'plugin_error_110' => 'L\'invio del file a fallito ',
+                        'plugin_error_111' => 'prerequisiti del modulo %s non sono verificati ',
+                        'plugin_error' => 'UN ERRORE E STATO INDIVIDUATO ',
 
 			//produit_modifier
 			'Reference' => 'Referenza',

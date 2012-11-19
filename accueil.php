@@ -1,5 +1,4 @@
 <?php
-		require_once("pre.php");
 		require_once("auth.php");
 		$rsspass = new Variable("rsspass");
 		$version = new Variable("version");

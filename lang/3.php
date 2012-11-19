@@ -326,6 +326,16 @@
 			'Autorisation' => 'Autorización',
 			'Module' => 'Plugin',
 			'Acces' => 'Acceso',
+                        'plugin_error_100' => 'el directorio del plugin %s no existé',
+                        'plugin_error_102' => 'no se puede suprimir el directorio des plugin %s',
+                        'plugin_error_103' => 'Plugin %s incompatible con esta versión de Thelia',
+                        'plugin_error_104' => 'Impossible de encontrar el plugin %s en Base de datos',
+                        'plugin_error_105' => 'Impossible de instalar el plugin %s. Error ZIP: %s',
+                        'plugin_error_106' => 'Ninguna class encontrada para el plugin %s',
+                        'plugin_error_107' => 'El directorio que queries instalar no contiene un plugin para Thelia',
+                        'plugin_error_110' => 'Upload failed',
+                        'plugin_error_111' => 'Les prérequis du module %s ne sont pas vérifiés',
+                        'plugin_error' => 'HAY UN ERROR',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURACIÓN',

@@ -1,6 +1,5 @@
 <?php
 
-require_once("pre.php");
 require_once("auth.php");
 
 if(! est_autorise("acces_contenu")) exit;
