@@ -427,6 +427,17 @@
 			'Suppression_plugin_echoue' => 'La suppression du plugin a échoué. Vérifiez les droits en écriture sur le répertoire du plugin et ses fichiers.',
 			'Valider' => 'Valider',
 			'Aucunplugin' => 'Aucun plugin de ce type n\'est présent.',
+                        'plugin_error_100' => 'Le répertoire du module %s est inexistant',
+                        'plugin_error_102' => 'Echec de la suppression du répertoire du module %s',
+                        'plugin_error_103' => 'Module %s incompatible avec votre version de Thelia',
+                        'plugin_error_104' => 'Impossible de trouver le module %s en Base de données',
+                        'plugin_error_105' => 'Echec à l\'installation du module %s. Erreur ZIP: %s',
+                        'plugin_error_106' => 'Aucune classe trouvée pour le module %s',
+                        'plugin_error_107' => 'Le fichier que vous souhaitez installer ne semble pas contenir un module Thelia',
+                        'plugin_error_110' => 'L\'envoi du fichier a échoué',
+                        'plugin_error_111' => 'Les prérequis du module %s ne sont pas vérifiées',
+                        'plugin_error' => 'UNE ERREUR A ÉTÉ DÉTECTÉ',
+                        
 
 			//produit_modifier
 			'Reference' => 'Référence',

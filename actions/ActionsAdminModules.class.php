@@ -205,7 +205,7 @@ class ActionsAdminModules extends ActionsModules {
 	 * @method Modules Activer un module
 	 * @param string $nom_module: le nom du module
 	 * @return un objet Modules chargé
-	 * @throws MODULE_INCOMPATIBLE si le module est incompatibel avec la version courante de Thelia
+	 * @throws MODULE_INCOMPATIBLE si le module est incompatible avec la version courante de Thelia
 	 * @throws MODULE_PREREQUIS_NON_VERIFIES si les prérequis du modules ne sont pas vérifiés.
 	 */
 	public function activer($nom_module) {
@@ -329,7 +329,7 @@ class ActionsAdminModules extends ActionsModules {
 				@unlink($path_zip);
                                 
 				if ($resul == 0) {
-					throw new TheliaException(trad("Echec à l'installation du module %s. Erreur ZIP: %s", 'admin', $nom_module, $archive->errorInfo(true)), TheliaException::MODULE_ECHEC_INSTALL);
+					throw new TheliaException($archive->errorInfo(true), TheliaException::MODULE_ECHEC_INSTALL);
 				}
                                 
 				// Vérifier qu'on peut instancier le plugin. Retrouver tout d'abord le repertoire du plugin

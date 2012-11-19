@@ -7,12 +7,15 @@ if (!est_autorise("acces_configuration"))
 require __DIR__ . '/liste/plugins.php';
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-
+$errorCode = 0;
+$errorMessage = "";
 try
 {
     ActionsAdminModules::instance()->action($request);
 } catch (TheliaException $e) {
     Tlog::error($e);
+    $errorCode = $e->getCode();
+    $errorMessage = $e->getMessage();
 }
 
 // Mise a jour de la base suivant le contenu du repertoire plugins
@@ -59,6 +62,27 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+    <?php if($errorCode > 0): ?>
+    <div class="modal hide fade in" id="error-plugin">
+        <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+             <h3><?php echo trad('plugin_error','admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-block alert-error">
+            <?php echo trad('plugin_error_'.$errorCode,'admin', $request->query->get('nom'), $errorMessage); ?>
+            </div>
+        </div>
+        <div class="modal-footer">
+            
+        </div>
+    </div>
+    <?php endif; ?>
 <?php require_once("pied.php"); ?> 
 </body>
+<script type="text/javascript">
+    <?php if($errorCode > 0): ?>
+        $("#error-plugin").modal("show");
+   <?php endif; ?>
+</script>
 </html>
