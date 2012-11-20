@@ -31,7 +31,6 @@ class MessageAdmin extends Message
     
     public function modify($lang, $intitule, $titre, $chapo, $description, $descriptiontext)
     {
-        Tlog::debug("modify");
         $messagedesc = new Messagedesc($this->id, $lang);
         
         $messagedesc->intitule = $intitule;

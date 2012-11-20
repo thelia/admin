@@ -206,8 +206,6 @@ class AdministrateurAdmin extends Administrateur
     {
         $password = trim($password);
         $verifyPassword = trim($verifyPassword);
-        Tlog::debug($password);
-        Tlog::debug($verifyPassword);
         
         if($password != $verifyPassword)
         {

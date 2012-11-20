@@ -12,7 +12,7 @@ try
 {
     ActionsAdminModules::instance()->action($request);
 } catch (TheliaException $e) {
-    Tlog::error($e);
+    Tlog::error($e->getMessage());
     $errorCode = $e->getCode();
     $errorMessage = $e->getMessage();
 }

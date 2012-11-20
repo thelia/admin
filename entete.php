@@ -117,7 +117,7 @@ $statAdmin = new StatAdmin();
                                                                         <li role="menuitem"><a data-target="plugins.php" href="#"><?php echo trad('Activation_plugins', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="variable.php" href="#"><?php echo trad('Gestion_variables', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="gestadm.php" href="#"><?php echo trad('Gestion_administrateurs', 'admin'); ?></a></li>
-                                                                        <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_cache', 'admin'); ?></a></li>
+                                                                        <li role="menuitem"><a data-target="cache.php" href="#"><?php echo trad('Gestion_cache', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_log', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_droit', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_htmlpurifier', 'admin'); ?></a></li>
