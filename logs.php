@@ -143,7 +143,7 @@ require_once("entete.php");
                 </p>
             </div>
             <div class="bigtable">
-                <table class="table table-striped">
+                <table class="table">
                     <thead>
                         <caption>
                             <h3>DESTINATIONS</h3>
@@ -155,18 +155,68 @@ require_once("entete.php");
                     <tbody>
                         <?php 
                             $actives = $adm->liste_destinations_actives();
-                            foreach($adm->liste_destinations() as $nomclasse => $destinations)
+                            foreach($adm->liste_destinations() as $nomclasse => $destination)
                             {
                                 $titre = $destination->get_titre();
                                 $label = $destination->get_description();
 
                                 $active = in_array($nomclasse, $actives);
                         ?>    
-                          <tr>
-                              
+                          <tr class="info">
+                             <input type="hidden" name="destinations[]" value="<?php echo $nomclasse;?>" > 
+                             <td colspan="2">
+                                 <label class="checkbox inline"><strong><?php echo $titre; ?></strong> <input type="checkbox" name="<?php echo $nomclasse;?>_actif" class="js-toggle-destination" destination-class="<?php echo $nomclasse; ?>" <?php echo ($active ? 'checked="checked"' : "") ?> > </label>
+                                 <p>
+                                     <small><?php echo $label; ?></small>
+                                 </p>
+                             </td>
                           </tr>
-                        
+                          
                         <?php
+                            $disabled = $active ? '' : 'disabled="disabled"';
+
+                            $configs = $destination->get_configs();
+
+                            $idx = 0;
+                                foreach($configs as $config) {
+                                    ?>
+                                    <tr class="<?php echo $nomclasse; ?> warning" <?php if ($disabled) echo 'style="display: none"'; ?>>
+                                        <td>
+                                            <?php echo $config->titre; ?>:
+                                            <p>
+                                                <small><?php echo $config->label; ?></small>
+                                            </p>
+                                        </td>
+                                        <td class="valeur-destination" rel="<?php echo $nomclasse; ?>">
+                                            <?php
+                                                switch($config->type) {
+                                                    default:
+                                                    case TlogDestinationConfig::TYPE_TEXTFIELD:
+                                                        ?>
+                                                        <input class="input-xxlarge" type="text" name="<?php echo $nomclasse;?>_<?php echo $config->nom; ?>" value="<?php echo htmlspecialchars($config->valeur); ?>" <?php echo $disabled ?>/>
+                                                        <?php
+                                                    break;
+
+                                                    case TlogDestinationConfig::TYPE_TEXTAREA:
+                                                        ?>
+                                                        <textarea class="input-xxlarge" name="<?php echo $nomclasse;?>_<?php echo $config->nom; ?>" <?php echo $disabled ?>><?php echo $config->valeur; ?></textarea>
+                                                        <?php
+                                                    break;
+                                                }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                if (count($configs) == 0) {
+                                        ?>
+                                <tr class="warning <?php echo $nomclasse; ?>" <?php if ($disabled) echo 'style="display: none"'; ?>>
+                                                <td colspan="2">
+                                                        Cette destination n'offre pas de possibilité de configuration.
+                                                </td>
+                                        </tr>
+                                        <?php
+                                }
                             }
                         ?>
                     </tbody>
@@ -190,6 +240,17 @@ require_once("entete.php");
                 $('input[name=<?php echo Tlog::VAR_FILES ?>]').val(files.join(';'));
 
                 $('#ms_form').submit();
+            });
+            
+            $(".js-toggle-destination").click(function(e){
+               var $this = $(this), id=$this.attr("destination-class");
+               if($this.is(":checked")){
+                    $('td[rel='+id+'] input, td[rel='+id+'] textarea').removeAttr('disabled');
+                    $('tr.'+id).show();
+               } else {
+                    $('td[rel='+id+'] input, td[rel='+id+'] textarea').attr('disabled', 'disabled');
+                    $('tr.'+id).hide();
+               }
             });
         })
     </script>
