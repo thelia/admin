@@ -637,7 +637,35 @@
                         'date_Septembre' => 'Septembre',
                         'date_Octobre' => 'Octobre',
                         'date_Novembre' => 'Novembre',
-                        'date_Decembre' => 'Décembre'
+                        'date_Decembre' => 'Décembre',
+            
+                        //LOGS
+                        'message_affiche' => 'Définit les messages qui seront affichés',
+                        'message_affiche_desc' => 'Tous les messages de niveau supérieur ou égal au niveau courant seront affichés.',
+                        'trace' => 'Trace de bas niveau',
+                        'debug' => 'Déboguage',
+                        'info' => 'Information',
+                        'alert' => 'Avertissement',
+                        'error' => 'Erreur',
+                        'fatal_error' => 'Erreur fatal',
+                        'entete_logs' => 'En-tête des lignes de log :',
+                        'num_ordre' => 'numéro d\'ordre',
+                        'message_level' => 'niveau du message',
+                        'file_name' => 'nom du fichier',
+                        'function_name' => 'nom de la fonction',
+                        'line_number' => 'numéro de ligne',
+                        'date_format' => 'date au format aaaa-mm-dd',
+                        'hour_format' => 'heure au format hh:mm:ss',
+                        'display_redirect' => 'Afficher les redirections : ',
+                        'display_redirect_desc' => 'Les redirections via redirige() seront affichées sous forme de liens cliquables.',
+                        'display_IP' => 'Afficher uniquement pour l\'adresse IP :',
+                        'display_IP_desc' => 'Une ou plusieurs adresses IP, séparées par des points-virgules (;). Laisser vide pour afficher les logs pour toutes les adresses IP.',
+                        'actual_IP' => 'Votre IP actuelle est',
+                        'activate_file_logs' => 'Activer les logs uniquement pour les fichiers ci contre.',
+                        'activate_file_logs_desc' => 'Indiquer le nom du fichier, sans le chemin. ! avant le nom du fichier permet de l\'exclure. Utiliser * pour activer les logs sur tous les fichiers',
+                        'add_file' => 'Ajouter le fichier',
+                        'destination_explain' => 'Les destinations sont chargées de stocker ou d\'afficher les logs. Par exemple, ils seront affichés à l\'écran, stockés dans un fichier, ou envoyés par e-mail...
+                            Vous pouvez choisir et paramétrer une ou plusieurs destinations ci-dessous.'
 		);
 
 ?>
