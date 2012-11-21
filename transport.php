@@ -51,6 +51,7 @@ require_once("entete.php");
     <?php if (false !== $id = $request->query->get("id", false)){ 
         $module = new Modules($id);
     ?>
+    <a name="lzone">&nbsp;</a>
     <div class="row-fluid">
         <div class="span7">
             <table class="table table-striped">
