@@ -32,12 +32,22 @@ class ActionsAdminPays extends ActionsAdminBase
                 break;
             case "editCountry":
                 PaysAdmin::getInstance($request->request->get("id"))->modify(
-                        $request->request->get("isocode"),
-                        $request->request->get("isoalpha2"),
-                        $request->request->get("isoalpha3"),
-                        $request->request->get("tva"),
-                        $request->request->get("zone"),
-                        $this->getDesc($request)
+                    $request->request->get("isocode"),
+                    $request->request->get("isoalpha2"),
+                    $request->request->get("isoalpha3"),
+                    $request->request->get("tva"),
+                    $request->request->get("zone"),
+                    $this->getDesc($request)
+                );
+                break;
+            case "addCountry":
+                PaysAdmin::getInstance()->add(
+                    $request->request->get("titre"),
+                    $request->request->get("isocode"),
+                    $request->request->get("isoalpha2"),
+                    $request->request->get("isoalpha3"),
+                    $request->request->get("tva"),
+                    $request->request->get("zone")
                 );
                 break;
         }

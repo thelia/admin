@@ -595,6 +595,7 @@
                         'ISO-3166' => 'Numéro ISO-3166',
                         'alpha-2' => 'Code alpha-2',
                         'alpha-3' => 'Code alpha-3',
+                        'country_error_500' => 'Le titre ne peut être vide ici',
 
 			// mois
 			'janvier' => 'janvier',

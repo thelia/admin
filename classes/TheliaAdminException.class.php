@@ -60,4 +60,6 @@ class TheliaAdminException extends Exception
     const ADMIN_PROFIL_DOES_NOT_EXISTS = 406;
     const ADMIN_LOGIN_EMPTY = 407;
     
+    const COUNTRY_TITLE_EMPTY = 500;
+    
 }

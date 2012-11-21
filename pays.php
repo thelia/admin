@@ -4,8 +4,14 @@ require_once("../fonctions/divers.php");
 if (!est_autorise("acces_configuration"))
     exit;
 $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
-
-ActionsAdminPays::getInstance()->action($request);
+$errorCode = 0;
+try
+{
+    ActionsAdminPays::getInstance()->action($request);
+} catch(TheliaAdminException $e) {
+    Tlog::error($e->getMessage());
+    $errorCode = $e->getCode();
+}
 
 ?>
 <!DOCTYPE html>
@@ -23,6 +29,11 @@ require_once("entete.php");
         <div class="span12">
             <h3>
                 <?php echo trad('Gestion des pays', 'admin'); ?>
+                <div class="btn-group">
+                    <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#countryAddModal" data-toggle="modal">
+                        <i class="icon-plus-sign icon-white"></i>
+                    </a>
+                </div>
             </h3>
             <div class="bigtable">
             <table class="table table-striped" id="table-pays">
@@ -80,6 +91,66 @@ require_once("entete.php");
             
         </div>
     </div>
+    <div class="modal hide fade in" id="countryAddModal">
+        <form method="post" action="pays.php">
+        <input type="hidden" name="action" value="addCountry">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('AJOUTER_PAYS', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            <?php if($errorCode > 0): ?>
+                <div class="alert alert-block alert-error" id="countryError">
+                    <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
+                    <p><?php echo trad('country_error_'.$errorCode, 'admin'); ?></p>
+                </div>
+            <?php endif; ?>
+            <table class="table table-striped">
+                <tr class="<?php if($errorCode == TheliaAdminException::COUNTRY_TITLE_EMPTY) echo "error"; ?>">
+                    <td><?php echo trad('Nom', 'admin'); ?></td>
+                    <td><input type="text" name="titre" value="<?php if($errorCode > 0) echo $request->request->get("titre"); ?>"></td>
+                </tr>
+                <tr>
+                    <td><?php echo trad('ISO-3166', 'admin') ?></td>
+                    <td><input type="text" name="isocode" value="<?php if($errorCode > 0) echo $request->request->get("isocode"); ?>"></td>
+                </tr>
+                <tr>
+                    <td><?php echo trad('alpha-2', 'admin') ?></td>
+                    <td><input type="text" name="isoalpha2" value="<?php if($errorCode > 0) echo $request->request->get("isoalpha2"); ?>"></td>
+                </tr>
+                <tr>
+                    <td><?php echo trad('alpha-3', 'admin') ?></td>
+                    <td><input type="text" name="isoalpha3" value="<?php if($errorCode > 0) echo $request->request->get("isoalpha3"); ?>"></td>
+                </tr>
+                <tr>
+                    <td><?php echo trad('TVA_francaise', 'admin') ?></td>
+                    <td>
+                        <label class="radio inline"><?php echo trad('Oui', 'admin'); ?><input type="radio" name="tva" value="1" <?php if($errorCode > 0 && $request->request->get("tva") == 1){ echo 'checked="checked"'; } else if($errorCode == 0) { echo 'checked="checked"'; }?>></label>
+                        <label class="radio inline"><?php echo trad('Non', 'admin'); ?><input type="radio" name="tva" value="0" <?php if($errorCode > 0 && $request->request->get("tva") == 0) echo 'checked="checked"'; ?> ></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo trad('Zone_transport', 'admin'); ?></td>
+                    <td>
+                        <select name="zone">
+                            <option value="0"><?php echo trad('Aucune', 'admin'); ?></option>
+                            <?php 
+                                $pays = new Pays();
+                                foreach($pays->query_liste("SELECT * FROM ".Zone::TABLE." ORDER BY nom") as $zone):
+                            ?>
+                            <option value="<?php echo $zone->id; ?>" <?php if($errorCode > 0 && $request->request->get("zone") == $zone->id): ?>selected="selected"<?php endif; ?>><?php echo $zone->nom; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+            <button type="submit" class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
+        </div>
+        </form>    
+    </div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -109,6 +180,16 @@ require_once("entete.php");
                }
            }); 
         });
+        
+        <?php if($errorCode): ?>
+            $("#countryAddModal").modal("show");
+            $("#countryAddModal").on("hidden", function(){
+                $("#countryError").remove();
+                $("#countryAddModal tr[class=error]").each(function(){
+                    $(this).removeClass("error");
+                })
+            });
+        <?php endif; ?>
     });
 </script>
 </body>

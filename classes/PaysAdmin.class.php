@@ -85,5 +85,30 @@ class PaysAdmin extends Pays
         redirige("pays.php");
     }
     
+    public function add($titre, $isocode, $isoalpha2, $isoalpha3, $tva, $zone)
+    {
+        $titre = trim($titre);
+        
+        if (empty($titre))
+        {
+            throw new TheliaAdminException("Title can not be empty", TheliaAdminException::COUNTRY_TITLE_EMPTY);
+        }
+        
+        $this->isocode = $isocode;
+        $this->isoalpha2 = $isoalpha2;
+        $this->isoalpha3 = $isoalpha3;
+        $this->tva = $tva;
+        $this->zone = $zone;
+        $this->id = parent::add();
+        
+        $paysdesc = new Paysdesc();
+        $paysdesc->pays = $this->id;
+        $paysdesc->lang = ActionsAdminLang::instance()->get_id_langue_courante();
+        $paysdesc->titre = $titre;
+        $paysdesc->add();
+        
+        redirige("pays.php");
+    }
+    
     
 }
