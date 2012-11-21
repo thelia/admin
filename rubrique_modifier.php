@@ -363,14 +363,14 @@ for($i=0; $i<count($AVlist); $i++)
                             <div class="span12">
                                 
                                 <ul class="nav nav-tabs">
-                                    <li class="span6 <?php if(!$request->get('tabAttachement') || $request->get('tabAttachement')=='pictureAttachementTab'){ ?>active<?php } ?>">
+                                    <li class="span5 <?php if(!$request->get('tabAttachement') || $request->get('tabAttachement')=='pictureAttachementTab'){ ?>active<?php } ?>">
                                         <a href="#pictureAttachementTab" data-toggle="tab">
-                                            <h3><?php echo trad('GESTION_PHOTOS', 'admin'); ?></h3>
+                                            <h4><?php echo trad('GESTION_PHOTOS', 'admin'); ?></h4>
                                         </a>
                                     </li>
-                                    <li class="span6 <?php if($request->get('tabAttachement')=='documentAttachementTab'){ ?>active<?php } ?>">
+                                    <li class="span5 <?php if($request->get('tabAttachement')=='documentAttachementTab'){ ?>active<?php } ?>">
                                         <a href="#documentAttachementTab" data-toggle="tab">
-                                            <h3><?php echo trad('GESTION_DOCUMENTS', 'admin'); ?></h3>
+                                            <h4><?php echo trad('GESTION_DOCUMENTS', 'admin'); ?></h4>
                                         </a>
                                     </li>
                                 </ul>
