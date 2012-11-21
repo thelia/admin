@@ -107,7 +107,7 @@ $statAdmin = new StatAdmin();
                                                                     <a href="#"><?php echo trad('GESTION_TRANSPORTS_LIVRAISONS', 'admin'); ?></a>
                                                                     <ul class="dropdown-menu" role="menu" >
                                                                         <li role="menuitem"><a data-target="pays.php" href="#"><?php echo trad('Gestion des pays', 'admin'); ?></a></li>
-                                                                        <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_transport', 'admin'); ?></a></li>
+                                                                        <li role="menuitem"><a data-target="transport.php" href="#"><?php echo trad('Gestion_transport', 'admin'); ?></a></li>
                                                                         <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_zones_livraison', 'admin'); ?></a></li>
                                                                     </ul>
                                                                 </li>
