@@ -23,3 +23,5 @@ Le dézipper et copier le répertoire dans votre Thelia
 
 
 n'oubliez pas de personnaliser le nom de la nouvelle admin. Le répertoire ne peut se nommer admin.
+
+![admin thelia](http://thelia.net/IMG/admin_1.png "Nouvelle Admin de Thelia")
