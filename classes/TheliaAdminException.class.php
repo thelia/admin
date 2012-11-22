@@ -30,6 +30,7 @@ class TheliaAdminException extends Exception
     const CONTENT_NOT_FOUND = 108;
     const PLUGIN_NOT_FOUND = 109;
     const ADMIN_NOT_FOUND = 110;
+    const CARAC_NOT_FOUND = 111;
     
     const CLIENT_EDIT_ERROR = 200;
     const CLIENT_ADRESS_EDIT_ERROR = 201;

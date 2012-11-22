@@ -48,6 +48,7 @@
 			'Tri_croissant' => 'Tri croissant',
 			'Tri_decroissant' => 'Tri décroissant',
 			'Suppr' => 'Suppr.',
+                        'supprime_caracteristique' => "Suppression de le caractéristique",
 
 			//caracteristique_modifier
 			'MODIFICATION_DES_CARACTERISTIQUES' => 'MODIFICATION DES CARACTERISTIQUES',

@@ -3,9 +3,25 @@
 class CaracteristiqueAdmin extends Caracteristique
 {
     
-    public function getInstance()
+    public function __construct($id = 0) {
+        parent::__construct();
+        
+        if($id)
+        {
+            if(!$this->charger_id($id))
+            {
+                throw new TheliaAdminException("Caracteristique not found", TheliaAdminException::CARAC_NOT_FOUND);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @return \CaracteristiqueAdmin
+     */
+    public static function getInstance($id = 0)
     {
-        return new CaracteristiqueAdmin();
+        return new CaracteristiqueAdmin($id);
     }
     
     public function getProductList(\Produit $produit, $lang)
@@ -35,6 +51,50 @@ class CaracteristiqueAdmin extends Caracteristique
             }
         }
         return $return;
+    }
+    
+    public function getList()
+    {
+        $return = array();
+        
+        $query = "SELECT c.id, c.classement FROM ".Caracteristique::TABLE." c order by c.classement";
+        foreach($this->query_liste($query) as $caracteristique)
+        {
+            $caracdesc = new Caracteristiquedesc($caracteristique->id);
+            
+            $return[] = array(
+                "id" => $caracteristique->id,
+                "classement" => $caracteristique->classement,
+                "titre" => $caracdesc->titre
+            );
+        }
+        
+        return $return;
+    }
+    
+    public function modifyOrder($type)
+    {
+        $this->veirfyLoaded();
+        
+        $this->changer_classement($this->id, $type);
+    }
+    
+    public function delete()
+    {
+        $this->veirfyLoaded();
+        parent::delete();
+        ActionsModules::instance()->appel_module("suppcaracteristique", $this);
+    }
+    
+    /**
+     * 
+     * Verify if an admin is loaded 
+     * 
+     * @throws TheliaAdminException ADMIN_NOT_FOUND
+     */
+    protected function veirfyLoaded()
+    {
+        if(!$this->id) throw new TheliaAdminException("Caracteristique not found", TheliaAdminException::CARAC_NOT_FOUND);
     }
     
 }
