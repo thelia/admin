@@ -5,6 +5,8 @@ if (!est_autorise("acces_configuration"))
     exit;
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
+ActionsAdminZone::getInstance()->action($request);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,7 +42,7 @@ require_once("entete.php");
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-mini" href="zone.php?id=<?php echo $zone->id; ?>&action=showZone#zone"><i class="icon-edit"></i></a>
-                                    <a class="btn btn-mini"><i class="icon-trash"></i></a>
+                                    <a href="zone.php?action=supprimer&id=<?php echo $zone->id; ?>" class="btn btn-mini"><i class="icon-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -92,6 +94,27 @@ require_once("entete.php");
         </div>
     </div>
     <?php endif; ?>
+    <div class="modal hide fade in" id="adminAddZone">
+        <form method="post" action="zone.php">
+        <input type="hidden" name="action" value="ajouter">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('AJOUTER_ZONE', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped">
+                <tr>
+                    <td><?php echo trad("Nom", "admin"); ?></td>
+                    <td><input type="text" name="nom"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+            <button type="submit" class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
+        </div>
+        </form>
+    </div>
 <?php require_once("pied.php"); ?> 
     <?php if(false !== $request->query->get("id", false) && $request->query->get("action") == "showZone"): ?>
     <script type="text/javascript">
