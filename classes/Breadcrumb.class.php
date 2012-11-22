@@ -155,5 +155,15 @@ class Breadcrumb
         
         return $this->getBreadcrumb();
     }
+    
+    public function getCaracList($title)
+    {
+        $this->addValue("#", trad('Configuration', 'admin'));
+        $this->addValue("caracteristique.php", trad('Gestion_caracteristiques', 'admin'));
+        
+        $this->addValue("", $title);
+        
+        return $this->getBreadcrumb();
+    }
 }
 ?>
