@@ -16,10 +16,10 @@ en utilisant git :
 
 ### Téléchargement ###
 
-    télécharger le zip ici : https://github.com/thelia/admin/archive/master.zip
+télécharger le zip ici : https://github.com/thelia/admin/archive/master.zip
 
-    Le dézipper et copier le répertoire dans votre Thelia
+Le dézipper et copier le répertoire dans votre Thelia
 
 
 
-    n'oubliez pas de personnaliser le nom de la nouvelle admin. Le répertoire ne peut se nommer admin.
+n'oubliez pas de personnaliser le nom de la nouvelle admin. Le répertoire ne peut se nommer admin.
