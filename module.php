@@ -17,9 +17,7 @@ require_once("entete.php");
 
 try {
         $path = ActionsAdminModules::instance()->trouver_fichier_admin($nom);
-        
-        Tlog::debug($path);
-    
+            
         include($path);
 } catch (Exception $e) {
         Tlog::error($e->getMessage());
