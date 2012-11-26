@@ -66,7 +66,6 @@ require_once("entete.php");
                             <select class="form_select" id="zone">
                             <?php
                             $query = "SELECT z.id, z.nom FROM ".Zone::TABLE." z LEFT JOIN ".Transzone::TABLE." tz ON z.id=tz.zone AND tz.transport=".$id." where ISNULL(tz.transport)";
-                            Tlog::debug($query);
                             foreach($module->query_liste($query) as $zone)
                             {
                             ?>
