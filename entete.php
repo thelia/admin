@@ -72,10 +72,10 @@ $statAdmin = new StatAdmin();
 								<ul class="dropdown-menu config_menu" role="menu">
                                                                     <li role="menuitem"><a data-target="commande.php" href="#">Toutes <span class="badge badge-important"><?php echo $statAdmin->getNbCommand(); ?></span></a></li>
                                                                     <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::NONPAYE; ?>" href="#">Non Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandToPaid(); ?></span></a></li>
-                                                                    <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::NONPAYE; ?>" href="#">Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandPaid(); ?></span></a></li>
+                                                                    <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::PAYE; ?>" href="#">Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandPaid(); ?></span></a></li>
                                                                     <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::TRAITEMENT; ?>" href="#">En cours de traitement <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandProcessed(); ?></span></a></li>
                                                                     <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::EXPEDIE; ?>" href="#">Exp&eacute;di&eacute;es <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandSend(); ?></span></a></li>
-                                                                    <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::EXPEDIE; ?>" href="#">Annul&eacute;es <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandCanceled(); ?></span></a></li>
+                                                                    <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::ANNULE; ?>" href="#">Annul&eacute;es <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandCanceled(); ?></span></a></li>
 								</ul>
 							</li>
 							<?php } ?>
