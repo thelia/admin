@@ -88,6 +88,62 @@ class CaracteristiqueAdmin extends Caracteristique
     
     /**
      * 
+     * @param string $title Caracteristique title
+     * @param string $display display caracteristique in boucle function
+     * @param int $addAuto add automatically this caracteristique to all category
+     */
+    public function add($title, $display, $addAuto)
+    {
+        
+        $title = trim($title);
+        
+        if(empty($title))
+        {
+            throw new TheliaAdminException("Title caracteristique empty", TheliaAdminException::CARAC_TITLE_EMPTY);
+        }
+        
+        $this->classement = $this->getMaxRank() + 1;
+        
+        $this->affiche = ($display != "")?1:0;
+        $this->id = parent::add();
+        
+        $caracdesc = new Caracteristiquedesc();
+        $caracdesc->caracteristique = $this->id;
+        $caracdesc->titre = $title;
+        $caracdesc->lang = ActionsAdminLang::instance()->get_id_langue_courante();
+        $caracdesc->add();
+        
+        if(intval($addAuto) == 1)
+        {
+            $query = "SELECT id FROM ".Rubrique::TABLE;
+            
+            foreach(CacheBase::getCache()->query($query) as $rub)
+            {
+                $rubcaracteristique = new Rubcaracteristique();
+                $rubcaracteristique->rubrique = $rub->id;
+                $rubcaracteristique->caracteristique = $this->id;
+                $rubcaracteristique->add();
+            }
+        }
+        
+        ActionsModules::instance()->appel_module("ajcaracteristique", $this);
+        
+        redirige("caracteristique_modifier.php?id=".$this->id);
+    }
+    
+    public function getMaxRank()
+    {
+        $query = "SELECT MAX(classement) as maxClassement FROM ".$this->table;
+        if($result = $this->query($query))
+        {
+            return $this->get_result($result, 0, "maxClassement");
+        } else {
+            return 0;
+        }
+    }
+    
+    /**
+     * 
      * Verify if an admin is loaded 
      * 
      * @throws TheliaAdminException ADMIN_NOT_FOUND

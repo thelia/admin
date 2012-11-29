@@ -63,4 +63,6 @@ class TheliaAdminException extends Exception
     
     const COUNTRY_TITLE_EMPTY = 500;
     
+    const CARAC_TITLE_EMPTY = 600;
+    
 }

@@ -31,6 +31,12 @@ class ActionsAdminCaracteristique extends ActionsAdminBase
                 CaracteristiqueAdmin::getInstance($request->query->get("id"))->delete();
                 redirige('caracteristique.php');
                 break;
+            case "ajouter":
+                CaracteristiqueAdmin::getInstance()->add(
+                        $request->request->get("titre"), 
+                        $request->request->get("affiche"), 
+                        $request->request->get("ajoutrub"));
+                break;
         }
     }
 }

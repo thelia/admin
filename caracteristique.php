@@ -5,11 +5,15 @@ if (!est_autorise("acces_configuration"))
     exit;
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
+$errorCode = 0;
+
 try 
 {
     ActionsAdminCaracteristique::getInstance()->action($request);
 } catch(TheliaAdminException $e) {
     Tlog::error($e->getMessage());
+    $errorCode = $e->getCode();
 }
 
 
@@ -30,7 +34,7 @@ require_once("entete.php");
             <h3>
                 <?php echo trad('LISTE_DES_CARACTERISTIQUES', 'admin'); ?>
                 <div class="btn-group">
-                    <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#categoryAddModal" data-toggle="modal">
+                    <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#caracteristiqueAddModal" data-toggle="modal">
                         <i class="icon-plus-sign icon-white"></i>
                     </a>
                 </div>
@@ -66,6 +70,37 @@ require_once("entete.php");
             </div>
         </div>
     </div>
+    <div class="modal hide fade in" id="caracteristiqueAddModal">
+        <form method="post" action="caracteristique.php">
+        <input type="hidden" name="action" value="ajouter">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4><?php echo trad('AJOUTER_UNE_NOUVELLE_CARACTERISTIQUE', 'admin'); ?></h4>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped">
+                <tbody>
+                    <tr class="<?php if($errorCode == TheliaAdminException::CARAC_TITLE_EMPTY) echo "error"; ?>">
+                        <td><?php echo trad('Titre_caracteristique', 'admin'); ?></td> 
+                        <td><input type="text" name="titre"></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Visible', 'admin'); ?></td>
+                        <td><label class="checkbox"><small><?php echo trad('permet', 'admin'); ?></small><input name="affiche" type="checkbox" checked="checked"/></label></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo trad('Ajoutauto', 'admin'); ?></td>
+                        <td><label class="checkbox"><small><?php echo trad('Ajout_carac_toutes_rubriques', 'admin'); ?></small><input type="checkbox" name="ajoutrub" value="1" checked="checked" /></label></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+            <button type="submit" class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
+        </div>
+        </form>
+    </div>
     <div class="modal hide fade in" id="delObject">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -88,6 +123,10 @@ require_once("entete.php");
                
                $("#delObject").modal("show");
             });
+            
+            <?php if($errorCode == TheliaAdminException::CARAC_TITLE_EMPTY): ?>
+                $("#caracteristiqueAddModal").modal("show");
+            <?php endif; ?>
         });
     </script>
 </body>
