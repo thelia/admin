@@ -296,9 +296,7 @@ class CaracteristiqueAdmin extends Caracteristique
     public function modifier($titre, $chapo, $description, $affiche, $caracdisp, $lang)
     {
         $this->verifyLoaded();
-        
-        Tlog::debug(func_get_args());
-        
+                
         $caracdesc = new Caracteristiquedesc($this->id, $lang);
         
         $caracdesc->titre = $titre;

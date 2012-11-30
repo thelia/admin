@@ -10,7 +10,7 @@ try
 {
     ActionsAdminDeclinaison::getInstance()->action($request);
 } catch(TheliaAdminException $e) {
-    
+    Tlog::error($e->getMessage());
 }
 
 

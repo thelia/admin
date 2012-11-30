@@ -165,5 +165,15 @@ class Breadcrumb
         
         return $this->getBreadcrumb();
     }
+    
+    public function getDecliList($title)
+    {
+        $this->addValue("#", trad('Configuration', 'admin'));
+        $this->addValue("declinaison.php", trad('Gestion_declinaison', 'admin'));
+        
+        $this->addValue("", $title);
+        
+        return $this->getBreadcrumb();
+    }
 }
 ?>
