@@ -98,7 +98,7 @@ $statAdmin = new StatAdmin();
                             <a href="#"><?php echo trad('GESTION_CATALOGUE_PRODUIT', 'admin'); ?></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li role="menuitem"><a data-target="caracteristique.php" href="#"><?php echo trad('Gestion_caracteristiques', 'admin'); ?></a></li>
-                                <li role="menuitem"><a data-target="#" href="#"><?php echo trad('Gestion_declinaison', 'admin'); ?></a></li>
+                                <li role="menuitem"><a data-target="declinaison.php" href="#"><?php echo trad('Gestion_declinaison', 'admin'); ?></a></li>
                                 <li role="menuitem"><a data-target="message.php" href="#"><?php echo trad('Gestion_messages', 'admin'); ?></a></li>
                                 <li role="menuitem"><a data-target="devise.php" href="#"><?php echo trad('Gestion_devises', 'admin'); ?></a></li>
                             </ul>
