@@ -74,14 +74,14 @@ class CaracteristiqueAdmin extends Caracteristique
     
     public function modifyOrder($type)
     {
-        $this->veirfyLoaded();
+        $this->verifyLoaded();
         
         $this->changer_classement($this->id, $type);
     }
     
     public function delete()
     {
-        $this->veirfyLoaded();
+        $this->verifyLoaded();
         parent::delete();
         ActionsModules::instance()->appel_module("suppcaracteristique", $this);
     }
@@ -142,15 +142,232 @@ class CaracteristiqueAdmin extends Caracteristique
         }
     }
     
+    public function getMaxCaracdispRank($idcaracteristique, $lang)
+    {
+        $caracdispdesc = new Caracdispdesc();
+        $caracdisp = new Caracdisp();
+
+        $query = "
+                select
+                        max(ddd.classement) as maxClassement
+                from
+                        $caracdispdesc->table ddd
+                left join
+                        $caracdisp->table dd on dd.id = ddd.caracdisp
+                where
+                        lang=$lang
+                and
+                        dd.caracteristique=$idcaracteristique
+        ";
+
+        $resul = $caracdispdesc->query($query);
+
+        return $resul ? intval($caracdispdesc->get_result($resul, 0, "maxClassement")) : 0;
+    }
+    
     /**
      * 
      * Verify if an admin is loaded 
      * 
      * @throws TheliaAdminException ADMIN_NOT_FOUND
      */
-    protected function veirfyLoaded()
+    protected function verifyLoaded()
     {
         if(!$this->id) throw new TheliaAdminException("Caracteristique not found", TheliaAdminException::CARAC_NOT_FOUND);
+    }
+    
+    /**
+     * 
+     * change the current rank of a caracdispdesc
+     * 
+     * @param int $idcaracdispdesc caracdisdesc id to modify
+     * @param sting $classement position for the new rank of the caracdispdesc
+     * @param int $lang current lang
+     */
+    public function setClassementCaracdisp($idcaracdispdesc, $classement, $lang)
+    {
+        $caracdispdesc = new Caracdispdesc();
+
+        if ($caracdispdesc->charger($idcaracdispdesc, $lang))
+        {
+            if ($classement == $caracdispdesc->classement) return;
+
+            if ($classement > $caracdispdesc->classement)
+            {
+                $offset = -1;
+                $between = "$caracdispdesc->classement and $classement";
+            }
+            else
+            {
+                $offset = 1;
+                $between = "$classement and $caracdispdesc->classement";
+            }
+
+            $caracdisp = new Caracdisp();
+
+            $query = "
+                    select
+                            id
+                    from
+                            $caracdispdesc->table
+                    where
+                            lang=$lang
+                    and
+                            caracdisp in (select id from $caracdisp->table where caracteristique = ".$this->id.")
+                    and
+                            classement BETWEEN $between
+            ";
+
+            $resul = $caracdispdesc->query($query);
+
+            $ddd = new Caracdispdesc();
+
+            while($resul && $row = $caracdispdesc->fetch_object($resul))
+            {
+                if ($ddd->charger($row->id, $lang))
+                {
+                    $ddd->classement += $offset;
+                    $ddd->maj();
+                }
+            }
+
+            $caracdispdesc->classement = $classement;
+            $caracdispdesc->maj();
+            
+            
+        }
+        redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
+    /**
+     * 
+     * increment or decrement the current caracdispdesc rank.
+     * 
+     * @param int $idcaracdispdesc caracdisdesc id to modify
+     * @param sting $type M for increase, D pour decrease rank
+     * @param int $lang current lang
+     */
+    function modClassementCaracdisp($idcaracdispdesc, $type, $lang)
+    {
+        $caracdispdesc = new Caracdispdesc();
+
+        if ($caracdispdesc->charger($idcaracdispdesc, $lang))
+        {
+            $remplace = new Caracdispdesc();
+
+            if ($type == "M")
+            {
+                    $where = "classement<" . $caracdispdesc->classement . " order by classement desc";
+            } else if ($type == "D") {
+                    $where  = "classement>" . $caracdispdesc->classement . " order by classement";
+            }
+
+            $caracdisp = new Caracdisp();
+
+            $query = "
+                    select
+                            *
+                    from
+                            $caracdispdesc->table
+                    where
+                            lang=$lang
+                    and
+                            caracdisp in (select id from $caracdisp->table where caracteristique = ".$this->id.")
+                    and
+                            $where
+                    limit
+                            0, 1
+            ";
+
+            if ($remplace->getVars($query))
+            {
+                $sauv = $remplace->classement;
+
+                $remplace->classement = $caracdispdesc->classement;
+                $caracdispdesc->classement = $sauv;
+
+                $remplace->maj();
+                $caracdispdesc->maj();
+            }
+        }
+        redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
+    public function modifier($titre, $chapo, $description, $affiche, $caracdisp, $lang)
+    {
+        $this->verifyLoaded();
+        
+        Tlog::debug(func_get_args());
+        
+        $caracdesc = new Caracteristiquedesc($this->id, $lang);
+        
+        $caracdesc->titre = $titre;
+        $caracdesc->chapo = nl2br($chapo);
+        $caracdesc->description = nl2br($description);
+        
+        $this->affiche = ($affiche != "")?1:0;
+        
+        $this->maj();
+        if($caracdesc->id)
+        {
+            $caracdesc->maj();
+        } else {
+            $caracdesc->lang = $lang;
+            $caracdesc->caracteristique = $this->id;
+            $caracdesc->add();
+        }
+        
+        ActionsModules::instance()->appel_module("modcaracteristique", $this);
+        
+        //Caracdispdesc
+        if(!empty($caracdisp) && is_array($caracdisp))
+        {
+            foreach($caracdisp as $id => $value)
+            {
+                $caracdispdesc = new Caracdispdesc();
+                
+                $caracdispdesc->charger_caracdisp($id, $lang);
+                
+                $caracdispdesc->titre = $value;
+                
+                if($caracdispdesc->id)
+                {
+                    $caracdispdesc->maj();
+                } else {
+                    $caracdispdesc->caracdisp = $id;
+                    $caracdispdesc->lang = $lang;
+                    $caracdispdesc->classement = $this->getMaxCaracdispRank($this->id, $lang) + 1;
+                    
+                    $caracdispdesc->add();
+                }
+                $caracdisp = new Caracdisp($id);
+                ActionsModules::instance()->appel_module("modcaracdisp", $caracdisp);
+            }
+        }
+        
+        redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
+        
+    }
+    
+    public function addCaracdisp($title, $lang)
+    {
+        $this->verifyLoaded();
+        
+        $caracdisp = new Caracdisp();
+        $caracdisp->caracteristique = $this->id;
+        $caracdisp->id = $caracdisp->add();
+        
+        $caracdispdesc = new Caracdispdesc();
+        $caracdispdesc->caracdisp = $caracdisp->id;
+        $caracdispdesc->lang = $lang;
+        $caracdispdesc->classement = $this->getMaxCaracdispRank($this->id, $lang) + 1;
+        $caracdispdesc->titre = $title;
+        
+        $caracdispdesc->add();
+        
+        ActionsModules::instance()->appel_module("ajcaracdisp", $caracdisp);
+        
+        redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
     }
     
 }
