@@ -368,4 +368,14 @@ class CaracteristiqueAdmin extends Caracteristique
         redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
     }
     
+    public function delCaracdisp($caracdisp, $lang)
+    {
+        $tcaracdisp = new Caracdisp($caracdisp);
+        $tcaracdisp->delete();
+
+        ActionsModules::instance()->appel_module("suppcaracdisp", $tcaracdisp);
+        
+        redirige("caracteristique_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
 }

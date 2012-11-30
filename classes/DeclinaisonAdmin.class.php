@@ -121,6 +121,44 @@ class DeclinaisonAdmin extends Declinaison
         ActionsModules::instance()->appel_module("suppdeclinaison", $this);
     }
     
+    public function getMaxRank()
+    {
+        $query = "SELECT MAX(classement) as maxClassement FROM ".$this->table;
+        if($result = $this->query($query))
+        {
+            return $this->get_result($result, 0, "maxClassement");
+        } else {
+            return 0;
+        }
+    }
+    
+    public function ajouter($titre, $ajoutrub)
+    {
+        $this->classement = $this->getMaxRank()+1;
+        $this->id = $this->add();
+        
+        $declinaisondesc = new Declinaisondesc();
+        $declinaisondesc->titre = $titre;
+        $declinaisondesc->declinaison = $this->id;
+        $declinaisondesc->lang = ActionsAdminLang::instance()->get_id_langue_courante();
+        $declinaisondesc->id = $declinaisondesc->add();
+        
+        if((intval($ajoutrub) == 1))
+        {
+            $query = "select id from ".Rubrique::TABLE;
+
+            foreach($this->query_liste($query) as $row){
+                   $rubdeclinaison = new Rubdeclinaison();
+                   $rubdeclinaison->rubrique = $row->id;
+                   $rubdeclinaison->declinaison = $this->id;
+                   $rubdeclinaison->add();
+            }
+        }
+        
+        redirige("declinaison_modifier.php?id=".$this->id."&lang=".ActionsAdminLang::instance()->get_id_langue_courante());
+        
+    }
+    
     public function modClassement($type)
     {
         $this->verifyLoaded();

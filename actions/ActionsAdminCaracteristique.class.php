@@ -68,6 +68,9 @@ class ActionsAdminCaracteristique extends ActionsAdminBase
                     $request->request->get("lang")
                 );
                 break;
+            case "delCaracdisp":
+                CaracteristiqueAdmin::getInstance($request->query->get("id"))->delCaracdisp($request->query->get("caracdisp"), $request->query->get("lang"));
+                break;
         }
     }
 }

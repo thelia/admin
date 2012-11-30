@@ -141,7 +141,7 @@ require_once("entete.php");
                             <span class="object_classement_editable" object-action="setclassementcaracdisp" object-name="caracdispdesc" object-id="<?php echo $caracdispdesc->id; ?>"><?php echo intval($caracdispdesc->classement); ?></span>
                             <a href="caracteristique_modifier.php?id=<?php echo $caract->id; ?>&cacacdispdesc=<?php echo $caracdispdesc->id; ?>&lang=<?php echo $lang ?>&type=D&action=modClassementCaracdisp"><i class="icon-arrow-down"></i></a>
                         </td>
-                        <td><a class="btn btn-mini" href="#"><i class="icon-trash"></i></a></td>
+                        <td><a class="btn btn-mini js-delete-caracdisp" caracdisp-id="<?php echo $caracdisp->id; ?>" href="#"><i class="icon-trash"></i></a></td>
                     </tr>
                     
                     <?php
@@ -177,28 +177,51 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+    
+    <div class="modal hide fade in" id="delObject">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('supprimer', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('non', 'admin'); ?></a>
+            <a class="btn btn-primary" id="deleteLink"><?php echo trad('Oui', 'admin'); ?></a>
+        </div>
+    </div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript" src="js/Thelia.js"></script>
 <script type="text/javascript" src="js/jeditable.min.js"></script>
 <script type="text/javascript">
-    $('.object_classement_editable').editable(function(value, settings){        
-        var form = Thelia.generateForm({
-            action : $(this).attr('object-action'),
-            object_name : $(this).attr('object-name'),
-            object_id : $(this).attr('object-id'),
-            target : "caracteristique_modifier.php",
-            value : value
+    $(document).ready(function(){
+        $('.object_classement_editable').editable(function(value, settings){        
+            var form = Thelia.generateForm({
+                action : $(this).attr('object-action'),
+                object_name : $(this).attr('object-name'),
+                object_id : $(this).attr('object-id'),
+                target : "caracteristique_modifier.php",
+                value : value
+            });
+
+            form.prepend('<input type="hidden" name="id" value="<?php echo $caract->id; ?>">')
+                .prepend('<input type="hidden" name="lang" value="<?php echo $lang; ?>">');
+
+            $(this).prepend(form);
+            form.submit();
+        },{
+            onblur : 'submit',
+            select : true
         });
         
-        form.prepend('<input type="hidden" name="id" value="<?php echo $caract->id; ?>">')
-            .prepend('<input type="hidden" name="lang" value="<?php echo $lang; ?>">');
-        
-        $(this).prepend(form);
-        form.submit();
-    },{
-        onblur : 'submit',
-        select : true
+        $(".js-delete-caracdisp").click(function(e){
+            e.preventDefault();
+            $("#deleteLink").attr("href","caracteristique_modifier.php?id=<?php echo $caract->id; ?>&action=delCaracdisp&caracdisp="+$(this).attr("caracdisp-id")+"&lang=<?php echo $lang; ?>");
+            $("#delObject").modal("show");
+        })
     });
+    
 </script>
 </body>
 </html>

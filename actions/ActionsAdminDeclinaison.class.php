@@ -28,6 +28,9 @@ class ActionsAdminDeclinaison extends ActionsAdminBase
                 DeclinaisonAdmin::getInstance($request->query->get("id"))->delete();
                 redirige("declinaison.php");
                 break;
+            case "ajouter":
+                DeclinaisonAdmin::getInstance()->ajouter($request->request->get("titre"), $request->request->get("ajoutrub"));
+                break;
             case "modifier":
                 DeclinaisonAdmin::getInstance($request->request->get("id"))->modifier(
                     $request->request->get("titre"),
