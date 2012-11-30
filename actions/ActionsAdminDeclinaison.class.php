@@ -24,6 +24,10 @@ class ActionsAdminDeclinaison extends ActionsAdminBase
             case "modClassementDeclinaison":
                 DeclinaisonAdmin::getInstance($request->query->get("id"))->modClassement($request->query->get("type"));
                 break;
+            case "supprimer":
+                DeclinaisonAdmin::getInstance($request->query->get("id"))->delete();
+                redirige("declinaison.php");
+                break;
         }
     }
 }

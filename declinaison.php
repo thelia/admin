@@ -56,7 +56,7 @@ require_once("entete.php");
                             <td>
                                 <div class="btn-group">
                                     <a href="declinaison_modifier.php?id=<?php echo $decli["id"]; ?>" class="btn btn-mini"><i class="icon-edit"></i></a>
-                                    <a href="#" carac-id="<?php echo $decli["id"]; ?>" class="btn btn-mini js-decli-delete"><i class="icon-trash"></i></a>
+                                    <a href="#" decli-id="<?php echo $decli["id"]; ?>" class="btn btn-mini js-decli-delete"><i class="icon-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -69,7 +69,7 @@ require_once("entete.php");
     <div class="modal hide fade in" id="delObject">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3><?php echo trad('supprime_caracteristique', 'admin'); ?></h3>
+            <h3><?php echo trad('supprimer_declinaison', 'admin'); ?></h3>
         </div>
         <div class="modal-body">
             
@@ -81,9 +81,14 @@ require_once("entete.php");
     </div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
-    $(".js-decli-delete").click(function(e){
-        e.preventDefault();
-    })
+    $(document).ready(function(){
+        $(".js-decli-delete").click(function(e){
+            e.preventDefault();
+            $("#deleteLink").attr("href","declinaison.php?id="+$(this).attr("decli-id")+"&action=supprimer");
+            $("#delObject").modal("show");
+
+        });
+    });
 </script>
 </body>
 </html>

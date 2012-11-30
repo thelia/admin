@@ -257,6 +257,7 @@
 			'LISTE_DECLINAISONS' => 'LISTE DES DÉCLINAISONS',
 			'AJOUTER_NOUVELLE_DECLINAISON' => 'AJOUTER UNE NOUVELLE DÉCLINAISON',
 			'Titre_declinaison' => 'Titre de la déclinaison',
+                        'supprimer_declinaison' => "Supprimer le déclinaison",
 
 			//declinaison_modifier
 			'MODIFICATION_DECLINAISONS' => 'MODIFICATION DES DECLINAISONS',
