@@ -37,7 +37,7 @@ require_once("entete.php");
         <div class="span12">
             <h3><?php echo trad('MODIFICATION_DECLINAISONS', 'admin'); ?>
             <div class="btn-group">
-                <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#caracteristiqueAddModal" data-toggle="modal">
+                <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="#declidispAddModal" data-toggle="modal">
                     <i class="icon-plus-sign icon-white"></i>
                 </a>
             </div>
@@ -128,11 +128,11 @@ require_once("entete.php");
                         <td>ID : <?php echo $declidisp->id; ?></td>
                         <td><input type="text" name="declinaisondesc_titre[<?php echo $declidisp->id; ?>]" value="<?php echo $declidispdesc->titre; ?>"></td>
                         <td>
-                            <a href="declinaison_modifier.php?id=<?php echo $declidisp->id; ?>&declidispdesc=<?php echo $declidispdesc->id; ?>&lang=<?php echo $lang ?>&type=M&action=modClassementDeclidisp"><i class="icon-arrow-up"></i></a>
-                            <span class="object_classement_editable" object-action="setclassementcaracdisp" object-name="caracdispdesc" object-id="<?php echo $declidispdesc->id; ?>"><?php echo intval($declidispdesc->classement); ?></span>
-                            <a href="declinaison_modifier.php?id=<?php echo $declidisp->id; ?>&declidispdesc=<?php echo $declidispdesc->id; ?>&lang=<?php echo $lang ?>&type=D&action=modClassementDeclidisp"><i class="icon-arrow-down"></i></a>
+                            <a href="declinaison_modifier.php?id=<?php echo $declinaison->id; ?>&declidispdesc=<?php echo $declidispdesc->id; ?>&lang=<?php echo $lang ?>&type=M&action=modClassementDeclidisp"><i class="icon-arrow-up"></i></a>
+                            <span class="object_classement_editable" object-action="setclassementdeclidisp" object-name="desclidispdesc" object-id="<?php echo $declidispdesc->id; ?>"><?php echo intval($declidispdesc->classement); ?></span>
+                            <a href="declinaison_modifier.php?id=<?php echo $declinaison->id; ?>&declidispdesc=<?php echo $declidispdesc->id; ?>&lang=<?php echo $lang ?>&type=D&action=modClassementDeclidisp"><i class="icon-arrow-down"></i></a>
                         </td>
-                        <td><a class="btn btn-mini" href="#"><i class="icon-trash"></i></a></td>
+                        <td><a class="btn btn-mini js-delete-declidisp" declidisp-id="<?php echo $declidisp->id; ?>" href="#"><i class="icon-trash"></i></a></td>
                     </tr>
                     
                     <?php
@@ -143,8 +143,75 @@ require_once("entete.php");
             </div>
         </div>
     </div>     
-        
    </form>
+    <div class="modal hide fade in" id="delObject">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('supprimer', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('non', 'admin'); ?></a>
+            <a class="btn btn-primary" id="deleteLink"><?php echo trad('Oui', 'admin'); ?></a>
+        </div>
+    </div>
+    
+    <div class="modal hide fade in" id="declidispAddModal">
+        <form method="post" action="declinaison_modifier.php">
+        <input type="hidden" name="action" value="ajDeclidisp">
+        <input type="hidden" name="lang" value="<?php echo $lang ?>">
+        <input type="hidden" name="id" value="<?php echo $declinaison->id; ?>">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('AJOUTER_VALEUR', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><input class="input-xlarge" type="text" name="titre"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+            <button type="submit" class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
+        </div>
+        </form>
+    </div>
 <?php require_once("pied.php"); ?> 
+<script type="text/javascript" src="js/Thelia.js"></script>
+<script type="text/javascript" src="js/jeditable.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".js-delete-declidisp").click(function(e){
+            e.preventDefault();
+            $("#deleteLink").attr("href","declinaison_modifier.php?id=<?php echo $declinaison->id ?>&declidisp_id="+$(this).attr("declidisp-id")+"&action=delDeclidisp&lang=<?php echo $lang; ?>");
+            $("#delObject").modal("show");
+        });
+        
+        $('.object_classement_editable').editable(function(value, settings){        
+            var form = Thelia.generateForm({
+                action : $(this).attr('object-action'),
+                object_name : $(this).attr('object-name'),
+                object_id : $(this).attr('object-id'),
+                target : "declinaison_modifier.php",
+                value : value
+            });
+
+            form.prepend('<input type="hidden" name="id" value="<?php echo $declinaison->id; ?>">')
+                .prepend('<input type="hidden" name="lang" value="<?php echo $lang; ?>">');
+
+            $(this).prepend(form);
+            form.submit();
+        },{
+            onblur : 'submit',
+            select : true
+        });
+    });
+</script>
 </body>
 </html>

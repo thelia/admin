@@ -37,6 +37,32 @@ class ActionsAdminDeclinaison extends ActionsAdminBase
                     $request->request->get("lang")
                 );
                 break;
+            case "delDeclidisp":
+                DeclinaisonAdmin::getInstance($request->query->get("id"))->delDeclidisp(
+                    $request->query->get("declidisp_id"),
+                    $request->query->get("lang")
+                );
+                break;
+            case "modClassementDeclidisp":
+                DeclinaisonAdmin::getInstance($request->query->get("id"))->modclassementdeclidisp(
+                    $request->query->get("declidispdesc"),
+                    $request->query->get("type"),
+                    $request->query->get("lang")
+                );
+                break;
+            case "setclassementdeclidisp":
+                DeclinaisonAdmin::getInstance($request->request->get("id"))->setclassementdeclidisp(
+                    $request->request->get("desclidispdesc"), 
+                    $request->request->get("newClassement"),
+                    $request->request->get("lang")
+                );
+                break;
+            case "ajDeclidisp":
+                DeclinaisonAdmin::getInstance($request->request->get("id"))->ajDeclidisp(
+                    $request->request->get("titre"),
+                    $request->request->get("lang")
+                );
+                break;
         }
     }
 }

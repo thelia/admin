@@ -130,6 +130,139 @@ class DeclinaisonAdmin extends Declinaison
         redirige("declinaison.php");
     }
     
+    public function delDeclidisp($declidisp_id, $lang)
+    {
+        $tdeclidisp = new Declidisp($declidisp_id);
+        $tdeclidisp->delete();
+
+        ActionsModules::instance()->appel_module("suppdeclidisp", $tdeclidisp);
+        
+        redirige("declinaison_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
+    function modclassementdeclidisp($iddeclidispdesc, $type, $lang)
+    {
+        $declidispdesc = new Declidispdesc();
+
+        if ($declidispdesc->charger($iddeclidispdesc, $lang))
+        {
+            $remplace = new Declidispdesc();
+
+            if ($type == "M")
+            {
+                $where = "classement<" . $declidispdesc->classement . " order by classement desc";
+            }
+            else if ($type == "D")
+            {
+                $where  = "classement>" . $declidispdesc->classement . " order by classement";
+            }
+
+            $declidisp = new Declidisp();
+
+            $query = "
+                    select
+                            *
+                    from
+                            $declidispdesc->table
+                    where
+                            lang=$lang
+                    and
+                            declidisp in (select id from $declidisp->table where declinaison = ".$this->id.")
+                    and
+                            $where
+                    limit
+                            0, 1
+            ";
+
+            if ($remplace->getVars($query))
+            {
+                $sauv = $remplace->classement;
+
+                $remplace->classement = $declidispdesc->classement;
+                $declidispdesc->classement = $sauv;
+
+                $remplace->maj();
+                $declidispdesc->maj();
+            }
+        }
+        
+        redirige("declinaison_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
+    public function setclassementdeclidisp($iddeclidispdesc, $classement, $lang)
+    {
+        $declidispdesc = new Declidispdesc();
+
+        if ($declidispdesc->charger($iddeclidispdesc, $lang))
+        {
+            if ($classement == $declidispdesc->classement) return;
+
+            if ($classement > $declidispdesc->classement)
+            {
+                $offset = -1;
+                $between = "$declidispdesc->classement and $classement";
+            }
+            else
+            {
+                $offset = 1;
+                $between = "$classement and $declidispdesc->classement";
+            }
+
+            $declidisp = new Declidisp();
+
+            $query = "
+                    select
+                            id
+                    from
+                            $declidispdesc->table
+                    where
+                            lang=$lang
+                    and
+                            declidisp in (select id from $declidisp->table where declinaison = ".$this->id.")
+                    and
+                            classement BETWEEN $between
+            ";
+
+            $resul = $declidispdesc->query($query);
+
+            $ddd = new Declidispdesc();
+
+            while($resul && $row = $declidispdesc->fetch_object($resul))
+            {
+                if ($ddd->charger($row->id, $lang))
+                {
+                    $ddd->classement += $offset;
+                    $ddd->maj();
+                }
+            }
+
+            $declidispdesc->classement = $classement;
+            $declidispdesc->maj();
+        }
+        
+        redirige("declinaison_modifier.php?id=".$this->id."&lang=".$lang);
+    }
+    
+    public function ajDeclidisp($titre, $lang)
+    {
+        $this->verifyLoaded();
+        $tdeclidisp = new Declidisp();
+        
+        $tdeclidisp->declinaison = $this->id;
+        $tdeclidisp->id = $tdeclidisp->add();;
+
+        $tdeclidispdesc = new Declidispdesc();
+        $tdeclidispdesc->declidisp = $tdeclidisp->id;
+        $tdeclidispdesc->lang = $lang;
+        $tdeclidispdesc->titre = $titre;
+
+        $tdeclidispdesc->classement = $this->maxClassement($this->id, $lang) + 1;
+
+        $tdeclidispdesc->add();
+
+        ActionsModules::instance()->appel_module("ajdeclidisp", $tdeclidisp);
+    }
+    
     protected function verifyLoaded()
     {
         if(!$this->id) throw new TheliaAdminException("Declinaison not found", TheliaAdminException::DECLI_NOT_FOUND);
