@@ -35,6 +35,6 @@
 
 	// Le parametre est passé par reference: utiliser un variable intermédiaire
 	$tmp = "";
- 	Tlog::ecrire($tmp);
+ 	//Tlog::ecrire($tmp);
  	echo $tmp;
     ?>

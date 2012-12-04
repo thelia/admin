@@ -256,7 +256,7 @@
 
 <script type="text/javascript">
     <?php
-        $detailsTrunover = $stat->getDetailTurnover('last30days');
+        $detailsTrunover = $stat->getDetailTurnover();
         $days = "";
         $value = "";
         foreach($detailsTrunover as $turnover)

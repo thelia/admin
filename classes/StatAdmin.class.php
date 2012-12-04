@@ -119,20 +119,25 @@ class StatAdmin extends Baseobj {
         return $nbCommande ? ($ca/$nbCommande):0;
     }
     
-    public function getDetailTurnover($period){
-        $query = 'SELECT c.datefact, SUM(v.quantite*v.prixu) AS ca FROM '.Venteprod::TABLE.' v left join '.Commande::TABLE.' c ON c.id=v.commande WHERE c.statut NOT IN ('.Commande::ANNULE.','.Commande::NONPAYE.')';
-        $resperiod = $this->getPeriod($period, 'c.datefact');
-        $query .= 'AND '.$resperiod.' GROUP BY c.datefact';
+    public function getDetailTurnover($nbDays = 30){
+        $date = date('Y-m-d', strtotime('-'.$nbDays.' day'));
         $return = array();
-        foreach($this->query_liste($query) as $turnover)
+        for($i = $nbDays; $i > 0; $i--)
         {
+            $date = date("Y-m-d", strtotime($date)+86400);
             $return[] = array(
-                "date" => $turnover->datefact,
-                "ca" => formatter_somme($turnover->ca + $this->getChippingPrice(null, $turnover->datefact) - $this->getDiscount(null, $turnover->datefact))
+                "date" => $date,
+                "ca" => formatter_somme($this->getTurnoverByDate($date) + $this->getChippingPrice(null, $date) - $this->getDiscount(null, $date))
             );
         }
         
         return $return;
+    }
+    
+    public function getTurnoverByDate($date)
+    {
+        $query = 'SELECT SUM(v.quantite*v.prixu) AS ca FROM '.Venteprod::TABLE.' v left join '.Commande::TABLE.' c ON c.id=v.commande WHERE c.statut NOT IN ('.Commande::ANNULE.','.Commande::NONPAYE.') AND c.datefact like "'.$date.'"';
+        return $this->executeCountQuery($query, "ca");
     }
     
     public function getPeriod($period, $column, $date = null){
