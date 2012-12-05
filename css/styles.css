@@ -21,6 +21,11 @@ body {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.bg-image.jpg', sizingMethod='scale');
 	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='bg-image.jpg', sizingMethod='scale')";
 }
+
+h3 {
+    font-size : 18px;
+}
+
 #wrapper {
 	padding-top: 20px;
 }
@@ -227,7 +232,7 @@ a {
 }
 .bigtable thead tr {
 	height: 70px;
-	font-size: 18px!important;
+	font-size: 15px!important;
 }
 .bigtable thead tr th {
 	vertical-align: middle;
