@@ -8,6 +8,10 @@ de votre interface d'administration à l'interface actuelle.
 
 ## INSTALLATION ##
 
+cette admin est compatible à partir de la version 1.5.3.4 de Thelia.
+
+Elle peut être utiliser tout en conservant l'admin actuelle de Thelia. Cependant des dysfonctionnements peuvent apparaître lors de l'utilisation simultanée des deux admins.
+
 ### Via github ###
 
 en utilisant git : 
