@@ -84,7 +84,7 @@ require_once("entete.php");
                         <td><a href="commande_details.php?ref=<?php echo $commande['ref']; ?>"><?php echo $commande['ref']; ?></a></td>
                         <td><?php echo $commande['date']; ?></td>
                         <td><?php echo $commande['client']['entreprise']; ?></td>
-                        <td><?php echo $commande['client']['nom'].' '.$commande['client']['prenom']; ?></td>
+                        <td><a href="client_visualiser.php?ref=<?php echo $commande['client']['ref'] ?>"><?php echo $commande['client']['nom'].' '.$commande['client']['prenom']; ?></a></td>
                         <td><?php echo $commande['total']; ?></td>
                         <td><?php echo $commande['titre']; ?></td>
                         <td>

@@ -14,7 +14,7 @@
                         'Commandes_envoye' => 'Commandes expédiées',
 			'CA_hors_frais_de_port' => 'C. A. <span>hors frais de port</span>',
 			'CA_mois_en_cours' => 'Chiffre d\'affaires du mois en cours',
-			'Panier_moyen' => 'Panier moyen <span>&euro; t.t.c</span>',
+			'Panier_moyen' => 'Panier moyen t.t.c',
 			'Version_en_cours' => 'Version en cours',
 			'Derniere_version_disponible' => 'Dernière version disponible',
 			'Actualites' => 'Actualités',
@@ -24,7 +24,7 @@
 			'STATISTIQUES_DE_VENTE' => 'STATISTIQUES DE VENTE',
 			'INFOS_THELIA' => 'INFOS THELIA',
                         'CA_30J' => 'C.A. des 30 derniers jours',
-                        'CA_TTC' => 'C. A. &euro;',
+                        'CA_TTC' => 'C. A.',
                         'CA_PREC' => 'C. A. pr&eacute;c&eacute;dent',
 
 			//accessoire
