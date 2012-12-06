@@ -13,15 +13,15 @@
 
     header('Content-Type: text/html; charset=utf-8');
 
-    if($request->query-get('action') == "supprimer" && $request->query-get('zone', "") != ""){
+    if($request->query->get('action') == "supprimer" && $request->query->get('zone', "") != ""){
             $transzone = new Transzone();
-            $transzone->charger_id($request->query-get('zone'));
+            $transzone->charger_id($request->query->get('zone'));
             $transzone->delete();
             echo 1;
 
-    } else if($request->query-get('action') == "ajouter" && $request->query-get('id',"") != "" && $request->query-get('zone',"") != ""){
+    } else if($request->query->get('action') == "ajouter" && $request->query->get('id',"") != "" && $request->query->get('zone',"") != ""){
             $transzone = new Transzone();
-            $transzone->zone = $request->query-get('zone');
+            $transzone->zone = $request->query->get('zone');
             $transzone->transport = $request->query->get('id');
             $id = $transzone->add();
             echo json_encode(array("res" => 1, "id" => $id));
