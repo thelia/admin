@@ -15,8 +15,9 @@ class OrderAdmin extends Commande
         return new OrderAdmin($id);
     }
     
-    public function getRequest($type = 'list', $search = '', $critere = 'id DESC', $debut = 0, $nbres = 30)
+    public function getRequest($type = 'list', $search = '', $critere = 'date', $order = 'DESC', $debut = 0, $nbres = 30)
     {
+        Tlog::debug(func_get_args());
         if($type == 'count')
         {
             $will = "COUNT(*)";
@@ -29,15 +30,16 @@ class OrderAdmin extends Commande
         return "SELECT $will
                     FROM " . $this->table . "
                     WHERE 1 $search
-                    ORDER BY $critere
+                    ORDER BY $critere $order
                     LIMIT $debut, $nbres";
     }
     
     public function getList($critere, $order, $debut, $nbres, $search = '')
     {
+        Tlog::debug(func_get_args());
         $return = array();
 
-        $qOrders = $this->getRequest('list', $search, $critere, $debut, $nbres);
+        $qOrders = $this->getRequest('list', $search, $critere, $order, $debut, $nbres);
   	$rOrders = $this->query($qOrders);
         
   	while($rOrders && $theOrder = $this->fetch_object($rOrders, 'Commande'))
