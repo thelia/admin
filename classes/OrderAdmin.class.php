@@ -17,7 +17,6 @@ class OrderAdmin extends Commande
     
     public function getRequest($type = 'list', $search = '', $critere = 'date', $order = 'DESC', $debut = 0, $nbres = 30)
     {
-        Tlog::debug(func_get_args());
         if($type == 'count')
         {
             $will = "COUNT(*)";
@@ -36,7 +35,6 @@ class OrderAdmin extends Commande
     
     public function getList($critere, $order, $debut, $nbres, $search = '')
     {
-        Tlog::debug(func_get_args());
         $return = array();
 
         $qOrders = $this->getRequest('list', $search, $critere, $order, $debut, $nbres);
