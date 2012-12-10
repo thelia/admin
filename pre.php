@@ -19,8 +19,8 @@
     
     if(!ini_get("date.timezone"))
     {
-        Tlog::error("Timezone not set, set to Europe/Paris for no errors");
         date_default_timezone_set("Europe/Paris");
+        Tlog::error("Timezone not set, set to Europe/Paris for no errors");
     }
     
     setlocale(LC_ALL, 'fr_FR');
