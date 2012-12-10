@@ -17,6 +17,12 @@
 
     foreach ($_REQUEST as $key => $value) $$key = $value;
     
+    if(!ini_get("date.timezone"))
+    {
+        Tlog::error("Timezone not set, set to Europe/Paris for no errors");
+        date_default_timezone_set("Europe/Paris");
+    }
+    
     setlocale(LC_ALL, 'fr_FR');
 
 ?>
