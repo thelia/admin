@@ -19,22 +19,11 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/general.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-           $(".config_menu a").click(function(){
-              var target = $(this).attr("data-target");
-              if(target){
-                  location.href = target;
-              }
-              
-           });
-        });
-    </script>
      <?php
  	ActionsAdminModules::instance()->inclure_module_admin("post");
 
 	// Le parametre est passé par reference: utiliser un variable intermédiaire
 	$tmp = "";
- 	//Tlog::ecrire($tmp);
+ 	Tlog::ecrire($tmp);
  	echo $tmp;
     ?>
