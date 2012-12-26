@@ -44,18 +44,18 @@
 	}
 
 
- ?>
-	<div class="row">
+ ?> 
+        <div class="row">
 		<div class="span12">
-		 <?php if(est_autorise("acces_commandes")){ ?>
+<?php if(est_autorise("acces_commandes")){ ?>
                     <h3><?php echo trad('CA_30J', 'admin') ?></h3>
                     <div class="dashgraph">
 			<div id="ca30j" style="height: 300px;"></div>
                     </div>
-			<?php } ?>
-
+<?php } ?>
 		</div>
 	</div>
+    
 	<div class="row-fluid spacetop18">
 		<div class="span4">
 			<h3>Informations site</h3>
@@ -252,79 +252,75 @@
 		</div>
 	</div>
 <?php require_once("pied.php");?>
-<script src="js/highcharts/highcharts.js"></script>
-
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.min.js"></script><![endif]-->
+<script src="js/jqplot/jquery.jqplot.min.js"></script>
+<link rel="stylesheet" type="text/css" href="js/jqplot/jquery.jqplot.min.css" />
+<script src="js/jqplot/plugins/jqplot.highlighter.min.js"></script>
+<style type="text/css">
+.jqplot-highlighter-tooltip{border: solid 2px #E9720F; background-color: #FFFFFF; padding: 0px 5px 0px 5px; font-size:14px; color: #000000}
+</style>
 <script type="text/javascript">
-    <?php
-        $detailsTrunover = $stat->getDetailTurnover();
-        $days = "";
-        $value = "";
-        foreach($detailsTrunover as $turnover)
-        {
-            $days .= '"'.strftime("%d-%b",  strtotime($turnover["date"])).'",';
-            $value .= $turnover["ca"].',';
+<?php
+    $detailsTrunover = $stat->getDetailTurnover();
+    $days = array();
+    $values = array();
+    $count = 0;
+    foreach($detailsTrunover as $turnover)
+    {
+        $days[] = '['.$count.', "'.strftime("%d-%b",  strtotime($turnover["date"])).'"]';
+        $values[] = '['.$count.','.$turnover["ca"].']';
+        $count++;
+    }
+?>
+var ticks = [['-0.5',''],<?php echo implode(',', $days); ?>,[parseFloat(<?php echo count($days)+0.5; ?>),'']];
+var values = [<?php echo implode(',', $values); ?>];
+$.jqplot(
+    'ca30j',
+    [values],
+    {
+        axes: {
+            xaxis: {
+                borderColor: '#E9720F',
+                ticks:          ticks,
+                tickOptions:    {
+                    showMark:       false,
+                    showGridline:   false
+                }
+            },
+            yaxis: {
+                min: 0,
+                tickOptions: {
+                    formatString: '%d €'
+                }
+            }
+        },
+        seriesDefaults: {
+            color:          '#E9720F',
+            lineWidth:      4,
+            shadow:         false,
+            markerOptions:  {
+                style:  'circle',
+                shadow: false
+            }
+        },
+        grid: {
+            gridLineColor:  '#C0C0C0',
+            background:     '#FFFFFF',
+            borderColor:    '#FFFFFF',
+            shadow:         false
+        },
+        highlighter: {
+            show:                   true,
+            lineWidthAdjust:        2,
+            showTooltip:            true,
+            tooltipAxes:            'both',
+            tooltipContentEditor: function(str, seriesIndex, pointIndex, plot)
+            {
+                return ticks[pointIndex][1] + ': ' + plot.data[0][pointIndex][1] + '€';
+            }
         }
-        $days = rtrim($days,",");
-        $value = rtrim($value,",");
-      ?>
-    $(function(){
-       var chart;
-       $(document).ready(function(){
-          chart = new Highcharts.Chart({
-              chart : {
-                   renderTo : "ca30j",
-                   animation : false
-              },
-              title : {
-                  text : ""
-              },
-              xAxis : {
-                  categories : [<?php echo $days; ?>]
-              },
-              yAxis : {
-                  title : {
-                      text : ""
-                  }
-              },
-              colors: [
-                '#E9720F',
-                '#4572A7',
-                '#AA4643',
-                '#89A54E',
-                '#80699B',
-                '#3D96AE',
-                '#DB843D',
-                '#92A8CD',
-                '#A47D7C',
-                '#B5CA92'
-              ] ,
-              tooltip : {
-                  formatter : function(){
-                      return this.x + ': '+this.y + '<?php echo $devise->symbole; ?>';
-                  }
-              },
-              legend : {
-                  enabled : false
-              },
-              plotOptions : {
-                  series : {
-                      lineWidth : 4,
-                      marker : {
-                          lineWidth : 2,
-                          fillColor: '#FFFFFF',
-                          lineColor: null
-                      },
-                      animation : false
-                  }
-              },
-              series : [
-                  {
-                      data : [<?php echo $value; ?>]
-                  }
-              ]
-          });
-       });
-    });
-</script>   
+    }
+);
+</script>
 </body>
 </html>
