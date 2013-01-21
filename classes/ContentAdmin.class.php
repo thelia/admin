@@ -99,6 +99,7 @@ class ContentAdmin extends Contenu {
         {
             $this->datemodif = date('Y-m-d H:i:s');
             $this->dossier = $folder;
+            $this->ligne = 1;
             $this->classement = $this->getMaxRanking($folder) + 1;
             $this->id = parent::add();
             

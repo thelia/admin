@@ -74,7 +74,7 @@ class FolderAdmin extends Dossier
                 $parent = 0;
             
             $this->parent = $parent;
-            $this->ligne = 0;
+            $this->ligne = 1;
             $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             

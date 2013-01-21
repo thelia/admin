@@ -100,7 +100,7 @@ class CategoryAdmin extends Rubrique
                 $parent = 0;
             
             $this->parent = $parent;
-            $this->ligne = 0;
+            $this->ligne = 1;
             $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
@@ -372,16 +372,16 @@ class CategoryAdmin extends Rubrique
         ActionsModules::instance()->appel_module('modrub', $this);
     }
     
-    public function deleteImage($id, $lang)
+    public function deleteImage($id)
     {
         $this->deleteAttachement("image", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
+        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab#editPicturesAnchor');
     }
     
-    public function deleteDocument($id, $lang)
+    public function deleteDocument($id)
     {
         $this->deleteAttachement("document", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
+        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab#editDocumentsAnchor');
     }
     
     public function deleteAttachement($attachement, $id)
