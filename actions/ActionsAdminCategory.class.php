@@ -20,7 +20,7 @@ class ActionsAdminCategory extends ActionsAdminBase
     public function action(Request $request){
         switch($request->get('action'))
         {
-            /*association : */
+            /*association*/
             case 'deleteAssociatedContent':
                 AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));
                 break;
