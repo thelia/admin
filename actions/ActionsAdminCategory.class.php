@@ -20,7 +20,7 @@ class ActionsAdminCategory extends ActionsAdminBase
     public function action(Request $request){
         switch($request->get('action'))
         {
-            /*association : RO REVIEW*/
+            /*association : */
             case 'deleteAssociatedContent':
                 AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));
                 break;
@@ -58,7 +58,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                 CategoryAdmin::getInstance($request->request->get('id'))->updateImage($this->getImages($request, CategoryAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
                 break;
             case 'deletePicture':
-                CategoryAdmin::getInstance($request->query->get('id'))->deleteImage($request->query->get('picture'), $request->query->get('lang'));
+                CategoryAdmin::getInstance($request->query->get('id'))->deleteImage($request->query->get('picture'));
                 break;
             case 'modifyPictureClassement':
                 CategoryAdmin::getInstance($request->query->get('id'))->modifyImageOrder($request->query->get('picture'), $request->query->get('will'), $request->query->get('lang'));
@@ -72,7 +72,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                 CategoryAdmin::getInstance($request->request->get('id'))->updateDocument($this->getDocuments($request, CategoryAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
                 break;
             case 'deleteDocument':
-                CategoryAdmin::getInstance($request->query->get('id'))->deleteDocument($request->query->get('document'), $request->query->get('lang'));
+                CategoryAdmin::getInstance($request->query->get('id'))->deleteDocument($request->query->get('document'));
                 break;
             case 'modifyDocumentClassement':
                 CategoryAdmin::getInstance($request->query->get('id'))->modifyDocumentOrder($request->query->get('document'), $request->query->get('will'), $request->query->get('lang'));

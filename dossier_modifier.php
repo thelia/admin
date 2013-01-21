@@ -177,11 +177,11 @@ require_once("entete.php");
                                 </table>
                             </div>
                             <div class="span1">
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=M&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
+                                <a class="change-page" href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&action=modifyAttachementPosition&direction=M&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
                                     <i class="icon-arrow-up"></i>
                                 </a>
 
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=D&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
+                                <a class="change-page" href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&action=modifyAttachementPosition&direction=D&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
                                     <i class="icon-arrow-down"></i>
                                 </a>
                             </div>
@@ -227,11 +227,11 @@ require_once("entete.php");
                                 </table>
                             </div>
                             <div class="span1">
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=M&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
+                                <a class="change-page" href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&action=modifyAttachementPosition&direction=M&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
                                     <i class="icon-arrow-up"></i>
                                 </a>
 
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=D&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
+                                <a class="change-page" href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&action=modifyAttachementPosition&direction=D&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
                                     <i class="icon-arrow-down"></i>
                                 </a>
                             </div>
@@ -320,12 +320,12 @@ $(document).ready(function(){
     
     $(".js-delete-picture").click(function(){
         $("#pictureDelationUrl").attr("src",$(this).attr('picture-file'));
-        $("#pictureDelationLink").attr("href","dossier_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
+        $("#pictureDelationLink").attr("href","dossier_modifier.php?id=<?php echo $dossier->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
     });
     
     $(".js-delete-document").click(function(){
         $("#documentFileName").html($(this).attr('document-file'));
-        $("#documentDelationLink").attr("href","dossier_modifier.php?id=<?php echo $contenu->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
+        $("#documentDelationLink").attr("href","dossier_modifier.php?id=<?php echo $dossier->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
     });
 });
 </script>
