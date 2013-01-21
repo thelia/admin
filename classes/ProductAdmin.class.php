@@ -250,7 +250,7 @@ class ProductAdmin extends Produit {
         
         foreach($caracteristique as $index => $value)
         {
-            $this->query("delete from $caracval->table where produit=" . $this->id . " and caracteristique=" . $index);
+            $this->query("delete from ".Caracval::TABLE." where produit=" . $this->id . " and caracteristique=" . $index);
             if ( is_array($value) )
             {
                 foreach ($value as $caracdisp)
