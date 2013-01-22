@@ -45,14 +45,6 @@ class ActionsAdminContent extends ActionsAdminBase
                         $request->query->get('tab')
                 );
                 break;
-            case "deleteAttachement":
-                ContentAdmin::getInstance($request->query->get('id'))->deleteAttachement(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
-                );
-                break;
             
             /*listdos actions*/
             case "addContent":
@@ -84,7 +76,8 @@ class ActionsAdminContent extends ActionsAdminBase
         $return = $this->extractResult($request, $content->query_liste($query), array(
             "titre" => "photo_titre_",
             "chapo" => "photo_chapo_",
-            "description" => "photo_description_"
+            "description" => "photo_description_",
+            "imageToDelete" => "image_to_delete_",
         ));
         
         return $return;
@@ -103,7 +96,8 @@ class ActionsAdminContent extends ActionsAdminBase
         $return = $this->extractResult($request, $content->query_liste($query), array(
             "titre" => "document_titre_",
             "chapo" => "document_chapo_",
-            "description" => "document_description_"
+            "description" => "document_description_",
+            "documentToDelete" => "document_to_delete_",
         ));
         
         return $return;

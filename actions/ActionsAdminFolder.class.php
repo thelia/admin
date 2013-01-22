@@ -60,14 +60,6 @@ class ActionsAdminFolder extends ActionsAdminBase
                         $request->query->get('tab')
                 );
                 break;
-            case "deleteAttachement":
-                FolderAdmin::getInstance($request->query->get('id'))->deleteAttachement(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
-                );
-                break;
             
         }
     }
@@ -86,7 +78,8 @@ class ActionsAdminFolder extends ActionsAdminBase
         $return = $this->extractResult($request, $folder->query_liste($query), array(
             "titre" => "photo_titre_",
             "chapo" => "photo_chapo_",
-            "description" => "photo_description_"
+            "description" => "photo_description_",
+            "imageToDelete" => "image_to_delete_",
         ));
         
         return $return;
@@ -105,7 +98,8 @@ class ActionsAdminFolder extends ActionsAdminBase
         $return = $this->extractResult($request, $folder->query_liste($query), array(
             "titre" => "document_titre_",
             "chapo" => "document_chapo_",
-            "description" => "document_description_"
+            "description" => "document_description_",
+            "documentToDelete" => "document_to_delete_",
         ));
         
         return $return;

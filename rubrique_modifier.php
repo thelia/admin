@@ -315,9 +315,11 @@ for($i=0; $i<count($AVlist); $i++)
                         </div>
                         <?php foreach (CategoryAdmin::getInstance($rubrique->id)->getImageList($lang) as $image): ?>
                         <div class="row-fluid">
-                            <div class="span3">
-                                <img src="<?php echo  $image["fichier"] ?>">
-                                <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#deletePictureModal" data-toggle="modal" picture-file="<?php echo $image["fichier"]; ?>" picture-id="<?php echo $image['id'] ?>">
+                            <div class="span3" style="position: relative;">
+                                <img  class="js-image" src="<?php echo  $image["fichier"] ?>">
+                                <img style="display: none; position: absolute;" class="js-image-delation" src="gfx/interdit-150x150.png" />
+                                <input type="hidden" class="js-delete-input" name="image_to_delete_<?php echo $image['id'] ?>" value="0" />
+                                <a style="position: absolute; bottom: 0px; right: 0px;" class="btn btn-large js-delete-picture" href="#">
                                     <i class="icon-trash"></i>
                                 </a>
                             </div>
@@ -484,22 +486,6 @@ for($i=0; $i<count($AVlist); $i++)
     </div>
 </div>
 
-<!-- picture delation -->
-<div class="modal hide" id="deletePictureModal" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeletePictureWarning', 'admin'); ?></p>
-        <img id="pictureDelationUrl" class="span11" />
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="pictureDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
-
 <!-- document delation -->
 <div class="modal hide" id="deleteDocumentModal" role="dialog" aria-hidden="true">
     <div class="modal-header">
@@ -528,7 +514,7 @@ $(document).ready(function(){
     $(".change-page").click(function(e){
         if(form == 1){            
             e.preventDefault();
-            $("#changeLangLink").attr("href",$(this).attr('href'));
+            $("#changeLangLink").attr("href",$(this).attr('href') + '&tab=' + $("ul#mainTabs li.active a").attr('href').substr(1));
             $("#changeLangModal").modal("show");
         }
     });
@@ -543,9 +529,25 @@ $(document).ready(function(){
         $("input[name=tab]").val($(e.target).attr('href').substring(1));
     });
     
-    $(".js-delete-picture").click(function(){
-        $("#pictureDelationUrl").attr("src",$(this).attr('picture-file'));
-        $("#pictureDelationLink").attr("href","rubrique_modifier.php?id=<?php echo $rubrique->id ?>&action=deleteAttachement&attachement=image&attachement_id="+$(this).attr('picture-id')+"&lang=<?php echo $lang; ?>&tab=imageTab");
+    /*picture delation*/
+    $(".js-delete-picture").click(function(e){
+        e.preventDefault();
+        
+        form=1;
+        
+        if($(this).parent().children('.js-image-delation').is(':hidden'))
+        {
+            $(this).parent().children('.js-image-delation')
+                .css('top', ($(this).parent().children('.js-image').height() - 150) / 2)
+                .css('left', ($(this).parent().width() - 150) / 2)
+                .show();
+            $(this).parent().children('.js-delete-input').val(1);
+        }
+        else
+        {
+            $(this).parent().children('.js-image-delation').hide();
+            $(this).parent().children('.js-delete-input').attr(0);
+        }
     });
     
     $(".js-delete-document").click(function(){

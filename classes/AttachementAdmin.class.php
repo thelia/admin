@@ -91,9 +91,11 @@ class AttachementAdmin
     {
         foreach($files as $index => $file)
         {
-            $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"]);
+            if($file["imageToDelete"] == 1)
+                $this->getAttachement($attachement)->supprimer($index);
+            else
+                $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"]);
         }
-        
     }
     
     public function updateDocuments(array $documents)
@@ -109,11 +111,6 @@ class AttachementAdmin
     public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
     {
         $this->getAttachement($attachement)->modclassement($id, $type);
-    }
-    
-    public function deleteAttachement($attachement, $id, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
     }
 }
 ?>

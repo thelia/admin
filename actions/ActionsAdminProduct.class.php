@@ -56,15 +56,6 @@ class ActionsAdminProduct extends ActionsAdminBase
                         $request->query->get('tab')
                 );
                 break;
-            case "deleteAttachement":
-                //produit_modifier.php?ref=chh0001&action=deleteAttachement&attachement=image&attachement_id=19&lang=1
-                ProductAdmin::getInstanceByRef($request->query->get('ref'))->deleteAttachement(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
-                );
-                break;
         }
     }
     
@@ -135,7 +126,8 @@ class ActionsAdminProduct extends ActionsAdminBase
         $return = $this->extractResult($request, $product->query_liste($query), array(
             "titre" => "photo_titre_",
             "chapo" => "photo_chapo_",
-            "description" => "photo_description_"
+            "description" => "photo_description_",
+            "imageToDelete" => "image_to_delete_",
         ));
         
         return $return;
@@ -154,7 +146,8 @@ class ActionsAdminProduct extends ActionsAdminBase
         $return = $this->extractResult($request, $product->query_liste($query), array(
             "titre" => "document_titre_",
             "chapo" => "document_chapo_",
-            "description" => "document_description_"
+            "description" => "document_description_",
+            "documentToDelete" => "document_to_delete_",
         ));
         
         return $return;
