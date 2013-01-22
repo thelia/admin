@@ -225,7 +225,7 @@ class ProductAdmin extends Produit {
         
         $this->maj();
         $produitdesc->maj();
-        
+                
         $produitdesc->reecrire($rewriteurl);
         $this->setLang($lang);
         $this->updateImage($images);
