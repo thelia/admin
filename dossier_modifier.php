@@ -47,14 +47,14 @@ require_once("entete.php");
         <div class="span4 offset5">
             <ul class="nav nav-pills">
                 <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
-                    <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
+                    <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
                 <?php endforeach; ?>
             </ul>
         </div>
     </div> 
     <div class="row-fluid">
         <div class="span12">
-            <ul class="nav nav-tabs">
+            <ul id="mainTabs" class="nav nav-tabs">
                 <li class="<?php if ($tab == 'generalDescriptionTab') echo "active"; ?>"><a href="#generalDescriptionTab" data-toggle="tab"><?php echo trad('DESCRIPTION_G_RUBRIQUE', 'admin'); ?></a></li>
                 <li class="<?php if ($tab == 'sectionInformationTab') echo "active"; ?>"><a href="#sectionInformationTab" data-toggle="tab"><?php echo trad('INFO_RUBRIQUE', 'admin'); ?></a></li>
                 <li class="<?php if ($tab == 'imageTab') echo "active"; ?>"><a href="#imageTab" data-toggle="tab"><?php echo trad('GESTION_PHOTOS', 'admin'); ?></a></li>
@@ -314,6 +314,12 @@ $(document).ready(function(){
             $("#changeLangModal").modal("show");
         }
     });
+    
+    $('.change-lang').click(function()
+    {
+        $(this).attr('href', $(this).attr('href') + '&tab=' + $("ul#mainTabs li.active a").attr('href').substr(1));
+    });
+    
     $('a[data-toggle="tab"]').on('show',function(e){
         $("input[name=tab]").val($(e.target).attr('href').substring(1));
     });

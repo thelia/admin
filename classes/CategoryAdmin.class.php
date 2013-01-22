@@ -2,15 +2,38 @@
 
 class CategoryAdmin extends Rubrique
 {
-    protected $imageFile;
-    protected $documentFile;
+    protected $extends = array();
+    protected $oldParent;
     
-    public function __construct($id = 0)
-    {
-        parent::__construct($id);
+    public function __call($name, $arguments) {
+        $find = false;
+        foreach($this->extends as $extend)
+        {
+            if(method_exists($extend, $name))
+            {
+                $find = true;
+                return call_user_func_array(array($extend, $name), $arguments);
+            }
+        }
         
-        $this->setImageFile(new ImageFile('rubrique', $this->id));
-        $this->setDocumentFile(new DocumentFile('rubrique', $this->id));
+        if($find === false)
+        {
+            return parent::__callStatic($name, $arguments);
+            throw new BadMethodCallException("Method ".$name." not found in " . __CLASS__);
+        }
+    }
+    
+    public function __construct($id = 0) {
+        parent::__construct();
+        
+        if($id){
+            $this->charger_id($id);
+        }
+        
+        $this->extends[] = new AttachementAdmin();
+        
+        $this->setAttachement("image", new ImageFile('rubrique', $this->id));
+        $this->setAttachement("document", new DocumentFile('rubrique', $this->id));
     }
 
     /**
@@ -20,72 +43,19 @@ class CategoryAdmin extends Rubrique
     public static function getInstance($id = 0){
         return new CategoryAdmin($id);        
     }
-    
-    public function setImageFile(FichierAdminBase $imageFile)
+
+    public function delete()
     {
-        $this->setAttachement('image', $imageFile);
-    }
-    
-    public function setDocumentFile(FichierAdminBase $documentFile)
-    {
-        $this->setAttachement('document', $documentFile);
-    }
-    
-    protected function setAttachement($attachement, $file)
-    {
-        $property = $this->getProperty($attachement);
-        $this->$property = $file;
-    }
-    
-    protected function getProperty($attachement)
-    {
-        return $attachement."File";
-    }
-    
-    /**
-     * 
-     * @return ImageFile
-     */
-    public function getImageFile()
-    {
-        return $this->getAttachement("image");
-    }
-    
-    /**
-     * 
-     * @return DocumentFile
-     */
-    public function getDocumentFile()
-    {
-        return $this->getAttachement("document");
-    }
-    
-    protected function getAttachement($attachement)
-    {
-        $property = $this->getProperty($attachement);
-        if(property_exists($this, $property) !== true)
+        if($this->id > 0)
         {
-            throw new TheliaAdminException("Attachement file does not Exist",  TheliaAdminException::ATTACHEMENT_NOT_FOUND);
+            parent::delete();
+        }
+        else
+        {
+            throw new TheliaAdminException("Category does not Exist",  TheliaAdminException::CATEGORY_NOT_FOUND);
         }
         
-        return $this->$property;
-    }
-    
-    public function setLang($lang)
-    {
-        $this->imageFile->setLang($lang);
-        $this->documentFile->setLang($lang);
-    }
-    
-    public function delete($parent, $id = 0){
-        
-        if($id > 0){
-            $this->charger($id);
-        }
-        
-        parent::delete();
-        
-        redirige("parcourir.php?parent=" . $parent);
+        redirige("parcourir.php?parent=" . $this->parent);
     }
     
     public function display($display){
@@ -93,8 +63,12 @@ class CategoryAdmin extends Rubrique
         $this->maj();
     }
     
-    public function add($title, $parent){
-        if($title != '')
+    public function add($title, $parent)
+    {
+        $rubriquedesc = new Rubriquedesc();
+        $rubriquedesc->titre = $title;
+        
+        if($rubriquedesc->titre !== '')
         {
             if(!is_numeric($parent) && $parent<1)
                 $parent = 0;
@@ -104,10 +78,8 @@ class CategoryAdmin extends Rubrique
             $this->classement = $this->getMaxRanking($parent) + 1;
             $this->id = parent::add();
             
-            $rubriquedesc = new Rubriquedesc();
             $rubriquedesc->rubrique = $this->id;
             $rubriquedesc->lang = ActionsLang::instance()->get_id_langue_courante();
-            $rubriquedesc->titre = $title;
             $rubriquedesc->chapo = '';
             $rubriquedesc->description = '';
             $rubriquedesc->postscriptum = '';
@@ -123,15 +95,17 @@ class CategoryAdmin extends Rubrique
                 $rubcaracteristique->caracteristique = $theCarac->id;
                 $rubcaracteristique->add();
             }
-
+            
             $rubriquedesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutrub", $this);
+            ActionsModules::instance()->appel_module("ajoutrub", $rubriquedesc);
             
             redirige("rubrique_modifier.php?id=" . $this->id);
         }
-        
-        return 1;
+        else
+        {
+            throw new TheliaAdminException("impossible to add new category", TheliaAdminException::CATEGORY_ADD_ERROR, null, $rubriquedesc);
+        }
     }
     
     public function getMaxRanking($parent)
@@ -151,6 +125,18 @@ class CategoryAdmin extends Rubrique
         $this->modifier_classement($this->id, $newClassement);
         
         redirige('parcourir.php?parent='.$parent);
+    }
+    
+    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
+    {
+        $this->getAttachement($attachement)->modclassement($id, $type);
+        redirige("rubrique_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
+    }
+    
+    public function deleteAttachement($attachement, $id, $lang, $tab)
+    {
+        $this->getAttachement($attachement)->supprimer($id);
+        redirige("rubrique_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
     }
 
     public function getList($parent, $critere, $order, $alpha)
@@ -189,21 +175,6 @@ class CategoryAdmin extends Rubrique
         return $return;
     }
     
-    public function getImageList($lang = false)
-    {
-        return $this->getAttachementList('image', $lang);
-    }
-    
-    public function getDocumentList($lang = false)
-    {
-        return $this->getAttachementList('document', $lang);
-    }
-    
-    protected function getAttachementList($attachement, $lang = false)
-    {
-        return $this->getAttachement($attachement)->getList($lang);
-    }
-    
     public function getBreadcrumbList($parent){
         $tab = array_reverse(chemin_rub($parent));
         
@@ -212,200 +183,75 @@ class CategoryAdmin extends Rubrique
         return $tab;
     }
     
-    public function getListAssociatedFeature()
-    {
-        $return = array();
-
-        if(!$this->id)
-            return $return;
-        
-        $associatedFeature = new Rubcaracteristique();
-	$qList = "SELECT * FROM " . Rubcaracteristique::TABLE . " WHERE rubrique='$this->id'";
-	$rList = $associatedFeature->query($qList);
-	while($rList && $theAssociatedFeature = $associatedFeature->fetch_object($rList))
-        {
-            $featureDescription = new Caracteristiquedesc($theAssociatedFeature->caracteristique);
-	
-            $return[] = array("id" => $theAssociatedFeature->id, "feature" => $featureDescription->titre);
-	}
-
-        return $return;
-    }
-    
-    public function addPicture()
-    {
-        $this->addAttachement('image', 'photo', array("jpg", "gif", "png", "jpeg"), "uploadimage");
-        
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab');
-    }
-    
-    public function addDocument()
-    {
-        $this->addAttachement('document', 'doc', array(), "uploaddocument");
-        
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab');
-    }
-    
-    protected function addAttachement($attachement, $nom_arg, $extensions_valides = array(), $point_d_entree= null)
-    {
-        $this->getAttachement($attachement)->ajouter($nom_arg, $extensions_valides, $point_d_entree);
-        
-        ActionsModules::instance()->appel_module("modrub", $this);
-    }
-    
-    public function editInformation($ligne, $parent, $lien)
-    {
-        if(!$this->id)
-            return;
-        
-        if($parent != $this->parent)
-        {
-            $categoryIsMovedInItselfOrASubcategory = 0;
-            $test = chemin_rub($parent);
-            for($i = 0; $i < count($test); $i++)
-            {
-                if($test[$i]->rubrique == $this->id)
-                {
-                    $categoryIsMovedInItselfOrASubcategory = 1;
-                    break;
-                }
-            }
-            
-            if(!$categoryIsMovedInItselfOrASubcategory)
-            {
-                $qUpdateClassement = "SELECT * FROM " . Rubrique::TABLE . " WHERE parent='$this->parent' AND id<>'$this->id' ORDER BY classement ASC";
-                $rUpdateClassement = $this->query($qUpdateClassement);
-
-                $newClassement = 1;
-                while($rUpdateClassement && $theCategory = $this->fetch_object($rUpdateClassement, 'Rubrique'))
-                {
-                    $theCategory->classement = $newClassement;
-                    $theCategory->maj();
-                    $newClassement++;
-                }
-            
-                $this->classement = $this->getMaxRanking($parent) + 1;
-                $this->parent = $parent;
-            }
-        }
-        
-        $this->lien = $lien;
-        $this->ligne = ($ligne=='on')?1:0;
-
-        parent::maj();
-        
-        ActionsModules::instance()->appel_module("modrub", $this);
-        
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=sectionInformationTab');
-    }
-    
-    public function editDescription($langId, $titre, $chapo, $description, $postscriptum, $url)
-    {
-        $lang = new Lang($langId);
-        
-        if(!$this->id || !$lang->id)
-            return;
-        
-        $rubriquedesc = new Rubriquedesc();
-        if(!$rubriquedesc->charger($this->id, $lang->id))
-        {
-            CacheBase::getCache()->reset_cache();
-            $rubriquedesc->rubrique = $this->id;
-            $rubriquedesc->lang = $lang->id;
-            $rubriquedesc->id = $rubriquedesc->add();
-        }
-        
-        $rubriquedesc->titre = $titre;
-        $rubriquedesc->chapo = $chapo;
-        $rubriquedesc->description = $description;
-        $rubriquedesc->postscriptum = $postscriptum;
-        $rubriquedesc->maj();
-        $rubriquedesc->reecrire(($url)?:$lang->code . "-" . $rubriquedesc->rubrique . "-" . $rubriquedesc->titre . ".html");
-        
-        ActionsModules::instance()->appel_module("modrub", $this);
-        
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=generalDescriptionTab&lang=' . $lang->id);
-    }
-    
-    public function getNumberOfImages()
-    {
-        return $this->getNumberOfAttachements('image');
-    }
-    
-    public function getNumberOfDocuments()
-    {
-        return $this->getNumberOfAttachements('document');
-    }
-    
-    protected function getNumberOfAttachements($attachement)
-    {
-        return $this->getAttachement($attachement)->compter();
-    }
-    
-    public function updateImage(array $images, $lang)
-    {
-        $this->updateAttachement('image', $images, $lang);
-        
-         redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
-    }
-    
-    public function updateDocument(array $documents, $lang)
-    {
-        $this->updateAttachement('document', $documents, $lang);
-
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
-    }
-    
-    protected function updateAttachement($attachement, $files, $lang)
+    public function modify($lang, $parent, $lien, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $images, $documents, $tab)
     {
         if($this->id == '')
         {
             throw new TheliaAdminException("Category not found", TheliaAdminException::CATEGORY_NOT_FOUND);
         }
         
-        $this->setLang($lang);
+        $rubriquedesc = new Rubriquedesc($this->id, $lang);
         
-        foreach($files as $index => $file)
+        if($rubriquedesc->id == '')
         {
-            $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"]);
+            CacheBase::getCache()->reset_cache();
+            
+            $rubriquedesc->rubrique = $this->id;
+            $rubriquedesc->lang = $lang;
+            $rubriquedesc->id = $rubriquedesc->add();
         }
-        ActionsModules::instance()->appel_module('modrub', $this);
+
+        $this->oldParent = $this->parent;
+                
+        
+        if($this->parent != $parent){
+            $this->checkOrder($parent);
+        }
+        $this->parent = $parent;
+        $this->lien = $lien;
+        $this->ligne = ($online == 'on')?1:0;
+
+        
+        $rubriquedesc->chapo = str_replace("\n", "<br />", $chapo);
+        $rubriquedesc->titre = $title;
+        $rubriquedesc->postscriptum = $postscriptum;
+        $rubriquedesc->description = $description;
+        
+        $this->maj();
+        $rubriquedesc->maj();
+        
+        $rubriquedesc->reecrire($rewriteurl);
+        $this->setLang($lang);
+        $this->updateImage($images);
+        $this->getImageFile()->ajouter("photo", array("jpg", "gif", "png", "jpeg"), "uploadimage");
+        $this->updateDocuments($documents);
+        $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
+        
+        ActionsModules::instance()->appel_module("modrub", $this);
+        
+        if ($urlsuiv)
+        {
+            redirige('parcourir.php?parent='.$this->rubrique);
+        } else {
+            redirige('rubrique_modifier.php?id='.$this->id.'&tab='.$tab.'&lang='.$lang);
+        }
+        
+        
     }
     
-    public function deleteImage($id)
+    /**
+     * 
+     * if category change, order must be change in old and new category
+     * 
+     * @param int $category
+     */
+    public function checkOrder($parent)
     {
-        $this->deleteAttachement("image", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab#editPicturesAnchor');
-    }
-    
-    public function deleteDocument($id)
-    {
-        $this->deleteAttachement("document", $id);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab#editDocumentsAnchor');
-    }
-    
-    public function deleteAttachement($attachement, $id)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
-        ActionsModules::instance()->appel_module('modrub', $this);
-    }
-    
-    public function modifyImageOrder($id, $will, $lang)
-    {
-        $this->modifyAttachementOrder("image", $id, $will);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&lang=' . $lang . '#editPicturesAnchor');
-    }
-    
-    public function modifyDocumentOrder($id, $will, $lang)
-    {
-        $this->modifyAttachementOrder("document", $id, $will);
-        redirige('rubrique_modifier.php?id=' . $this->id . '&tab=attachementTab&tabAttachement=documentAttachementTab&lang=' . $lang . '#editDocumentsAnchor');
-    }
-    
-    public function modifyAttachementOrder($attachement, $id, $will)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $will);
-        ActionsModules::instance()->appel_module('modrub', $this);
+        //in old category
+        $this->modifier_classement($this->id, $this->getMaxRanking($this->oldParent) + 1);
+
+        //in new category
+        $this->classement = $this->getMaxRanking($parent) + 1;        
     }
 }
 

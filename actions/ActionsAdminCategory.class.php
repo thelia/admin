@@ -20,6 +20,56 @@ class ActionsAdminCategory extends ActionsAdminBase
     public function action(Request $request){
         switch($request->get('action'))
         {
+            /*listrub actions*/
+            case 'addCategory':
+                CategoryAdmin::getInstance()->add($request->request->get('title'), $request->request->get('parent'));
+                break;
+            case 'deleteCategory':
+                CategoryAdmin::getInstance($request->query->get('category_id'))->delete();
+                break;
+            case 'modClassementCategory':
+                CategoryAdmin::getInstance($request->query->get("category_id"))->modifyOrder($request->query->get("type"), $request->query->get("parent"));
+                break;
+            case 'changeClassementCategory':
+                CategoryAdmin::getInstance($request->request->get("category_id"))->changeOrder($request->request->get("newClassement"), $request->request->get("parent"));
+                break;
+            
+            case "modifier" : 
+                $categoryAdmin = CategoryAdmin::getInstance($request->request->get('id'));
+                $categoryAdmin->modify(
+                        $request->request->get('lang', ActionsLang::instance()->get_id_langue_courante()),
+                        $request->request->get('parent'),
+                        $request->request->get('lien'),
+                        $request->request->get('ligne'),
+                        $request->request->get('titre'),
+                        $request->request->get('chapo'),
+                        $request->request->get('description'),
+                        $request->request->get('postscriptum'),
+                        $request->request->get('urlsuiv'),
+                        $request->request->get('urlreecrite'),
+                        $this->getImages($request, $categoryAdmin),
+                        $this->getDocuments($request, $categoryAdmin),
+                        $request->request->get('tab')
+                );
+                break;
+            case "modifyAttachementPosition":
+                CategoryAdmin::getInstance($request->query->get('id'))->changeAttachementPosition(
+                        $request->query->get('attachement'),
+                        $request->query->get('attachement_id'),
+                        $request->query->get('direction'),
+                        $request->query->get('lang'),
+                        $request->query->get('tab')
+                );
+                break;
+            case "deleteAttachement":
+                CategoryAdmin::getInstance($request->query->get('id'))->deleteAttachement(
+                        $request->query->get('attachement'),
+                        $request->query->get('attachement_id'),
+                        $request->query->get('lang'),
+                        $request->query->get('tab')
+                );
+                break;
+            
             /*association*/
             case 'deleteAssociatedContent':
                 AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));
@@ -40,42 +90,6 @@ class ActionsAdminCategory extends ActionsAdminBase
                 break;
             case 'addAssociatedVariant':
                 AssociatedVariantAdmin::getInstance()->add($request->query->get('variant'), $request->query->get('id'));
-                break;
-
-            /*information & description*/
-            case 'changeInformation':
-                CategoryAdmin::getInstance($request->request->get('id'))->editInformation($request->request->get('ligne'), $request->request->get('parent'), $request->request->get('lien'));
-                break;
-            case 'changeDescription':
-                CategoryAdmin::getInstance($request->request->get('id'))->editDescription($request->request->get('lang'), $request->request->get('titre'), $request->request->get('chapo'), $request->request->get('description'), $request->request->get('postscriptum'), $request->request->get('url'));
-                break;
-
-            /*attachement : picture*/
-            case 'addPicture':
-                CategoryAdmin::getInstance($request->request->get('id'))->addPicture();
-                break;
-            case 'editPicture':
-                CategoryAdmin::getInstance($request->request->get('id'))->updateImage($this->getImages($request, CategoryAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
-                break;
-            case 'deletePicture':
-                CategoryAdmin::getInstance($request->query->get('id'))->deleteImage($request->query->get('picture'));
-                break;
-            case 'modifyPictureClassement':
-                CategoryAdmin::getInstance($request->query->get('id'))->modifyImageOrder($request->query->get('picture'), $request->query->get('will'), $request->query->get('lang'));
-                break;
-            
-            /*attachement : document*/
-            case 'addDocument':
-                CategoryAdmin::getInstance($request->request->get('id'))->addDocument();
-                break;
-            case 'editDocument':
-                CategoryAdmin::getInstance($request->request->get('id'))->updateDocument($this->getDocuments($request, CategoryAdmin::getInstance($request->request->get('id'))), $request->request->get('lang'));
-                break;
-            case 'deleteDocument':
-                CategoryAdmin::getInstance($request->query->get('id'))->deleteDocument($request->query->get('document'));
-                break;
-            case 'modifyDocumentClassement':
-                CategoryAdmin::getInstance($request->query->get('id'))->modifyDocumentOrder($request->query->get('document'), $request->query->get('will'), $request->query->get('lang'));
                 break;
         }
     }
@@ -143,11 +157,16 @@ class ActionsAdminCategory extends ActionsAdminBase
         $query = 'select id from '.Image::TABLE.' where rubrique='.$category->id;
 
         
-        $return = $this->extractResult($request, $category->query_liste($query), array(
-            "titre" => "photo_titre_",
-            "chapo" => "photo_chapo_",
-            "description" => "photo_description_"
-        ));
+        $return = $this->extractResult(
+            $request,
+            $category->query_liste($query),
+            array(
+                "titre" => "photo_titre_",
+                "chapo" => "photo_chapo_",
+                "description" => "photo_description_"
+            ),
+            'request'
+        );
         
         return $return;
     }
@@ -162,11 +181,16 @@ class ActionsAdminCategory extends ActionsAdminBase
         
         $query = "select id from ".Document::TABLE.' where rubrique='.$category->id;
         
-        $return = $this->extractResult($request, $category->query_liste($query), array(
-            "titre" => "document_titre_",
-            "chapo" => "document_chapo_",
-            "description" => "document_description_"
-        ));
+        $return = $this->extractResult(
+            $request,
+            $category->query_liste($query),
+            array(
+                "titre" => "document_titre_",
+                "chapo" => "document_chapo_",
+                "description" => "document_description_"
+            ),
+            'request'
+        );
         
         return $return;
     }
