@@ -67,11 +67,11 @@ class ActionsAdminBase extends ActionsBase
         
         foreach($results as $result)
         {
-            if ( false !== $request->request->get($mapping[$firstKey].$result->id, false) )
+            if ( false !== $request->get($mapping[$firstKey].$result->id, false) )
             {
                 foreach($mapping as $key => $param)
                 {
-                    $return[$result->id][$key] = $request->$method->get($param.$result->id);
+                    $return[$result->id][$key] = $request->get($param.$result->id);
                 }
             }
         }

@@ -131,6 +131,7 @@ class ActionsAdminProduct extends ActionsAdminBase
         $query = 'select id from '.Image::TABLE.' where produit='.$product->id;
 
         
+        
         $return = $this->extractResult($request, $product->query_liste($query), array(
             "titre" => "photo_titre_",
             "chapo" => "photo_chapo_",
