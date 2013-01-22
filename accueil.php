@@ -159,7 +159,7 @@
                                     <table class="table table-striped">
                                         <tr>
                                             <td><?php echo trad('CA_TTC','admin'); ?></td>
-                                            <td><?php echo formatter_somme($stat->getTurnover('month')); ?></td>
+                                            <td><?php echo formatter_somme($stat->getTurnover('month')); ?> <?php echo $devise->symbole; ?></td>
                                         </tr>
                                         <tr>
                                             <td><?php echo trad('CA_hors_frais_de_port','admin'); ?> </td>
