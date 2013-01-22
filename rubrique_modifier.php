@@ -128,14 +128,14 @@ require_once("entete.php");
                             <tbody>
                                 <tr class="info">
                                     <td class="span5">
-                                        <select class="span12" id="associatedContent_dossier">
+                                        <select class="span12 not-change-page" id="associatedContent_dossier">
 <?php
 echo arbreOption_dos(0, 1, 0, 0, 1);
 ?>
                                         </select>
                                     </td>
                                     <td class="span5">
-                                        <select class="span12" id="select_prodcont"></select>
+                                        <select class="span12 not-change-page" id="select_prodcont"></select>
                                     </td>
                                     <td class="span1 offset1">
                                         <div class="btn-group">
@@ -179,7 +179,7 @@ for($i=0; $i<count($AClist); $i++)
                             <tbody>
                                 <tr class="info">
                                     <td class="span10">
-                                        <select class="span12" id="associatedFeatureList">
+                                        <select class="span12 not-change-page" id="associatedFeatureList">
 <?php
 $Flist = AssociatedFeatureAdmin::getInstance()->getListAvailableFeature($rubrique->id);
 for($i=0; $i<count($Flist); $i++)
@@ -230,7 +230,7 @@ for($i=0; $i<count($AFlist); $i++)
                             <tbody>
                                 <tr class="info">
                                     <td class="span10">
-                                        <select class="span12" id="associatedVariantList">
+                                        <select class="span12 not-change-page" id="associatedVariantList">
 <?php
 $Vlist = AssociatedVariantAdmin::getInstance()->getListAvailableVariant($rubrique->id);
 for($i=0; $i<count($Vlist); $i++)
@@ -317,7 +317,9 @@ for($i=0; $i<count($AVlist); $i++)
                         <div class="row-fluid">
                             <div class="span3">
                                 <img src="<?php echo  $image["fichier"] ?>">
-                                <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#deletePictureModal" data-toggle="modal" picture-file="<?php echo $image["fichier"]; ?>" picture-id="<?php echo $image['id'] ?>"><i class="icon-trash"></i></a>
+                                <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#deletePictureModal" data-toggle="modal" picture-file="<?php echo $image["fichier"]; ?>" picture-id="<?php echo $image['id'] ?>">
+                                    <i class="icon-trash"></i>
+                                </a>
                             </div>
                             <div class="span8">
                                 <table class="table table-striped">
@@ -518,8 +520,9 @@ for($i=0; $i<count($AVlist); $i++)
 $(document).ready(function(){
     var form = 0;
 
-    $("#formulaire").change(function(){
-        form=1;
+    $("#formulaire").change(function(e){
+        if(!$(e.target).is('.not-change-page'))
+            form=1;
     });
 
     $(".change-page").click(function(e){
@@ -605,6 +608,7 @@ $(document).ready(function(){
     });
     
     /*associated features loading*/
+    
     $('#associatedContent_dossier').trigger('change');
     $('#associatedFeatureList').trigger('change');
     $('#associatedVariantList').trigger('change');
