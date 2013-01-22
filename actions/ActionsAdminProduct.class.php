@@ -128,6 +128,7 @@ class ActionsAdminProduct extends ActionsAdminBase
             "chapo" => "photo_chapo_",
             "description" => "photo_description_",
             "toDelete" => "image_to_delete_",
+            "rank" => "rank_",
         ));
         
         return $return;
@@ -147,7 +148,7 @@ class ActionsAdminProduct extends ActionsAdminBase
             "titre" => "document_titre_",
             "chapo" => "document_chapo_",
             "description" => "document_description_",
-            "toDelete" => "document_to_delete_",
+            "rank" => "rank_",
         ));
         
         return $return;

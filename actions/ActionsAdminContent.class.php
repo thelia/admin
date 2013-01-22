@@ -78,6 +78,7 @@ class ActionsAdminContent extends ActionsAdminBase
             "chapo" => "photo_chapo_",
             "description" => "photo_description_",
             "toDelete" => "image_to_delete_",
+            "rank" => "rank_",
         ));
         
         return $return;
@@ -98,6 +99,7 @@ class ActionsAdminContent extends ActionsAdminBase
             "chapo" => "document_chapo_",
             "description" => "document_description_",
             "toDelete" => "document_to_delete_",
+            "rank" => "rank_",
         ));
         
         return $return;

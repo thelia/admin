@@ -86,58 +86,6 @@ class ActionsAdminCategory extends ActionsAdminBase
         }
     }
     
-    /**
-     * 
-     * search caracteristique in request and return an array. Indexes are the id of each caracteristique and value are the caracdisp selected
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return Array
-     */
-    /*protected function getCaracteristique(Request $request, \ProductAdmin $product)
-    {        
-        $return = array();
-        
-        if($product->id == ''){
-            return $return;
-        }
-        
-        $query = 'select caracteristique from '.Rubcaracteristique::TABLE.' where rubrique='.$product->rubrique;
-        
-        foreach($product->query_liste($query) as $caracteristique)
-        {
-            if(false !== $carac = $request->request->get('caract'.$caracteristique->caracteristique, false)){                
-                $return[$caracteristique->caracteristique] = $carac;
-            }
-        }
-        
-        return $return;
-    }
-    
-    /**
-     * 
-     * search declinaison in request and return an array.
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return Array
-     */
-    /*protected function getDeclinaison(Request $request, \ProductAdmin $product)
-    {
-        $return = array();
-        
-        if($product->id == ''){
-            return $return;
-        }
-        
-        $query = "select dc.id from ".Declidisp::TABLE." dc left join ".Rubdeclinaison::TABLE." rd on rd.declinaison=dc.declinaison where rd.rubrique=".$product->rubrique;
-        
-        $return = $this->extractResult($request, $product->query_liste($query), array(
-            "stock" => "stock",
-            "surplus" => "surplus"
-        ));
-        
-        return $return;
-    }*/
-    
     protected function getImages(Request $request, \CategoryAdmin $category)
     {
         $return = array();
@@ -157,6 +105,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                 "chapo" => "photo_chapo_",
                 "description" => "photo_description_",
                 "toDelete" => "image_to_delete_",
+                "rank" => "rank_",
             ),
             'request'
         );
@@ -182,6 +131,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                 "chapo" => "document_chapo_",
                 "description" => "document_description_",
                 "toDelete" => "document_to_delete_",
+                "rank" => "rank_",
             ),
             'request'
         );
