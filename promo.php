@@ -1,5 +1,4 @@
 <?php
-require_once("pre.php");
 require_once("auth.php");
 require_once("../fonctions/divers.php");
 if (!est_autorise("acces_catalogue"))
@@ -7,8 +6,6 @@ if (!est_autorise("acces_catalogue"))
 
 use Symfony\Component\HttpFoundation\Request;
 $request = Request::createFromGlobals();
-
-error_reporting(E_ALL);
 
 $page = $request->get('page', 1);
 
