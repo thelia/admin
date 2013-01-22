@@ -153,11 +153,12 @@ require_once("entete.php");
                         </div>
                         </div>
                         <?php foreach (ContentAdmin::getInstance($contenu->id)->getImageList($lang) as $image): ?>
-                        <div class="row-fluid">
+                        <div class="row-fluid js-bloc-image" js-image-id="<?php echo $image['id'] ?>">
                             <div class="span3" style="position: relative;">
                                 <img class="js-image" src="<?php echo  $image["fichier"] ?>">
                                 <img style="display: none; position: absolute;" class="js-image-delation" src="gfx/interdit-150x150.png" />
                                 <input type="hidden" class="js-delete-input" name="image_to_delete_<?php echo $image['id'] ?>" value="0" />
+                                <input type="hidden" class="js-rank-input" name="rank_<?php echo $image['id'] ?>" value="<?php echo $image['classement'] ?>" />
                                 <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#"><i class="icon-trash"></i></a>
                             </div>
                             <div class="span8">
@@ -185,11 +186,11 @@ require_once("entete.php");
                                 </table>
                             </div>
                             <div class="span1">
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=M&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
+                                <a class="change-image-rank" js-sens="up" href="#">
                                     <i class="icon-arrow-up"></i>
                                 </a>
 
-                                <a class="change-page" href="contenu_modifier.php?id=<?php echo $contenu->id; ?>&action=modifyAttachementPosition&direction=D&attachement=image&attachement_id=<?php echo $image['id']; ?>&lang=<?php echo $lang; ?>&tab=imageTab">
+                                <a class="change-image-rank" js-sens="down" href="#">
                                     <i class="icon-arrow-down"></i>
                                 </a>
                             </div>
@@ -333,6 +334,40 @@ $(document).ready(function(){
         }
     });
     
+    /*picture ranking*/
+    $('.change-image-rank').click(function(e)
+    {
+        e.preventDefault();
+        
+        form=1;
+        
+        if($(this).attr('js-sens') == 'up')
+        {
+            if($(this).parent().parent().prev().is('.js-bloc-image'))
+            {
+                $(this).parent().parent().insertBefore(
+                    $(this).parent().parent().prev()
+                );
+            }
+        }
+        else if($(this).attr('js-sens') == 'down')
+        {
+            if($(this).parent().parent().next().is('.js-bloc-image'))
+            {
+                $(this).parent().parent().insertAfter(
+                    $(this).parent().parent().next()
+                );
+            }
+        }
+        
+        $('.js-bloc-image').each(function(k, v){
+            $(v).children().children('.js-rank-input').val(
+                parseInt(k) + 1
+            );
+        });
+    });
+    
+    /*document delation*/
     $(".js-delete-document").click(function(e){
         e.preventDefault();
         
