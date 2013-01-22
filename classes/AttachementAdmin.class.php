@@ -91,7 +91,7 @@ class AttachementAdmin
     {
         foreach($files as $index => $file)
         {
-            if($file["imageToDelete"] == 1)
+            if($file["toDelete"] == 1)
                 $this->getAttachement($attachement)->supprimer($index);
             else
                 $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"]);

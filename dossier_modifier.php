@@ -142,14 +142,15 @@ require_once("entete.php");
                         <div class="row-fluid">
                         <div class="span6 offset4">
                             <?php for($i = 1; $i <= FolderAdmin::getInstance()->getImageFile()->getNumberUpload(); $i++): ?>
-                                <input type="file" name="photo<?php echo $i; ?>" class="input-large"> <br >
+                                <input type="file" name="photo<?php echo $i; ?>" class="input-large">
+                                <br >
                             <?php endfor; ?>
                         </div>
                         </div>
                         <?php foreach (FolderAdmin::getInstance($dossier->id)->getImageList($lang) as $image): ?>
                         <div class="row-fluid">
                             <div class="span3" style="position: relative;">
-                                <img  class="js-image" src="<?php echo  $image["fichier"] ?>">
+                                <img class="js-image" src="<?php echo  $image["fichier"] ?>">
                                 <img style="display: none; position: absolute;" class="js-image-delation" src="gfx/interdit-150x150.png" />
                                 <input type="hidden" class="js-delete-input" name="image_to_delete_<?php echo $image['id'] ?>" value="0" />
                                 <a style="position:relative; margin-top:-45px; float:right" class="btn btn-large js-delete-picture" href="#"><i class="icon-trash"></i></a>
@@ -195,14 +196,24 @@ require_once("entete.php");
                             <div class="span6 offset4">
                                 <?php for($i=1; $i <= FolderAdmin::getInstance()->getDocumentFile()->getNumberUpload(); $i++): ?>
                                     <input type="file" name="document_<?php echo $i ?>" class="input-large">
+                                    <br >
                                 <?php endfor;?>
                             </div>
                         </div>
                         <?php foreach(FolderAdmin::getInstance($dossier->id)->getDocumentList($lang) as $document): ?>
                         <div class="row-fluid">
-                            <div class="span3">
-                                <p><a target="_blank" href="<?php echo $document["fichier"]; ?>"><?php echo $document["nomFichier"]; ?></a></p>
-                                <p class="offset4"><a class="btn btn-large js-delete-document" href="#deleteDocumentModal" data-toggle="modal" document-file="<?php echo $document["nomFichier"]; ?>" document-id="<?php echo $document['id'] ?>"><i class="icon-trash"></i></a></p>
+                            <div class="span3" style="position: relative;">
+                                <p class="js-document">
+                                    <a target="_blank" href="<?php echo $document["fichier"]; ?>"><?php echo $document["nomFichier"]; ?></a>
+                                </p>
+                                
+                                <img style="display: none; position: absolute;" class="js-document-delation" src="gfx/interdit-150x150.png" />
+                                <input type="hidden" class="js-delete-input" name="document_to_delete_<?php echo $document['id'] ?>" value="0" />
+                                
+                                <a class="btn btn-large js-delete-document" href="#">
+                                    <i class="icon-trash"></i>
+                                </a>
+                                
                             </div>
                             <div class="span8">
                                 <table class="table table-striped">
@@ -269,37 +280,6 @@ require_once("entete.php");
     </div>
 </div>
 
-<!-- picture delation -->
-<div class="modal hide" id="deletePictureModal" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeletePictureWarning', 'admin'); ?></p>
-        <img id="pictureDelationUrl" class="span11" />
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="pictureDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
-
-<!-- document delation -->
-<div class="modal hide" id="deleteDocumentModal" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeletePictureWarning', 'admin'); ?></p>
-        <p id="documentFileName"></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="documentDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -343,13 +323,28 @@ $(document).ready(function(){
         else
         {
             $(this).parent().children('.js-image-delation').hide();
-            $(this).parent().children('.js-delete-input').attr(0);
+            $(this).parent().children('.js-delete-input').val(0);
         }
     });
     
-    $(".js-delete-document").click(function(){
-        $("#documentFileName").html($(this).attr('document-file'));
-        $("#documentDelationLink").attr("href","dossier_modifier.php?id=<?php echo $dossier->id ?>&action=deleteAttachement&attachement=document&attachement_id="+$(this).attr('document-id')+"&lang=<?php echo $lang; ?>&tab=documentTab");
+    $(".js-delete-document").click(function(e){
+        e.preventDefault();
+        
+        form=1;
+        
+        if($(this).parent().children('.js-document-delation').is(':hidden'))
+        {
+            $(this).parent().children('.js-document-delation')
+                .css('top', ($(this).parent().children('.js-document').height() - 150) / 2)
+                .css('left', ($(this).parent().width() - 150) / 2)
+                .show();
+            $(this).parent().children('.js-delete-input').val(1);
+        }
+        else
+        {
+            $(this).parent().children('.js-document-delation').hide();
+            $(this).parent().children('.js-delete-input').val(0);
+        }
     });
 });
 </script>
