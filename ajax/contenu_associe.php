@@ -19,17 +19,17 @@ if ( $request->isXmlHttpRequest() === false )
 
 switch ($request->query->get('action')) {
     case 'contenu_assoc':
-        contenuassoc_contenu();
+        contenuassoc_contenu($request);
         break;
     case 'ajouter':
-        contenuassoc_ajouter();
+        contenuassoc_ajouter($request);
         break;
     case 'supprimer':
-        contenuassoc_supprimer();
+        contenuassoc_supprimer($request);
         break;
 }
 
-function contenuassoc_contenu() {
+function contenuassoc_contenu($request) {
     if ($request->query->get('type') == 1) {
         $objet = new Produit();
         $objet->charger($request->query->get('objet'));
@@ -58,7 +58,7 @@ function contenuassoc_contenu() {
     }
 }
 
-function contenuassoc_ajouter() {
+function contenuassoc_ajouter($request) {
 	if ($request->query->get('type') == 1) {
 		$objet = new Produit();
 		$objet->charger($request->query->get('objet'));
@@ -89,7 +89,7 @@ function contenuassoc_ajouter() {
 
 }
 
-function contenuassoc_supprimer() {
+function contenuassoc_supprimer($request) {
 	$contenuassoc = new Contenuassoc();
 	$contenuassoc->charger($request->query->get('id'));
 	$contenuassoc->delete();
