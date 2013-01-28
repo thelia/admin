@@ -94,7 +94,7 @@ class AttachementAdmin
             if($file["toDelete"] == 1)
                 $this->getAttachement($attachement)->supprimer($index);
             else
-                $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"]);
+                $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"], $file["rank"]);
         }
     }
     

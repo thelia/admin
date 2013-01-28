@@ -88,8 +88,13 @@ abstract class FichierAdminBase {
 		}
 	}
 
-	public function modifier($id, $titre, $chapo, $description)
+	public function modifier($id, $titre, $chapo, $description, $rank)
         {
+            $obj = new $this->class();
+            $obj->charger($id);
+            $obj->classement = $rank;
+            $obj->maj();
+            
             $objdesc = new $this->classdesc();
 
             $colonne = strtolower($this->class);
@@ -102,6 +107,7 @@ abstract class FichierAdminBase {
             $objdesc->titre = $titre;
             $objdesc->chapo = $chapo;
             $objdesc->description = $description;
+            
             $objdesc->lang = $this->lang;
             $objdesc->$colonne = $id;
 

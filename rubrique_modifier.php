@@ -353,7 +353,6 @@ for($i=0; $i<count($AVlist); $i++)
                                 <a class="change-image-rank" js-sens="up" href="#">
                                     <i class="icon-arrow-up"></i>
                                 </a>
-
                                 <a class="change-image-rank" js-sens="down" href="#">
                                     <i class="icon-arrow-down"></i>
                                 </a>
@@ -371,15 +370,14 @@ for($i=0; $i<count($AVlist); $i++)
                             </div>
                         </div>
                         <?php foreach(CategoryAdmin::getInstance($rubrique->id)->getDocumentList($lang) as $document): ?>
-                        <div class="row-fluid">
+                        <div class="row-fluid js-bloc-document" js-document-id="<?php echo $document['id'] ?>">
                             <div class="span3" style="position: relative;">
                                 <p class="js-document">
                                     <a target="_blank" href="<?php echo $document["fichier"]; ?>"><?php echo $document["nomFichier"]; ?></a>
                                 </p>
-                                
                                 <img style="display: none; position: absolute;" class="js-document-delation" src="gfx/interdit-150x150.png" />
                                 <input type="hidden" class="js-delete-input" name="document_to_delete_<?php echo $document['id'] ?>" value="0" />
-                                
+                                <input type="hidden" class="js-rank-input" name="rank_<?php echo $document['id'] ?>" value="<?php echo $document['classement'] ?>" />
                                 <a class="btn btn-large js-delete-document" href="#">
                                     <i class="icon-trash"></i>
                                 </a>
@@ -410,11 +408,10 @@ for($i=0; $i<count($AVlist); $i++)
                                 </table>
                             </div>
                             <div class="span1">
-                                <a class="change-page" href="rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=modifyAttachementPosition&direction=M&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
+                                <a class="change-document-rank" js-sens="up" href="#">
                                     <i class="icon-arrow-up"></i>
                                 </a>
-
-                                <a class="change-page" href="rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=modifyAttachementPosition&direction=D&attachement=document&attachement_id=<?php echo $document['id']; ?>&lang=<?php echo $lang; ?>&tab=documentTab">
+                                <a class="change-document-rank" js-sens="down" href="#">
                                     <i class="icon-arrow-down"></i>
                                 </a>
                             </div>
@@ -599,6 +596,39 @@ $(document).ready(function(){
             $(this).parent().children('.js-document-delation').hide();
             $(this).parent().children('.js-delete-input').val(0);
         }
+    });
+    
+    /*document ranking*/
+    $('.change-document-rank').click(function(e)
+    {
+        e.preventDefault();
+        console.log(1);
+        form=1;
+        
+        if($(this).attr('js-sens') == 'up')
+        {
+            if($(this).parent().parent().prev().is('.js-bloc-document'))
+            {
+                $(this).parent().parent().insertBefore(
+                    $(this).parent().parent().prev()
+                );
+            }
+        }
+        else if($(this).attr('js-sens') == 'down')
+        {
+            if($(this).parent().parent().next().is('.js-bloc-document'))
+            {
+                $(this).parent().parent().insertAfter(
+                    $(this).parent().parent().next()
+                );
+            }
+        }
+        
+        $('.js-bloc-document').each(function(k, v){
+            $(v).children().children('.js-rank-input').val(
+                parseInt(k) + 1
+            );
+        });
     });
     
     /*associated features event*/
