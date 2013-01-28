@@ -31,7 +31,6 @@ class CategoryAdmin extends Rubrique
         }
         
         $this->extends[] = new AttachementAdmin();
-        $this->extends[] = new AssociationAdmin();
         
         $this->setAttachement("image", new ImageFile('rubrique', $this->id));
         $this->setAttachement("document", new DocumentFile('rubrique', $this->id));

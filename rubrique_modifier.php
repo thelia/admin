@@ -195,7 +195,7 @@ for($i=0; $i<count($AFlist); $i++)
 <?php
 }
 ?>
-                                        <select class="span12" id="associatedFeatureList">
+                                        <select class="span12 not-change-page" id="associatedFeatureList">
 <?php
 for($i=0; $i<count($Flist); $i++)
 {
@@ -260,7 +260,7 @@ for($i=0; $i<count($AVlist); $i++)
 <?php
 }
 ?>
-                                        <select class="span12" id="associatedVariantList">
+                                        <select class="span12 not-change-page" id="associatedVariantList">
 <?php
 for($i=0; $i<count($Vlist); $i++)
 {
@@ -475,22 +475,6 @@ for($i=0; $i<count($AVlist); $i++)
     </div>
 </div>
 
-<!-- associatedContent delation -->
-<div class="modal hide" id="deletContenuassoceModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeleteAssociatedContentWarning', 'admin'); ?></p>
-        <p id="associatedContentDelationInfo"></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="associatedContentDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
-
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 /*html elements for dynamic display*/
@@ -681,7 +665,7 @@ $(document).ready(function(){
         });
     });
     
-    /*associated features event*/
+    /*associated contents*/
     $('#associatedContent_dossier').change(function(){
         $('#select_prodcont').load(
             'ajax/contenu_associe.php',
@@ -696,18 +680,12 @@ $(document).ready(function(){
     $('#select_prodcont').change(function()
     {
         if($(this).val() != null)
-        {
-            $('#link_prodcont').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=addAssociatedContent&contenu=' + $(this).val());
             $('#link_prodcont').removeClass('disabled');
-        }
         else
-        {
-            $('#link_prodcont').removeAttr('href');
             $('#link_prodcont').addClass('disabled');
-        }
     });
     
-    /*features*/
+    /*associated features*/
     $('#associatedFeatureList').change(function()
     {
         if($(this).val() != null)
@@ -765,7 +743,7 @@ $(document).ready(function(){
     });
     
     
-    /*variants*/
+    /*associated variants*/
     $('#associatedVariantList').change(function()
     {
         if($(this).val() != null)
