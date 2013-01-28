@@ -384,6 +384,39 @@ $(document).ready(function(){
             $(this).parent().children('.js-delete-input').val(0);
         }
     });
+    
+    /*document ranking*/
+    $('.change-document-rank').click(function(e)
+    {
+        e.preventDefault();
+        console.log(1);
+        form=1;
+        
+        if($(this).attr('js-sens') == 'up')
+        {
+            if($(this).parent().parent().prev().is('.js-bloc-document'))
+            {
+                $(this).parent().parent().insertBefore(
+                    $(this).parent().parent().prev()
+                );
+            }
+        }
+        else if($(this).attr('js-sens') == 'down')
+        {
+            if($(this).parent().parent().next().is('.js-bloc-document'))
+            {
+                $(this).parent().parent().insertAfter(
+                    $(this).parent().parent().next()
+                );
+            }
+        }
+        
+        $('.js-bloc-document').each(function(k, v){
+            $(v).children().children('.js-rank-input').val(
+                parseInt(k) + 1
+            );
+        });
+    });
 });
 </script>
 </body>
