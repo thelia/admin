@@ -96,6 +96,9 @@ class AttachementAdmin
             else
                 $this->getAttachement($attachement)->modifier($index, $file["titre"], $file["chapo"], $file["description"], $file["rank"]);
         }
+        
+        /*force proper ranking*/
+        $this->getAttachement($attachement)->cleanRanking();
     }
     
     public function updateDocuments(array $documents)

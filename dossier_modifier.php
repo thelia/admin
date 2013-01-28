@@ -383,7 +383,7 @@ $(document).ready(function(){
     $('.change-document-rank').click(function(e)
     {
         e.preventDefault();
-        console.log(1);
+        
         form=1;
         
         if($(this).attr('js-sens') == 'up')

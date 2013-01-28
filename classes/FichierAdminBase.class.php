@@ -117,7 +117,18 @@ abstract class FichierAdminBase {
                 $objdesc->maj();
 
 	}
-
+        
+        public function cleanRanking()
+        {
+            $obj = new $this->class();
+            $qCleanRanking = "SELECT * FROM $obj->table WHERE $this->typeobjet='$this->idobjet' ORDER BY classement ASC";
+            foreach($obj->query_liste($qCleanRanking, $this->class) as $key => $aCleanRanking)
+            {
+                $aCleanRanking->classement = $key+1;
+                $aCleanRanking->maj();
+            }
+        }
+        
         public function compter()
         {
             $obj = new $this->class();
