@@ -78,18 +78,6 @@ class ContentAdmin extends Contenu {
         redirige('listdos.php?parent='.$parent);
     }
     
-    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $type);
-        redirige("contenu_modifier.php?id=".$this->id."&dossier=".$this->dossier."&lang=".$lang."&tab=".$tab);
-    }
-    
-    public function deleteAttachement($attachement, $id, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
-        redirige("contenu_modifier.php?id=".$this->id."&dossier=".$this->dossier."&lang=".$lang."&tab=".$tab);
-    }
-    
     public function add($title, $folder)
     {
         $contentdesc = new Contenudesc();

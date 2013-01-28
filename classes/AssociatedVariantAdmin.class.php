@@ -20,7 +20,7 @@ class AssociatedVariantAdmin extends Rubdeclinaison {
         {
             $variantDescription = new Declinaisondesc($theAssociatedVariant->declinaison);
             
-	    $return[] = array("id" => $theAssociatedVariant->id, "variant" => $variantDescription->titre);
+	    $return[] = array("id" => $theAssociatedVariant->id, "variant_id" => $variantDescription->declinaison, "variant_titre" => $variantDescription->titre);
 	}
 
         return $return;
@@ -61,14 +61,14 @@ class AssociatedVariantAdmin extends Rubdeclinaison {
             
             ActionsModules::instance()->appel_module("modrub", $category);
         }
-
-        redirige('rubrique_modifier.php?id=' . $category->id . '&tab=associationTab#associatedFeatureAnchor');
     }
     
     public function add($variantToAddId, $categoryId)
     {
         $category = new Rubrique();
         $variantToAdd = new Declinaison();
+        
+        $this->id = '';
         if(!$this->charger($categoryId, $variantToAddId) && $variantToAdd->charger($variantToAddId) && $category->charger($categoryId))
         {
             $this->rubrique = $category->id;
@@ -78,8 +78,20 @@ class AssociatedVariantAdmin extends Rubdeclinaison {
 
             ActionsModules::instance()->appel_module("modrub", $category);
         }
-        
-        redirige('rubrique_modifier.php?id=' . $category->id . '&tab=associationTab#associatedVariantAnchor');
+    }
+    
+    public function updateAssociatedVariants($categoryId, $infos)
+    {
+        foreach($infos as $index => $info)
+        {
+            if($info["alive"] == 0 && $this->charger($categoryId, $index)) {
+                $this->delete($this->id);
+            }
+            elseif($info["alive"] == 1)
+            {
+                $this->add($index, $categoryId);
+            }
+        }
     }
 }
 

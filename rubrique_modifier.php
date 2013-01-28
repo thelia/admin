@@ -118,7 +118,7 @@ require_once("entete.php");
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane<?php if($tab=='associationTab'){ ?> active<?php } ?>" id="associationTab">
+                    <div class="tab-pane <?php if($tab=='associationTab'){ ?> active<?php } ?>" id="associationTab">
                         
                         <h3 id="associatedContentAnchor">
                             <?php echo trad('GESTION_CONTENUS_ASSOCIES', 'admin'); ?>
@@ -176,16 +176,31 @@ for($i=0; $i<count($AClist); $i++)
                         </h3>
 
                         <table class="table table-striped">
-                            <tbody>
+                            <tbody id="listeAssociatedFeature">
                                 <tr class="info">
                                     <td class="span10">
-                                        <select class="span12 not-change-page" id="associatedFeatureList">
 <?php
 $Flist = AssociatedFeatureAdmin::getInstance()->getListAvailableFeature($rubrique->id);
+$AFlist = AssociatedFeatureAdmin::getInstance()->getList($rubrique->id);
 for($i=0; $i<count($Flist); $i++)
 {
 ?>
-                                            <option value="<?php echo $Flist[$i]['id']; ?>"><?php echo $Flist[$i]['titre']; ?></option>
+                                        <input type="hidden" id="alive_associated_feature_<?php echo $Flist[$i]['id']; ?>" name="alive_associated_feature_<?php echo $Flist[$i]['id']; ?>" value="0" />
+<?php
+}
+for($i=0; $i<count($AFlist); $i++)
+{
+?>
+                                        <input type="hidden" id="alive_associated_feature_<?php echo $AFlist[$i]['feature_id']; ?>" name="alive_associated_feature_<?php echo $AFlist[$i]['feature_id']; ?>" value="1" />
+<?php
+}
+?>
+                                        <select class="span12" id="associatedFeatureList">
+<?php
+for($i=0; $i<count($Flist); $i++)
+{
+?>
+                                            <option value="<?php echo $Flist[$i]['id']; ?>" js-titre="<?php echo $Flist[$i]['titre']; ?>"><?php echo $Flist[$i]['titre']; ?></option>
 <?php
 }
 ?>
@@ -200,17 +215,16 @@ for($i=0; $i<count($Flist); $i++)
                                     </td>
                                 </tr>
 <?php
-$AFlist = AssociatedFeatureAdmin::getInstance()->getList($rubrique->id);
 for($i=0; $i<count($AFlist); $i++)
 {
 ?>
                                 <tr>
                                     <td>
-                                        <?php echo $AFlist[$i]['feature']; ?>
+                                        <?php echo $AFlist[$i]['feature_titre']; ?>
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a class="btn btn-mini js-delete-associatedFeature" title="<?php echo trad('supprimer', 'admin'); ?>" href="#deletAssociatedFeatureModal" data-toggle="modal" associated-feature-info="<?php echo $AFlist[$i]['feature'] ?>" associated-feature-id="<?php echo $AFlist[$i]['id'] ?>">
+                                            <a class="btn btn-mini js-delete-associatedFeature" title="<?php echo trad('supprimer', 'admin'); ?>" href="#" js-feature-id="<?php echo $AFlist[$i]['feature_id'] ?>" js-feature-title="<?php echo $AFlist[$i]['feature_titre'] ?>">
                                                 <i class="icon-trash"></i>
                                             </a>
                                         </div>
@@ -227,16 +241,31 @@ for($i=0; $i<count($AFlist); $i++)
                         </h3>
 
                         <table class="table table-striped">
-                            <tbody>
+                            <tbody id="listeAssociatedVariant">
                                 <tr class="info">
                                     <td class="span10">
-                                        <select class="span12 not-change-page" id="associatedVariantList">
 <?php
 $Vlist = AssociatedVariantAdmin::getInstance()->getListAvailableVariant($rubrique->id);
+$AVlist = AssociatedVariantAdmin::getInstance()->getList($rubrique->id);
 for($i=0; $i<count($Vlist); $i++)
 {
 ?>
-                                            <option value="<?php echo $Vlist[$i]['id']; ?>"><?php echo $Vlist[$i]['titre']; ?></option>
+                                        <input type="hidden" id="alive_associated_variant_<?php echo $Vlist[$i]['id']; ?>" name="alive_associated_variant_<?php echo $Vlist[$i]['id']; ?>" value="0" />
+<?php
+}
+for($i=0; $i<count($AVlist); $i++)
+{
+?>
+                                        <input type="hidden" id="alive_associated_variant_<?php echo $AVlist[$i]['variant_id']; ?>" name="alive_associated_variant_<?php echo $AVlist[$i]['variant_id']; ?>" value="1" />
+<?php
+}
+?>
+                                        <select class="span12" id="associatedVariantList">
+<?php
+for($i=0; $i<count($Vlist); $i++)
+{
+?>
+                                            <option value="<?php echo $Vlist[$i]['id']; ?>" js-titre="<?php echo $Vlist[$i]['titre']; ?>"><?php echo $Vlist[$i]['titre']; ?></option>
 <?php
 }
 ?>
@@ -244,24 +273,23 @@ for($i=0; $i<count($Vlist); $i++)
                                     </td>
                                     <td class="span1 offset1">
                                         <div class="btn-group">
-                                            <a class="btn btn-mini" id="link_addAssociatedVariant" title="<?php echo trad('ajouter', 'admin'); ?>" href="">
+                                            <a class="btn btn-mini" id="link_addAssociatedVariant" title="<?php echo trad('ajouter', 'admin'); ?>" href="#">
                                                 <i class="icon-plus-sign"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
 <?php
-$AVlist = AssociatedVariantAdmin::getInstance()->getList($rubrique->id);
 for($i=0; $i<count($AVlist); $i++)
 {
 ?>
                                 <tr>
                                     <td>
-                                        <?php echo $AVlist[$i]['variant']; ?>
+                                        <?php echo $AVlist[$i]['variant_titre']; ?>
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a class="btn btn-mini js-delete-associatedVariant" title="<?php echo trad('supprimer', 'admin'); ?>" href="#deletAssociatedVariantModal" data-toggle="modal" associated-variant-info="<?php echo $AVlist[$i]['variant'] ?>" associated-variant-id="<?php echo $AVlist[$i]['id'] ?>">
+                                            <a class="btn btn-mini js-delete-associatedVariant" title="<?php echo trad('supprimer', 'admin'); ?>" href="#" js-variant-id="<?php echo $AVlist[$i]['variant_id'] ?>" js-variant-title="<?php echo $AVlist[$i]['variant_titre'] ?>">
                                                 <i class="icon-trash"></i>
                                             </a>
                                         </div>
@@ -463,40 +491,62 @@ for($i=0; $i<count($AVlist); $i++)
     </div>
 </div>
 
-<!-- associatedFeature delation -->
-<div class="modal hide" id="deletAssociatedFeatureModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeleteAssociatedFeatureWarning', 'admin'); ?></p>
-        <p id="associatedFeatureDelationInfo"></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="associatedFeatureDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
-
-<!-- associatedVariant delation -->
-<div class="modal hide" id="deletAssociatedVariantModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3><?php echo trad('Cautious', 'admin'); ?></h3>
-    </div>
-    <div class="modal-body">
-        <p><?php echo trad('DeleteAssociatedVariantWarning', 'admin'); ?></p>
-        <p id="associatedVariantDelationInfo"></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
-        <a class="btn btn-primary" id="associatedVariantDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
-    </div>
-</div>
-
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
+/*html elements for dynamic display*/
+var htmlElements = {
+    tr_list: {
+        variant: function(variant_id, variant_title)
+        {
+            if(!variant_id && !variant_title)
+                return;
+
+            return $('<tr />').append(
+                $('<td />').html(variant_title),
+                $('<td />').append(
+                    $('<div />').addClass('btn-groupn').append(
+                        $('<a />').addClass('btn').addClass('btn-mini').addClass('js-delete-associatedVariant').attr('title', '<?php echo trad('supprimer', 'admin'); ?>').attr('href', '#').attr('js-variant-id', variant_id).attr('js-variant-title', variant_title).append(
+                            $('<i />').addClass('icon-trash')
+                        )
+                    )
+                )
+            )
+        },
+        feature: function(feature_id, feature_title)
+        {
+            if(!feature_id && !feature_title)
+                return;
+
+            return $('<tr />').append(
+                $('<td />').html(feature_title),
+                $('<td />').append(
+                    $('<div />').addClass('btn-groupn').append(
+                        $('<a />').addClass('btn').addClass('btn-mini').addClass('js-delete-associatedFeature').attr('title', '<?php echo trad('supprimer', 'admin'); ?>').attr('href', '#').attr('js-feature-id', feature_id).attr('js-feature-title', feature_title).append(
+                            $('<i />').addClass('icon-trash')
+                        )
+                    )
+                )
+            )
+        }
+    },
+    opt: {
+        variant: function(variant_id, variant_title)
+        {
+            if(!variant_id && !variant_title)
+                return;
+            
+            return $('<option />').val(variant_id).attr('js-titre', variant_title).html(variant_title)
+        },
+        feature: function(feature_id, feature_title)
+        {
+            if(!feature_id && !feature_title)
+                return;
+            
+            return $('<option />').val(feature_id).attr('js-titre', feature_title).html(feature_title)
+        }
+    }
+}
+    
 $(document).ready(function(){
     var form = 0;
 
@@ -657,32 +707,115 @@ $(document).ready(function(){
         }
     });
     
+    /*features*/
     $('#associatedFeatureList').change(function()
     {
         if($(this).val() != null)
-        {
-            $('#link_addAssociatedFeature').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=addAssociatedFeature&feature=' + $(this).val());
             $('#link_addAssociatedFeature').removeClass('disabled');
-        }
         else
-        {
-            $('#link_addAssociatedFeature').removeAttr('href');
             $('#link_addAssociatedFeature').addClass('disabled');
-        }
     });
     
+    $('#link_addAssociatedFeature').click(function(e)
+    {
+        e.preventDefault();
+        
+        /*add line*/
+        $('#listeAssociatedFeature').append(
+            htmlElements.tr_list.feature(
+                $('#associatedFeatureList').val(),
+                $('#associatedFeatureList').children(":selected").attr("js-titre")
+            )
+        );
+            
+        /*mark for add*/
+        $('#alive_associated_feature_' + $('#associatedFeatureList').val()).val(1);
+            
+        /*delete from select*/
+        $('#associatedFeatureList').children(":selected").unbind().remove();
+        
+        /**/
+        $('#associatedFeatureList').trigger('change');
+    });
+    
+    $('.js-delete-associatedFeature').live('click', function(e)
+    {
+        e.preventDefault();
+        
+        console.log(
+            
+        );
+        
+        /*delete ligne*/
+        $(this).parent().parent().parent().unbind().remove();
+        
+        /*mark for delation*/
+        $('#alive_associated_feature_' + $(this).attr('js-feature-id')).val(0);
+        
+        /*add in select*/
+        $('#associatedFeatureList').append(
+            htmlElements.opt.feature(
+                $(this).attr('js-feature-id'),
+                $(this).attr('js-feature-title')
+            )
+        );
+            
+        /**/
+        $('#associatedFeatureList').trigger('change');
+    });
+    
+    
+    /*variants*/
     $('#associatedVariantList').change(function()
     {
         if($(this).val() != null)
-        {
-            $('#link_addAssociatedVariant').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=addAssociatedVariant&variant=' + $(this).val());
             $('#link_addAssociatedVariant').removeClass('disabled');
-        }
         else
-        {
-            $('#link_addAssociatedVariant').removeAttr('href');
             $('#link_addAssociatedVariant').addClass('disabled');
-        }
+    });
+    
+    $('#link_addAssociatedVariant').click(function(e)
+    {
+        e.preventDefault();
+        
+        /*add line*/
+        $('#listeAssociatedVariant').append(
+            htmlElements.tr_list.variant(
+                $('#associatedVariantList').val(),
+                $('#associatedVariantList').children(":selected").attr("js-titre")
+            )
+        );
+        
+        /*mark for add*/
+        $('#alive_associated_variant_' + $('#associatedVariantList').val()).val(1);
+        
+        /*delete from select*/
+        $('#associatedVariantList').children(":selected").unbind().remove();
+        
+        /**/
+        $('#associatedVariantList').trigger('change');
+    });
+    
+    $('.js-delete-associatedVariant').live('click', function(e)
+    {
+        e.preventDefault();
+        
+        /*delete ligne*/
+        $(this).parent().parent().parent().unbind().remove();
+        
+        /*mark for delation*/
+        $('#alive_associated_variant_' + $(this).attr('js-variant-id')).val(0);
+        
+        /*add in select*/
+        $('#associatedVariantList').append(
+            htmlElements.opt.variant(
+                $(this).attr('js-variant-id'),
+                $(this).attr('js-variant-title')
+            )
+        );
+        
+        /**/
+        $('#associatedVariantList').trigger('change');
     });
     
     /*associated features loading*/
@@ -702,12 +835,6 @@ $(document).ready(function(){
     {
         $('#associatedFeatureDelationInfo').html($(this).attr('associated-feature-info'));
         $('#associatedFeatureDelationLink').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=deleteAssociatedFeature&associatedFeature=' + $(this).attr('associated-feature-id'));
-    });
-    
-    $('.js-delete-associatedVariant').click(function()
-    {
-        $('#associatedVariantDelationInfo').html($(this).attr('associated-variant-info'));
-        $('#associatedVariantDelationLink').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=deleteAssociatedVariant&associatedVariant=' + $(this).attr('associated-variant-id'));
     });
 });
 </script>

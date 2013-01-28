@@ -36,15 +36,6 @@ class ActionsAdminContent extends ActionsAdminBase
                         $request->request->get('tab')
                 );
                 break;
-            case "modifyAttachementPosition":
-                ContentAdmin::getInstance($request->query->get('id'))->changeAttachementPosition(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('direction'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
-                );
-                break;
             
             /*listdos actions*/
             case "addContent":

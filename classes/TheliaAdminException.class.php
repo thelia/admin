@@ -32,6 +32,7 @@ class TheliaAdminException extends Exception
     const ADMIN_NOT_FOUND = 110;
     const CARAC_NOT_FOUND = 111;
     const DECLI_NOT_FOUND = 112;
+    const ASSOCIATION_NOT_FOUND = 113;
     
     const CLIENT_EDIT_ERROR = 200;
     const CLIENT_ADRESS_EDIT_ERROR = 201;

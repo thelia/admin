@@ -31,6 +31,7 @@ class CategoryAdmin extends Rubrique
         }
         
         $this->extends[] = new AttachementAdmin();
+        $this->extends[] = new AssociationAdmin();
         
         $this->setAttachement("image", new ImageFile('rubrique', $this->id));
         $this->setAttachement("document", new DocumentFile('rubrique', $this->id));
@@ -126,18 +127,6 @@ class CategoryAdmin extends Rubrique
         
         redirige('parcourir.php?parent='.$parent);
     }
-    
-    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $type);
-        redirige("rubrique_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
-    }
-    
-    public function deleteAttachement($attachement, $id, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
-        redirige("rubrique_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
-    }
 
     public function getList($parent, $critere, $order, $alpha)
     {
@@ -183,7 +172,7 @@ class CategoryAdmin extends Rubrique
         return $tab;
     }
     
-    public function modify($lang, $parent, $lien, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $images, $documents, $tab)
+    public function modify($lang, $parent, $lien, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $associatedFeatures, $associatedVariants, $images, $documents, $tab)
     {
         if($this->id == '')
         {
@@ -222,6 +211,8 @@ class CategoryAdmin extends Rubrique
         
         $rubriquedesc->reecrire($rewriteurl);
         $this->setLang($lang);
+        AssociatedVariantAdmin::getInstance()->updateAssociatedVariants($this->id, $associatedVariants);
+        AssociatedFeatureAdmin::getInstance()->updateAssociatedFeatures($this->id, $associatedFeatures);
         $this->updateImage($images);
         $this->getImageFile()->ajouter("photo", array("jpg", "gif", "png", "jpeg"), "uploadimage");
         $this->updateDocuments($documents);

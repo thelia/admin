@@ -115,18 +115,6 @@ class FolderAdmin extends Dossier
         
         redirige('listdos.php?parent='.$parent);
     }
-    
-    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $type);
-        redirige("dossier_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
-    }
-    
-    public function deleteAttachement($attachement, $id, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
-        redirige("dossier_modifier.php?id=".$this->id."&lang=".$lang."&tab=".$tab);
-    }
 
     public function getList($parent, $critere, $order, $alpha)
     {

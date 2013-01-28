@@ -20,7 +20,7 @@ class AssociatedFeatureAdmin extends Rubcaracteristique {
         {
             $featureDescription = new Caracteristiquedesc($theAssociatedFeature->caracteristique);
 	
-            $return[] = array("id" => $theAssociatedFeature->id, "feature" => $featureDescription->titre);
+            $return[] = array("id" => $theAssociatedFeature->id, "feature_id" => $featureDescription->caracteristique, "feature_titre" => $featureDescription->titre);
 	}
 
         return $return;
@@ -61,14 +61,14 @@ class AssociatedFeatureAdmin extends Rubcaracteristique {
             
             ActionsModules::instance()->appel_module("modrub", $category);
         }
-
-        redirige('rubrique_modifier.php?id=' . $category->id . '&tab=associationTab#associatedFeatureAnchor');
     }
     
     public function add($featureToAddId, $categoryId)
     {
         $category = new Rubrique();
         $featureToAdd = new Caracteristique();
+        
+        $this->id = '';
         if(!$this->charger($categoryId, $featureToAddId) && $featureToAdd->charger($featureToAddId) && $category->charger($categoryId))
         {
             $this->rubrique = $category->id;
@@ -78,8 +78,20 @@ class AssociatedFeatureAdmin extends Rubcaracteristique {
 
             ActionsModules::instance()->appel_module("modrub", $category);
         }
-        
-        redirige('rubrique_modifier.php?id=' . $category->id . '&tab=associationTab#associatedFeatureAnchor');
+    }
+    
+    public function updateAssociatedFeatures($categoryId, $infos)
+    {
+        foreach($infos as $index => $info)
+        {
+            if($info["alive"] == 0 && $this->charger($categoryId, $index)) {
+                $this->delete($this->id);
+            }
+            elseif($info["alive"] == 1)
+            {
+                $this->add($index, $categoryId);
+            }
+        }
     }
 }
 

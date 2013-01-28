@@ -85,18 +85,6 @@ class ProductAdmin extends Produit {
         redirige('parcourir.php?parent='.$parent);
     }
     
-    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $type);
-        redirige("produit_modifier.php?ref=".$this->ref."&rubrique=".$this->rubrique."&lang=".$lang."&tab=".$tab);
-    }
-    
-    public function deleteAttachement($attachement, $id, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->supprimer($id);
-        redirige("produit_modifier.php?ref=".$this->ref."&rubrique=".$this->rubrique."&lang=".$lang."&tab=".$tab);
-    }
-    
     public static function cleanRef($ref)
     {
         $ref = str_replace(" ", "", $ref);

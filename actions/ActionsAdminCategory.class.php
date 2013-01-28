@@ -17,7 +17,8 @@ class ActionsAdminCategory extends ActionsAdminBase
         return self::$instance;
     }
     
-    public function action(Request $request){
+    public function action(Request $request)
+    {
         switch($request->get('action'))
         {
             /*listrub actions*/
@@ -47,18 +48,11 @@ class ActionsAdminCategory extends ActionsAdminBase
                         $request->request->get('postscriptum'),
                         $request->request->get('urlsuiv'),
                         $request->request->get('urlreecrite'),
+                        $this->getAssociatedFeatures($request, $categoryAdmin),
+                        $this->getAssociatedVariants($request, $categoryAdmin),
                         $this->getImages($request, $categoryAdmin),
                         $this->getDocuments($request, $categoryAdmin),
                         $request->request->get('tab')
-                );
-                break;
-            case "modifyAttachementPosition":
-                CategoryAdmin::getInstance($request->query->get('id'))->changeAttachementPosition(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('direction'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
                 );
                 break;
             
@@ -70,7 +64,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                 AssociatedContentAdmin::getInstance()->add($request->query->get('contenu'), 0, $request->query->get('id'));
                 break;
 
-            case 'deleteAssociatedFeature':
+            /*case 'deleteAssociatedFeature':
                 AssociatedFeatureAdmin::getInstance()->delete($request->query->get('associatedFeature'));
                 break;
             case 'addAssociatedFeature':
@@ -82,8 +76,52 @@ class ActionsAdminCategory extends ActionsAdminBase
                 break;
             case 'addAssociatedVariant':
                 AssociatedVariantAdmin::getInstance()->add($request->query->get('variant'), $request->query->get('id'));
-                break;
+                break;*/
         }
+    }
+    
+    protected function getAssociatedFeatures(Request $request, \CategoryAdmin $category)
+    {
+        $return = array();
+        
+        if($category->id == ''){
+            return $return;
+        }
+        
+        $query = 'SELECT id from ' . Caracteristique::TABLE;
+
+        $return = $this->extractResult(
+            $request,
+            $category->query_liste($query),
+            array(
+                "alive" => "alive_associated_feature_",
+            ),
+            'request'
+        );
+        
+        return $return;
+    }
+    
+    protected function getAssociatedVariants(Request $request, \CategoryAdmin $category)
+    {
+        $return = array();
+        
+        if($category->id == ''){
+            return $return;
+        }
+        
+        $query = 'SELECT id from ' . Declinaison::TABLE;
+
+        $return = $this->extractResult(
+            $request,
+            $category->query_liste($query),
+            array(
+                "alive" => "alive_associated_variant_",
+            ),
+            'request'
+        );
+        
+        return $return;
     }
     
     protected function getImages(Request $request, \CategoryAdmin $category)
@@ -97,18 +135,18 @@ class ActionsAdminCategory extends ActionsAdminBase
         $query = 'select id from '.Image::TABLE.' where rubrique='.$category->id;
 
         
-        $return = $this->extractResult(
-            $request,
-            $category->query_liste($query),
-            array(
-                "titre" => "photo_titre_",
-                "chapo" => "photo_chapo_",
-                "description" => "photo_description_",
-                "toDelete" => "image_to_delete_",
-                "rank" => "rank_",
-            ),
-            'request'
-        );
+//        $return = $this->extractResult(
+//            $request,
+//            $category->query_liste($query),
+//            array(
+//                "titre" => "photo_titre_",
+//                "chapo" => "photo_chapo_",
+//                "description" => "photo_description_",
+//                "toDelete" => "image_to_delete_",
+//                "rank" => "rank_",
+//            ),
+//            'request'
+//        );
         
         return $return;
     }
@@ -123,18 +161,18 @@ class ActionsAdminCategory extends ActionsAdminBase
         
         $query = "select id from ".Document::TABLE.' where rubrique='.$category->id;
         
-        $return = $this->extractResult(
-            $request,
-            $category->query_liste($query),
-            array(
-                "titre" => "document_titre_",
-                "chapo" => "document_chapo_",
-                "description" => "document_description_",
-                "toDelete" => "document_to_delete_",
-                "rank" => "rank_",
-            ),
-            'request'
-        );
+//        $return = $this->extractResult(
+//            $request,
+//            $category->query_liste($query),
+//            array(
+//                "titre" => "document_titre_",
+//                "chapo" => "document_chapo_",
+//                "description" => "document_description_",
+//                "toDelete" => "document_to_delete_",
+//                "rank" => "rank_",
+//            ),
+//            'request'
+//        );
         
         return $return;
     }

@@ -110,10 +110,5 @@ class AttachementAdmin
     {
         $this->updateAttachement('image', $images);
     }
-    
-    public function changeAttachementPosition($attachement, $id, $type, $lang, $tab)
-    {
-        $this->getAttachement($attachement)->modclassement($id, $type);
-    }
 }
 ?>

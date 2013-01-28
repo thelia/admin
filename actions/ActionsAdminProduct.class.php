@@ -47,15 +47,6 @@ class ActionsAdminProduct extends ActionsAdminBase
                         $request->request->get('tab')
                 );
                 break;
-            case "modifyAttachementPosition":
-                ProductAdmin::getInstanceByRef($request->query->get('ref'))->changeAttachementPosition(
-                        $request->query->get('attachement'),
-                        $request->query->get('attachement_id'),
-                        $request->query->get('direction'),
-                        $request->query->get('lang'),
-                        $request->query->get('tab')
-                );
-                break;
         }
     }
     
