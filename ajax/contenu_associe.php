@@ -46,7 +46,13 @@ function contenuassoc_contenu($request) {
     while ($resul && $row = $contenu->fetch_object($resul)) {
 
         $contenuassoc = new Contenuassoc();
-        if ($contenuassoc->existe($objet->id, $request->query->get('type'), $row->id))
+        if (
+                (
+                    !in_array($row->id, explode('-', $request->query->get('force_show_content')))
+                    && $contenuassoc->existe($objet->id, $request->query->get('type'), $row->id)
+                )
+                || in_array($row->id, explode('-', $request->query->get('force_hide_content')))
+        )
                 continue;
 
         $contenudesc = new Contenudesc();

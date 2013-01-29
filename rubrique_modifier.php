@@ -123,9 +123,19 @@ require_once("entete.php");
                         <h3 id="associatedContentAnchor">
                             <?php echo trad('GESTION_CONTENUS_ASSOCIES', 'admin'); ?>
                         </h3>
+                        <input type="hidden" id="new_associated_content" name="new_associated_content" value="" />
+<?php
+$AClist = AssociatedContentAdmin::getInstance()->getList(0, $rubrique->id);
+for($i=0; $i<count($AClist); $i++)
+{
+?>
+                        <input type="hidden" id="alive_associated_content_<?php echo $AClist[$i]['id'] ?>" name="alive_associated_content_<?php echo $AClist[$i]['id'] ?>" class="js-deleted-associated-content" js-id-content="<?php echo $AClist[$i]['content_id'] ?>" js-id-associated-content="<?php echo $AClist[$i]['id'] ?>" value="1" />
+<?php
+}
+?>
                         
                         <table class="table table-striped">
-                            <tbody>
+                            <tbody id="listeAssociatedContent">
                                 <tr class="info">
                                     <td class="span5">
                                         <select class="span12 not-change-page" id="associatedContent_dossier">
@@ -139,27 +149,26 @@ echo arbreOption_dos(0, 1, 0, 0, 1);
                                     </td>
                                     <td class="span1 offset1">
                                         <div class="btn-group">
-                                            <a class="btn btn-mini" id="link_prodcont" title="<?php echo trad('ajouter', 'admin'); ?>" href="">
+                                            <a class="btn btn-mini" id="link_prodcont" title="<?php echo trad('ajouter', 'admin'); ?>" href="#">
                                                 <i class="icon-plus-sign"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
 <?php
-$AClist = AssociatedContentAdmin::getInstance()->getList(0, $rubrique->id);
 for($i=0; $i<count($AClist); $i++)
 {
 ?>
                                 <tr>
                                     <td>
-                                        <?php echo $AClist[$i]['folder']; ?>
+                                        <?php echo $AClist[$i]['folder_titre']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $AClist[$i]['content']; ?>
+                                        <?php echo $AClist[$i]['content_titre']; ?>
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a class="btn btn-mini js-delete-associatedContent" title="<?php echo trad('supprimer', 'admin'); ?>" href="#deletContenuassoceModal" data-toggle="modal" associated-content-info="<?php echo $AClist[$i]['folder'] ?> > <?php echo $AClist[$i]['content'] ?>" associated-content-id="<?php echo $AClist[$i]['id'] ?>">
+                                            <a class="btn btn-mini js-delete-associatedContent" title="<?php echo trad('supprimer', 'admin'); ?>" href="#" js-associated-content-id="<?php echo $AClist[$i]['id'] ?>" js-content-id="<?php echo $AClist[$i]['content_id'] ?>">
                                                 <i class="icon-trash"></i>
                                             </a>
                                         </div>
@@ -482,7 +491,7 @@ var htmlElements = {
     tr_list: {
         variant: function(variant_id, variant_title)
         {
-            if(!variant_id && !variant_title)
+            if(!variant_id || !variant_title)
                 return;
 
             return $('<tr />').append(
@@ -498,7 +507,7 @@ var htmlElements = {
         },
         feature: function(feature_id, feature_title)
         {
-            if(!feature_id && !feature_title)
+            if(!feature_id || !feature_title)
                 return;
 
             return $('<tr />').append(
@@ -511,19 +520,38 @@ var htmlElements = {
                     )
                 )
             )
+        },
+        content: function(content_id, content_title, folder_title, associated_content_id)
+        {
+            if(!content_id || !content_title || !folder_title)
+                return;
+
+            return $('<tr />').append(
+                $('<td />').html(
+                    folder_title.replace(/&nbsp;/gi, '')
+                ),
+                $('<td />').html(content_title),
+                $('<td />').append(
+                    $('<div />').addClass('btn-groupn').append(
+                        $('<a />').addClass('btn').addClass('btn-mini').addClass('js-delete-associatedContent').attr('title', '<?php echo trad('supprimer', 'admin'); ?>').attr('href', '#').attr('js-associated-content-id', ((associated_content_id!==false)?associated_content_id:'')).attr('js-content-id', content_id).append(
+                            $('<i />').addClass('icon-trash')
+                        )
+                    )
+                )
+            )
         }
     },
     opt: {
         variant: function(variant_id, variant_title)
         {
-            if(!variant_id && !variant_title)
+            if(!variant_id || !variant_title)
                 return;
             
             return $('<option />').val(variant_id).attr('js-titre', variant_title).html(variant_title)
         },
         feature: function(feature_id, feature_title)
         {
-            if(!feature_id && !feature_title)
+            if(!feature_id || !feature_title)
                 return;
             
             return $('<option />').val(feature_id).attr('js-titre', feature_title).html(feature_title)
@@ -667,14 +695,68 @@ $(document).ready(function(){
     
     /*associated contents*/
     $('#associatedContent_dossier').change(function(){
+        var toDeleteAssociatedContentList = new Array();
+        $('.js-deleted-associated-content').each(function(k, v)
+        {
+            if($(v).val() == 0)
+                toDeleteAssociatedContentList.push($(v).attr('js-id-content'))
+        });
+        
         $('#select_prodcont').load(
             'ajax/contenu_associe.php',
-            'action=contenu_assoc&type=0&objet=<?php echo $rubrique->id; ?>&id_dossier=' + $(this).val(),
+            'action=contenu_assoc&type=0&objet=<?php echo $rubrique->id; ?>&id_dossier=' + $(this).val() + '&force_show_content=' + toDeleteAssociatedContentList.join('-') + '&force_hide_content=' + $('#new_associated_content').val(),
             function()
             {
                 $('#select_prodcont').trigger('change');
             }
         );
+    });
+    
+    $('#link_prodcont').click(function(e)
+    {
+        e.preventDefault();
+        
+        if($('#select_prodcont').val() == '')
+            return;
+        
+        /*cancel potential delation*/
+        var justCancelDelation = false;
+        $('.js-deleted-associated-content').each(function(k, v)
+        {
+            if($(v).attr('js-id-content') == $('#select_prodcont').val())
+            {
+                $(v).val(1);
+                justCancelDelation = $(v).attr('js-id-associated-content');
+            }
+        });
+        
+        /*add line*/
+        $('#listeAssociatedContent').append(
+            htmlElements.tr_list.content(
+                $('#select_prodcont').val(),
+                $('#select_prodcont').children(":selected").html(),
+                $('#associatedContent_dossier').children(":selected").html(),
+                ((justCancelDelation!==false)?justCancelDelation:false)
+            )
+        );
+        
+        /*mark for add*/
+        if(!justCancelDelation)
+        {
+            var addedAssociatedContentTab = ($('#new_associated_content').val()=='')?[]:$('#new_associated_content').val().split('-');
+            addedAssociatedContentTab.push($('#select_prodcont').val());
+            
+            $('#new_associated_content').val(
+                addedAssociatedContentTab.join('-')
+            )
+            
+        }
+        
+        /*delete from select*/
+        $('#select_prodcont').children(":selected").unbind().remove();
+        
+        /**/
+        $('#select_prodcont').trigger('change');
     });
     
     $('#select_prodcont').change(function()
@@ -683,6 +765,35 @@ $(document).ready(function(){
             $('#link_prodcont').removeClass('disabled');
         else
             $('#link_prodcont').addClass('disabled');
+    });
+    
+    $('.js-delete-associatedContent').live('click', function(e)
+    {
+        e.preventDefault();
+        
+        /*mark for delation*/
+        if($(this).attr('js-associated-content-id') != '')
+            $('#alive_associated_content_' + $(this).attr('js-associated-content-id')).val(0);
+        else
+        {
+            var newAddedAssociatedContentTab = new Array();
+            var idContent = $(this).attr('js-content-id');
+            $($('#new_associated_content').val().split('-')).each(function(k, v)
+            {
+                if(v != idContent)
+                    newAddedAssociatedContentTab.push(v);
+            });
+            
+            $('#new_associated_content').val(
+                newAddedAssociatedContentTab.join('-')
+            )
+        }
+        
+        /*delete ligne*/
+        $(this).parent().parent().parent().unbind().remove();
+        
+        /**/
+        $('#associatedContent_dossier').trigger('change');
     });
     
     /*associated features*/
@@ -719,10 +830,6 @@ $(document).ready(function(){
     $('.js-delete-associatedFeature').live('click', function(e)
     {
         e.preventDefault();
-        
-        console.log(
-            
-        );
         
         /*delete ligne*/
         $(this).parent().parent().parent().unbind().remove();
@@ -801,19 +908,6 @@ $(document).ready(function(){
     $('#associatedContent_dossier').trigger('change');
     $('#associatedFeatureList').trigger('change');
     $('#associatedVariantList').trigger('change');
-    
-    /*associated features modals*/
-    $('.js-delete-associatedContent').click(function()
-    {
-        $('#associatedContentDelationInfo').html($(this).attr('associated-content-info'));
-        $('#associatedContentDelationLink').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=deleteAssociatedContent&associatedContent=' + $(this).attr('associated-content-id'));
-    });
-    
-    $('.js-delete-associatedFeature').click(function()
-    {
-        $('#associatedFeatureDelationInfo').html($(this).attr('associated-feature-info'));
-        $('#associatedFeatureDelationLink').attr('href', 'rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&action=deleteAssociatedFeature&associatedFeature=' + $(this).attr('associated-feature-id'));
-    });
 });
 </script>
 </body>

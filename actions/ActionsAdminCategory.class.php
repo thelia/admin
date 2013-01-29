@@ -48,6 +48,7 @@ class ActionsAdminCategory extends ActionsAdminBase
                         $request->request->get('postscriptum'),
                         $request->request->get('urlsuiv'),
                         $request->request->get('urlreecrite'),
+                        $this->getAssociatedContents($request, $categoryAdmin),
                         $this->getAssociatedFeatures($request, $categoryAdmin),
                         $this->getAssociatedVariants($request, $categoryAdmin),
                         $this->getImages($request, $categoryAdmin),
@@ -57,27 +58,44 @@ class ActionsAdminCategory extends ActionsAdminBase
                 break;
             
             /*association*/
-            case 'deleteAssociatedContent':
+            /*case 'deleteAssociatedContent':
                 AssociatedContentAdmin::getInstance()->delete($request->query->get('associatedContent'));
                 break;
             case 'addAssociatedContent':
                 AssociatedContentAdmin::getInstance()->add($request->query->get('contenu'), 0, $request->query->get('id'));
-                break;
-
-            /*case 'deleteAssociatedFeature':
-                AssociatedFeatureAdmin::getInstance()->delete($request->query->get('associatedFeature'));
-                break;
-            case 'addAssociatedFeature':
-                AssociatedFeatureAdmin::getInstance()->add($request->query->get('feature'), $request->query->get('id'));
-                break;
-
-            case 'deleteAssociatedVariant':
-                AssociatedVariantAdmin::getInstance()->delete($request->query->get('associatedVariant'));
-                break;
-            case 'addAssociatedVariant':
-                AssociatedVariantAdmin::getInstance()->add($request->query->get('variant'), $request->query->get('id'));
                 break;*/
         }
+    }
+    
+    protected function getAssociatedContents(Request $request, \CategoryAdmin $category)
+    {
+        $return = array();
+        
+        if($category->id == ''){
+            return $return;
+        }
+        
+        $query = 'SELECT id from ' . Contenuassoc::TABLE . ' WHERE type=0 AND objet=' . $category->id;
+
+        $return = $this->extractResult(
+            $request,
+            $category->query_liste($query),
+            array(
+                "alive" => "alive_associated_content_",
+            ),
+            'request'
+        );
+        
+        $toAdd = $request->get('new_associated_content');
+        foreach(explode('-', $toAdd) as $idContent)
+        {
+            $return[] = array(
+                'add' => '1',
+                'content' => $idContent,
+            );
+        }
+        
+        return $return;
     }
     
     protected function getAssociatedFeatures(Request $request, \CategoryAdmin $category)

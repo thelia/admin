@@ -171,7 +171,7 @@ class CategoryAdmin extends Rubrique
         return $tab;
     }
     
-    public function modify($lang, $parent, $lien, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $associatedFeatures, $associatedVariants, $images, $documents, $tab)
+    public function modify($lang, $parent, $lien, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $associatedContents, $associatedFeatures, $associatedVariants, $images, $documents, $tab)
     {
         if($this->id == '')
         {
@@ -210,6 +210,7 @@ class CategoryAdmin extends Rubrique
         
         $rubriquedesc->reecrire($rewriteurl);
         $this->setLang($lang);
+        AssociatedContentAdmin::getInstance()->updateAssociatedContents(0, $this->id, $associatedContents);
         AssociatedVariantAdmin::getInstance()->updateAssociatedVariants($this->id, $associatedVariants);
         AssociatedFeatureAdmin::getInstance()->updateAssociatedFeatures($this->id, $associatedFeatures);
         $this->updateImage($images);

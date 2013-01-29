@@ -38,7 +38,7 @@ class AssociatedContentAdmin extends Contenuassoc {
             $folderDescription = new Dossierdesc();
             $folderDescription->charger($content->dossier);
 
-            $return[] = array('id' => $theAssociatedContent->id, 'folder' => $folderDescription->titre, 'content' => $contentDescription->titre);
+            $return[] = array('id' => $theAssociatedContent->id, 'folder_id' => $folderDescription->dossier, 'folder_titre' => $folderDescription->titre, 'content_id' => $contentDescription->contenu, 'content_titre' => $contentDescription->titre);
         }
 
         return $return;
@@ -62,11 +62,6 @@ class AssociatedContentAdmin extends Contenuassoc {
             else
                 ActionsModules::instance()->appel_module("modrub", $objet);
         }
-
-        if ($this->type == 1)
-            redirige('produit_modifier.php?ref=' . $objet->ref . '&tab=associationTab#associatedContentAnchor');
-        else
-            redirige('rubrique_modifier.php?id=' . $objet->id . '&tab=associationTab#associatedContentAnchor');
     }
     
     public function add($contentToAddId, $type, $object)
@@ -83,6 +78,7 @@ class AssociatedContentAdmin extends Contenuassoc {
         }
         
         $contentToAdd = new Contenu();
+        $this->id = '';
         if(!$this->existe($object, $type, $contentToAddId) && $contentToAdd->charger($contentToAddId))
         {
             $classement = $this->getMaxRanking($objectInstance->id, $type) + 1;
@@ -99,11 +95,6 @@ class AssociatedContentAdmin extends Contenuassoc {
             else
                 ActionsModules::instance()->appel_module("modrub", $objectInstance);
         }
-        
-        if ($this->type == 1)
-            redirige('produit_modifier.php?ref=' . $objectInstance->ref . '&tab=associationTab#associatedContentAnchor');
-        else
-            redirige('rubrique_modifier.php?id=' . $objectInstance->id . '&tab=associationTab#associatedContentAnchor');
     }
     
     public function getMaxRanking($object, $type)
@@ -113,17 +104,19 @@ class AssociatedContentAdmin extends Contenuassoc {
         return $this->get_result($this->query($qRanking), 0, 'maxRanking');
     }
     
-    /*public function modifyOrder($type, $parent){
-        $this->changer_classement($this->id, $type);
-        
-        redirige('parcourir.php?parent='.$parent);
+    public function updateAssociatedContents($type, $id, $infos)
+    {
+        foreach($infos as $index => $info)
+        {
+            if($info["alive"] === '0') {
+                $this->delete($index);
+            }
+            elseif($info["add"] == 1)
+            {
+                $this->add($info["content"], $type, $id);
+            }
+        }
     }
-    
-    public function changeOrder($newClassement, $parent){
-        $this->modifier_classement($this->id, $newClassement);
-        
-        redirige('parcourir.php?parent='.$parent);
-    }*/
 }
 
 ?>
