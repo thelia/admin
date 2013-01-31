@@ -77,6 +77,11 @@ require_once("entete.php");
                                     ?>
                                 </li>
                                 <li class="">
+                                    <a href="<?php echo urlfond("produit", "id_produit=$produit->id&id_rubrique=$produit->rubrique", true); ?>" target="_blank" title="<?php echo trad('preview', 'admin'); ?>" class="change-page">
+                                        <i class="icon-eye-open"></i>
+                                    </a>
+                                </li>
+                                <li class="">
                                     <?php
                                     $next = ToolBoxAdmin::getNext($produit, 'rubrique');
                                     if($next !== false)

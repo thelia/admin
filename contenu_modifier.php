@@ -69,6 +69,11 @@ require_once("entete.php");
                             ?>
                         </li>
                         <li class="">
+                            <a href="<?php echo urlfond("contenu", "id_contenu=$contenu->id&id_dossier=$contenu->dossier", true); ?>" target="_blank" title="<?php echo trad('preview', 'admin'); ?>" class="change-page">
+                                <i class="icon-eye-open"></i>
+                            </a>
+                        </li>
+                        <li class="">
                             <?php
                             $next = ToolBoxAdmin::getNext($contenu, 'dossier');
                             if($next !== false)
