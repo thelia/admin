@@ -65,7 +65,7 @@ require_once("entete.php");
                             if($previousCategory !== false)
                             {
                             ?>
-                            <a href="rubrique_modifier.php?id=<?php echo $previousCategory->id; ?>" class="change-page">
+                            <a href="rubrique_modifier.php?id=<?php echo $previousCategory->id; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
                                 <i class="icon-backward"></i>
                             </a>
                             <?php
@@ -78,7 +78,7 @@ require_once("entete.php");
                             if($nextCategory !== false)
                             {
                             ?>
-                            <a href="rubrique_modifier.php?id=<?php echo $nextCategory->id; ?>" class="change-page">
+                            <a href="rubrique_modifier.php?id=<?php echo $nextCategory->id; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
                                 <i class="icon-forward"></i>
                             </a>
                             <?php

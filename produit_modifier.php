@@ -69,7 +69,7 @@ require_once("entete.php");
                                     if($previous !== false)
                                     {
                                     ?>
-                                    <a href="produit_modifier.php?ref=<?php echo $previous->ref; ?>&rubrique=<?php echo $previous->rubrique; ?>" class="change-page">
+                                    <a href="produit_modifier.php?ref=<?php echo $previous->ref; ?>&rubrique=<?php echo $previous->rubrique; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
                                         <i class="icon-backward"></i>
                                     </a>
                                     <?php
@@ -82,7 +82,7 @@ require_once("entete.php");
                                     if($next !== false)
                                     {
                                     ?>
-                                    <a href="produit_modifier.php?ref=<?php echo $next->ref; ?>&rubrique=<?php echo $next->rubrique; ?>" class="change-page">
+                                    <a href="produit_modifier.php?ref=<?php echo $next->ref; ?>&rubrique=<?php echo $next->rubrique; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
                                         <i class="icon-forward"></i>
                                     </a>
                                     <?php

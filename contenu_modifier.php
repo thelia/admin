@@ -61,7 +61,7 @@ require_once("entete.php");
                             if($previous !== false)
                             {
                             ?>
-                            <a href="contenu_modifier.php?id=<?php echo $previous->id; ?>&dossier=<?php echo $previous->dossier; ?>" class="change-page">
+                            <a href="contenu_modifier.php?id=<?php echo $previous->id; ?>&dossier=<?php echo $previous->dossier; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
                                 <i class="icon-backward"></i>
                             </a>
                             <?php
@@ -74,7 +74,7 @@ require_once("entete.php");
                             if($next !== false)
                             {
                             ?>
-                            <a href="contenu_modifier.php?id=<?php echo $next->id; ?>&dossier=<?php echo $next->dossier; ?>" class="change-page">
+                            <a href="contenu_modifier.php?id=<?php echo $next->id; ?>&dossier=<?php echo $next->dossier; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
                                 <i class="icon-forward"></i>
                             </a>
                             <?php

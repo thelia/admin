@@ -280,6 +280,41 @@ while($resul && $filleul = $listepar->fetch_object($resul, 'Client'))
         <div class="span6">
             
             <div class="row-fluid">
+                <span class="12">
+                    <div class="littletable">
+                        <ul class="nav nav-pills">
+                            <li class="">
+                                <?php
+                                $previous = ToolBoxAdmin::getPrevious($client, false, 'nom');
+                                if($previous !== false)
+                                {
+                                ?>
+                                <a href="client_visualiser.php?ref=<?php echo $previous->ref; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
+                                    <i class="icon-backward"></i>
+                                </a>
+                                <?php
+                                }
+                                ?>
+                            </li>
+                            <li class="">
+                                <?php
+                                $next = ToolBoxAdmin::getNext($client, false, 'nom');
+                                if($next !== false)
+                                {
+                                ?>
+                                <a href="client_visualiser.php?ref=<?php echo $next->ref; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
+                                    <i class="icon-forward"></i>
+                                </a>
+                                <?php
+                                }
+                                ?>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+            
+            <div class="row-fluid">
 
                 <span class="12">
                     <h3>

@@ -32,7 +32,6 @@ if (isset($colis) && $colis != "") {
 $client = new Client();
 $client->charger_id($commande->client);
 
-
 $statutdesc = new Statutdesc();
 $statutdesc->charger($commande->statut);
 
@@ -285,48 +284,86 @@ $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE
                 </table>
             </div>
             <div class="span4">
-                <div class="littletable">
-                <table class="table table-striped">
-                    <caption>
-                        <h4><?php echo trad('INFO_COMPLEMENTAIRE', 'admin'); ?></h4>
-                    </caption>
-                    <tbody>
-                        <tr>
-                            <td><strong><?php echo trad('STATUT_REGLEMENT', 'admin'); ?></strong></td>
-                            <td>
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="formStatus" method="post" class="form-inline">
-                                    <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>">
-                                    <select name="statutch" id="statutch" class="input-medium">
-                                    <?php foreach($statusArray as $statusDesc): ?>
-                                        <option value="<?php echo $statusDesc->statut; ?>" <?php if($statusDesc->statut == $commande->statut) echo 'selected="selected"'; ?>><?php echo $statusDesc->titre; ?></option>
-                                    <?php endforeach; ?>
-                                    </select>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong><?php echo trad('SUIVI_COLIS', 'admin'); ?></strong></td>
-                            <td>
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                                    <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>">
-                                    <div class="input-append">
-                                    <input type="text" class="input-small" name="colis" value="<?php echo htmlspecialchars($commande->colis); ?>">
-                                    <button class="btn" type="submit"><?php echo trad('Valider','admin'); ?></button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong><?php echo trad('Facture', 'admin'); ?></strong></td>
-                            <td><a href="../client/pdf/facture.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
-                        </tr>
-                        <tr>
-                            <td><strong><?php echo trad('Bon_livraison', 'admin'); ?></strong></td>
-                            <td><a href="livraison.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>    
+                <div class="row-fluide">
+                    <div class="span12">
+                        <div class="littletable">
+                            <ul class="nav nav-pills">
+                                <li class="">
+                                    <?php
+                                    $previous = ToolBoxAdmin::getPrevious($commande, false, 'id');
+                                    if($previous !== false)
+                                    {
+                                    ?>
+                                    <a href="commande_details.php?ref=<?php echo $previous->ref; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
+                                        <i class="icon-backward"></i>
+                                    </a>
+                                    <?php
+                                    }
+                                    ?>
+                                </li>
+                                <li class="">
+                                    <?php
+                                    $next = ToolBoxAdmin::getNext($commande, false, 'id');
+                                    if($next !== false)
+                                    {
+                                    ?>
+                                    <a href="commande_details.php?ref=<?php echo $next->ref; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
+                                        <i class="icon-forward"></i>
+                                    </a>
+                                    <?php
+                                    }
+                                    ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluide">
+                    <div class="span12">
+                        <div class="littletable">
+                        <table class="table table-striped">
+                            <caption>
+                                <h4><?php echo trad('INFO_COMPLEMENTAIRE', 'admin'); ?></h4>
+                            </caption>
+                            <tbody>
+                                <tr>
+                                    <td><strong><?php echo trad('STATUT_REGLEMENT', 'admin'); ?></strong></td>
+                                    <td>
+                                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="formStatus" method="post" class="form-inline">
+                                            <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>">
+                                            <select name="statutch" id="statutch" class="input-medium">
+                                            <?php foreach($statusArray as $statusDesc): ?>
+                                                <option value="<?php echo $statusDesc->statut; ?>" <?php if($statusDesc->statut == $commande->statut) echo 'selected="selected"'; ?>><?php echo $statusDesc->titre; ?></option>
+                                            <?php endforeach; ?>
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong><?php echo trad('SUIVI_COLIS', 'admin'); ?></strong></td>
+                                    <td>
+                                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                                            <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>">
+                                            <div class="input-append">
+                                            <input type="text" class="input-small" name="colis" value="<?php echo htmlspecialchars($commande->colis); ?>">
+                                            <button class="btn" type="submit"><?php echo trad('Valider','admin'); ?></button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong><?php echo trad('Facture', 'admin'); ?></strong></td>
+                                    <td><a href="../client/pdf/facture.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><?php echo trad('Bon_livraison', 'admin'); ?></strong></td>
+                                    <td><a href="livraison.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>  
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row-fluid">

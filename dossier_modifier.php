@@ -61,7 +61,7 @@ require_once("entete.php");
                             if($previous !== false)
                             {
                             ?>
-                            <a href="dossier_modifier.php?id=<?php echo $previous->id; ?>" class="change-page">
+                            <a href="dossier_modifier.php?id=<?php echo $previous->id; ?>" title="<?php echo trad('previous', 'admin'); ?>" class="change-page">
                                 <i class="icon-backward"></i>
                             </a>
                             <?php
@@ -74,7 +74,7 @@ require_once("entete.php");
                             if($next !== false)
                             {
                             ?>
-                            <a href="dossier_modifier.php?id=<?php echo $next->id; ?>" class="change-page">
+                            <a href="dossier_modifier.php?id=<?php echo $next->id; ?>" title="<?php echo trad('next', 'admin'); ?>" class="change-page">
                                 <i class="icon-forward"></i>
                             </a>
                             <?php
