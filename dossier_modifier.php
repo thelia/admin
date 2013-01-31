@@ -45,11 +45,45 @@ require_once("entete.php");
     </div>        
     <div class="row-fluid">
         <div class="span4 offset5">
-            <ul class="nav nav-pills">
-                <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
-                    <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
-                <?php endforeach; ?>
-            </ul>
+            <div class="row-fluid">
+                <div class="span4">
+                    <ul class="nav nav-pills">
+                        <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
+                            <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="dossier_modifier.php?id=<?php echo $dossier->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="span4 offset4" style="text-align: right">
+                    <ul class="nav nav-pills">
+                        <li class="">
+                            <?php
+                            $previous = ToolBoxAdmin::getPrevious($dossier);
+                            if($previous !== false)
+                            {
+                            ?>
+                            <a href="dossier_modifier.php?id=<?php echo $previous->id; ?>" class="change-page">
+                                <i class="icon-backward"></i>
+                            </a>
+                            <?php
+                            }
+                            ?>
+                        </li>
+                        <li class="">
+                            <?php
+                            $next = ToolBoxAdmin::getNext($dossier);
+                            if($next !== false)
+                            {
+                            ?>
+                            <a href="dossier_modifier.php?id=<?php echo $next->id; ?>" class="change-page">
+                                <i class="icon-forward"></i>
+                            </a>
+                            <?php
+                            }
+                            ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div> 
     <div class="row-fluid">

@@ -53,11 +53,45 @@ require_once("entete.php");
             </div>
             <div class="row-fluid">
                 <div class="span4 offset5">
-                    <ul class="nav nav-pills">
-                        <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
-                            <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="produit_modifier.php?ref=<?php echo $produit->ref; ?>&rubrique=<?php echo $produit->rubrique ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <ul class="nav nav-pills">
+                                <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
+                                    <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>"><a href="produit_modifier.php?ref=<?php echo $produit->ref; ?>&rubrique=<?php echo $produit->rubrique ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang"><img src="gfx/lang<?php echo $displayLang->id; ?>.gif" /></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="span4 offset4" style="text-align: right">
+                            <ul class="nav nav-pills">
+                                <li class="">
+                                    <?php
+                                    $previous = ToolBoxAdmin::getPrevious($produit, 'rubrique');
+                                    if($previous !== false)
+                                    {
+                                    ?>
+                                    <a href="produit_modifier.php?ref=<?php echo $previous->ref; ?>&rubrique=<?php echo $previous->rubrique; ?>" class="change-page">
+                                        <i class="icon-backward"></i>
+                                    </a>
+                                    <?php
+                                    }
+                                    ?>
+                                </li>
+                                <li class="">
+                                    <?php
+                                    $next = ToolBoxAdmin::getNext($produit, 'rubrique');
+                                    if($next !== false)
+                                    {
+                                    ?>
+                                    <a href="produit_modifier.php?ref=<?php echo $next->ref; ?>&rubrique=<?php echo $next->rubrique; ?>" class="change-page">
+                                        <i class="icon-forward"></i>
+                                    </a>
+                                    <?php
+                                    }
+                                    ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row-fluid">

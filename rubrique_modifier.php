@@ -45,15 +45,49 @@ require_once("entete.php");
     </div>        
     <div class="row-fluid">
         <div class="span4 offset5">
-            <ul class="nav nav-pills">
-                <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
-                    <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>">
-                        <a href="rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang">
-                            <img src="gfx/lang<?php echo $displayLang->id; ?>.gif" />
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+            <div class="row-fluid">
+                <div class="span4">
+                    <ul class="nav nav-pills">
+                        <?php foreach (LangAdmin::getInstance()->getList() as $displayLang): ?>
+                            <li class="<?php if ($displayLang->id == $lang) { ?>active<?php } ?>">
+                                <a href="rubrique_modifier.php?id=<?php echo $rubrique->id; ?>&lang=<?php echo $displayLang->id; ?>" class="change-page change-lang">
+                                    <img src="gfx/lang<?php echo $displayLang->id; ?>.gif" />
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="span4 offset4" style="text-align: right">
+                    <ul class="nav nav-pills">
+                        <li class="">
+                            <?php
+                            $previousCategory = ToolBoxAdmin::getPrevious($rubrique);
+                            if($previousCategory !== false)
+                            {
+                            ?>
+                            <a href="rubrique_modifier.php?id=<?php echo $previousCategory->id; ?>" class="change-page">
+                                <i class="icon-backward"></i>
+                            </a>
+                            <?php
+                            }
+                            ?>
+                        </li>
+                        <li class="">
+                            <?php
+                            $nextCategory = ToolBoxAdmin::getNext($rubrique);
+                            if($nextCategory !== false)
+                            {
+                            ?>
+                            <a href="rubrique_modifier.php?id=<?php echo $nextCategory->id; ?>" class="change-page">
+                                <i class="icon-forward"></i>
+                            </a>
+                            <?php
+                            }
+                            ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div> 
     <div class="row-fluid">
