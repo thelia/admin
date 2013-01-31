@@ -3,6 +3,10 @@ require_once("auth.php");
         
 if(! est_autorise("acces_commandes")) exit; 
 
+use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::createFromGlobals();
+
 require_once("../fonctions/divers.php");
 require __DIR__ . '/liste/commande_details.php';
 
@@ -50,11 +54,30 @@ $adrFacturation = new Venteadr($commande->adrfact);
 $adrLivraison = new Venteadr($commande->adrlivr);
 
 $paysFacturation = new Paysdesc($adrFacturation->pays);
-
 $paysLivraison = new Paysdesc($adrLivraison->pays);
+
+$raisonFacturation = new Raisondesc($adrFacturation->raison);
+$raisonLivraison = new Raisondesc($adrLivraison->raison);
 
 $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE lang='.ActionsLang::instance()->get_id_langue_courante());
 
+try
+{
+    ActionsAdminOrder::getInstance()->action($request);
+}
+catch(TheliaAdminException $e)
+{
+    $errorCode = $e->getCode();    
+    switch ($errorCode)
+    {
+        case TheliaAdminException::ORDER_VENTEADR_EDIT_ERROR:
+            if( $id == $adrFacturation->id )
+                $facturationError = 1;
+            elseif( $id == $adrLivraison->id )
+                $deliveryError = 1;
+            break;
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -201,9 +224,28 @@ $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE
                 
                 <table class="table table-striped">
                     <caption>
-                        <h4><?php echo trad('ADRESSE_FACTURATION', 'admin'); ?></h4>
+                        <h4>
+                            <?php echo trad('ADRESSE_FACTURATION', 'admin'); ?>
+                            <div class="btn-group">
+                                <a class="btn btn-large" title="<?php echo trad('editer', 'admin'); ?>" href="#facturationModal" data-toggle="modal">
+                                    <i class="icon-edit icon-white"></i>
+                                </a>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </h4>
+                        
+                            
+                        
                     </caption>
                     <tbody>
+                        <tr>
+                            <td><strong><?php echo trad('Civilite', 'admin'); ?></strong></td>
+                            <td><?php echo $raisonFacturation->long; ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong><?php echo trad('Societe', 'admin'); ?></strong></td>
+                            <td><?php echo $adrFacturation->entreprise; ?></td>
+                        </tr>
                         <tr>
                             <td><strong><?php echo trad('Prenom', 'admin'); ?></strong></td>
                             <td><?php echo $adrFacturation->prenom; ?></td>
@@ -245,9 +287,25 @@ $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE
                 
                 <table class="table table-striped">
                     <caption>
-                        <h4><?php echo trad('ADRESSE_LIVRAISON', 'admin'); ?></h4>
+                        <h4>
+                            <?php echo trad('ADRESSE_LIVRAISON', 'admin'); ?>
+                            <div class="btn-group">
+                                <a class="btn btn-large" title="<?php echo trad('editer', 'admin'); ?>" href="#deliveryModal" data-toggle="modal">
+                                    <i class="icon-edit icon-white"></i>
+                                </a>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </h4>
                     </caption>
                     <tbody>
+                        <tr>
+                            <td><strong><?php echo trad('Civilite', 'admin'); ?></strong></td>
+                            <td><?php echo $raisonLivraison->long; ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong><?php echo trad('Societe', 'admin'); ?></strong></td>
+                            <td><?php echo $adrLivraison->entreprise; ?></td>
+                        </tr>
                         <tr>
                             <td><strong><?php echo trad('Prenom', 'admin'); ?></strong></td>
                             <td><?php echo $adrLivraison->prenom; ?></td>
@@ -377,14 +435,283 @@ $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE
                 ?>
             </div>
         </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- facturation modal -->
+                <div class="modal hide" id="facturationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <form method="POST" action="commande_details.php">
+                    <input type="hidden" name="action" value="editVenteadr" />
+                    <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>" />
+                    <input type="hidden" name="id" value="<?php echo $adrFacturation->id; ?>" />
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <div>
+                            <h3>
+                                <?php echo trad('ADRESSE_FACTURATION', 'admin'); ?>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+
+    <?php if($facturationError){ ?>
+                        <div class="alert alert-block alert-error fade in">
+                            <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
+                        <p><?php echo trad('check_information', 'admin'); ?></p>
+                        </div>
+    <?php } ?>
+
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td><?php echo trad('Societe', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$entreprise:$adrFacturation->entreprise ?>" name="entreprise"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Civilite', 'admin'); ?></td>
+                                    <td>
+                                        <select name="raison" >
+    <?php
+
+    $qListTitles = "SELECT * FROM " . Raisondesc::TABLE . " WHERE lang=" . ActionsLang::instance()->get_id_langue_courante();
+    $rListTitles = $raisonFacturation->query($qListTitles);
+    while($rListTitles && $theTitle = $raisonFacturation->fetch_object($rListTitles, 'Raisondesc'))
+    {
+    ?>
+                                            <option value="<?php echo $theTitle->raison; ?>" <?php if(($facturationError?$raison:$raisonFacturation->raison)==$theTitle->raison){ ?>selected="selected"<?php } ?>>
+                                                <?php echo $theTitle->long; ?>
+                                            </option>
+    <?php
+    }
+    ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($facturationError && empty($nom)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Nom', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$nom:$adrFacturation->nom ?>" name="nom"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($facturationError && empty($prenom)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Prenom', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$prenom:$adrFacturation->prenom ?>" name="prenom"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($facturationError && empty($adresse1)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Adresse', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$adresse1:$adrFacturation->adresse1 ?>" name="adresse1"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Adressesuite', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$adresse2:$adrFacturation->adresse2 ?>" name="adresse2"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Adressesuite', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$adresse3:$adrFacturation->adresse3 ?>" name="adresse3"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($facturationError && empty($cpostal)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('CP', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$cpostal:$adrFacturation->cpostal ?>" name="cpostal"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($facturationError && empty($ville)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Ville', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$ville:$adrFacturation->ville ?>" name="ville"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Pays', 'admin'); ?></td>
+                                    <td>
+                                        <select name="pays" >
+    <?php
+
+    $qListCountries = "SELECT * FROM " . Paysdesc::TABLE . " WHERE lang=" . ActionsLang::instance()->get_id_langue_courante();
+    $rListCountries = $paysFacturation->query($qListCountries);
+    while($rListCountries && $theCountry = $paysFacturation->fetch_object($rListCountries, 'Paysdesc'))
+    {
+    ?>
+                                            <option value="<?php echo $theCountry->pays; ?>" <?php if(($facturationError?$pays:$paysFacturation->pays)==$theCountry->pays){ ?>selected="selected"<?php } ?>>
+                                                <?php echo $theCountry->titre; ?>
+                                            </option>
+    <?php
+    }
+    ?>
+                                        </select>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Telephone', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $facturationError?$tel:$adrFacturation->tel ?>" name="tel"  />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+                        <button type="submit" class="btn btn-primary"><?php echo trad('Modifier', 'admin'); ?></button>
+                    </div>
+                </form>
+                </div>
+                
+                <!-- delivery modal -->
+                <div class="modal hide" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <form method="POST" action="commande_details.php">
+                    <input type="hidden" name="action" value="editVenteadr" />
+                    <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>" />
+                    <input type="hidden" name="id" value="<?php echo $adrLivraison->id; ?>" />
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <div>
+                            <h3>
+                                <?php echo trad('ADRESSE_LIVRAISON', 'admin'); ?>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+
+    <?php if($deliveryError){ ?>
+                        <div class="alert alert-block alert-error fade in">
+                            <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
+                        <p><?php echo trad('check_information', 'admin'); ?></p>
+                        </div>
+    <?php } ?>
+
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td><?php echo trad('Societe', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$entreprise:$adrLivraison->entreprise ?>" name="entreprise"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Civilite', 'admin'); ?></td>
+                                    <td>
+                                        <select name="raison" >
+    <?php
+
+    $qListTitles = "SELECT * FROM " . Raisondesc::TABLE . " WHERE lang=" . ActionsLang::instance()->get_id_langue_courante();
+    $rListTitles = $raisonLivraison->query($qListTitles);
+    while($rListTitles && $theTitle = $raisonLivraison->fetch_object($rListTitles, 'Raisondesc'))
+    {
+    ?>
+                                            <option value="<?php echo $theTitle->raison; ?>" <?php if(($deliveryError?$raison:$raisonLivraison->raison)==$theTitle->raison){ ?>selected="selected"<?php } ?>>
+                                                <?php echo $theTitle->long; ?>
+                                            </option>
+    <?php
+    }
+    ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($deliveryError && empty($nom)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Nom', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$nom:$adrLivraison->nom ?>" name="nom"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($deliveryError && empty($prenom)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Prenom', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$prenom:$adrLivraison->prenom ?>" name="prenom"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($deliveryError && empty($adresse1)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Adresse', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$adresse1:$adrLivraison->adresse1 ?>" name="adresse1"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Adressesuite', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$adresse2:$adrLivraison->adresse2 ?>" name="adresse2"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Adressesuite', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$adresse3:$adrLivraison->adresse3 ?>" name="adresse3"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($deliveryError && empty($cpostal)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('CP', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$cpostal:$adrLivraison->cpostal ?>" name="cpostal"  />
+                                    </td>
+                                </tr>
+                                <tr class="<?php if($deliveryError && empty($ville)){ ?>error<?php } ?>">
+                                    <td><?php echo trad('Ville', 'admin'); ?> *</td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$ville:$adrLivraison->ville ?>" name="ville"  />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Pays', 'admin'); ?></td>
+                                    <td>
+                                        <select name="pays" >
+    <?php
+
+    $qListCountries = "SELECT * FROM " . Paysdesc::TABLE . " WHERE lang=" . ActionsLang::instance()->get_id_langue_courante();
+    $rListCountries = $paysLivraison->query($qListCountries);
+    while($rListCountries && $theCountry = $paysLivraison->fetch_object($rListCountries, 'Paysdesc'))
+    {
+    ?>
+                                            <option value="<?php echo $theCountry->pays; ?>" <?php if(($deliveryError?$pays:$paysLivraison->pays)==$theCountry->pays){ ?>selected="selected"<?php } ?>>
+                                                <?php echo $theCountry->titre; ?>
+                                            </option>
+    <?php
+    }
+    ?>
+                                        </select>
+                                </tr>
+                                <tr>
+                                    <td><?php echo trad('Telephone', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" value="<?php echo $deliveryError?$tel:$adrLivraison->tel ?>" name="tel"  />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+                        <button type="submit" class="btn btn-primary"><?php echo trad('Modifier', 'admin'); ?></button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
 <?php require_once("pied.php");?> 
 <script type="text/javascript">
-
-    $(document).ready(function(){
-        $('#statutch').change(function(){
-            $('#formStatus').submit();
-        });
+$(document).ready(function(){
+    $('#statutch').change(function(){
+        $('#formStatus').submit();
     });
+    
+<?php if($facturationError){ ?>
+    $('#facturationModal').modal();
+<?php } ?>
+    
+<?php if($deliveryError){ ?>
+    $('#deliveryModal').modal();
+<?php } ?>
+    
+});
 </script>
 </body>
 </html>

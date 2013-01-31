@@ -49,6 +49,8 @@ class TheliaAdminException extends Exception
     
     const CONTENT_ADD_ERROR = 242;
     
+    const ORDER_VENTEADR_EDIT_ERROR = 251;
+    
     const SMTP_EDIT_ERROR = 251;
     
     const PROMO_EDIT_ERROR = 300;

@@ -15,6 +15,13 @@ class OrderAdmin extends Commande
         return new OrderAdmin($id);
     }
     
+    public static function getInstanceByRef($ref = '')
+    {
+        $orderAdmin = new OrderAdmin($id);
+        $orderAdmin->charger_ref($ref);
+        return $orderAdmin;
+    }
+    
     public function getRequest($type = 'list', $search = '', $critere = 'date', $order = 'DESC', $debut = 0, $nbres = 30)
     {
         if($type == 'count')
@@ -134,5 +141,42 @@ class OrderAdmin extends Commande
 	}
         
         return $return;
+    }
+    
+    public function editVenteAdr($id, $raison, $entreprise, $nom, $prenom, $adresse1, $adresse2, $adresse3, $cpostal, $ville, $tel, $pays)
+    {
+            $addressToEdit = new Venteadr();
+            if($addressToEdit->charger($id))
+            {
+                $addressToEdit->raison = $raison;
+                $addressToEdit->entreprise = $entreprise;
+                $addressToEdit->prenom = $prenom;
+                $addressToEdit->nom = $nom;
+                $addressToEdit->adresse1 = $adresse1;
+                $addressToEdit->adresse2 = $adresse2;
+                $addressToEdit->adresse3 = $adresse3;
+                $addressToEdit->cpostal = $cpostal;
+                $addressToEdit->ville = $ville;
+                $addressToEdit->tel = $tel;
+                $addressToEdit->pays = $pays;
+                                
+                if($addressToEdit->raison!="" && $addressToEdit->prenom!="" && $addressToEdit->nom!="" && $addressToEdit->adresse1 !="" && $addressToEdit->cpostal!="" && $addressToEdit->ville !="" && $addressToEdit->pays !="")
+                {
+                    $addressToEdit->maj();
+                    
+                    ActionsModules::instance()->appel_module("apres_modifierventeadr", $addressToEdit);
+                }
+                else
+                {
+                    throw new TheliaAdminException("impossible to edit venteadr",  TheliaAdminException::ORDER_VENTEADR_EDIT_ERROR);
+                }
+            }
+            
+            $this->redirect();
+    }
+    
+    public function redirect()
+    {
+        redirige("commande_details.php?ref=".$this->ref);
     }
 }
