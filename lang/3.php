@@ -619,6 +619,11 @@
                         'date_Septembre' => 'Septiembre',
                         'date_Octobre' => 'Octubre',
                         'date_Novembre' => 'Noviembre',
-                        'date_Decembre' => 'Diciembre'
+                        'date_Decembre' => 'Diciembre',
+            
+                        //tool box
+                        'next' => 'siguiente',
+                        'previous' => 'preceder',
+                        'preview' => 'visualizar',
 		);
 ?>

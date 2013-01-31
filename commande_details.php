@@ -124,7 +124,11 @@ $statusArray = $commande->query_liste('SELECT * FROM '.Statutdesc::TABLE.' WHERE
                         <tr>
                             <td><?php echo($commande->facture); ?></td>
                             <td><?php echo($client->entreprise); ?></td>
-                            <td><?php echo $client->nom." ".$client->prenom; ?></td>
+                            <td>
+                                <a href="client_visualiser.php?ref=<?php echo $client->ref; ?>">
+                                    <?php echo $client->nom." ".$client->prenom; ?>
+                                </a>
+                            </td>
                             <td><?php echo $date->format('d/m/Y H:i:s'); ?></td>
                         </tr>
                     </tbody>

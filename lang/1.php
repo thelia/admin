@@ -668,7 +668,13 @@
                         'activate_file_logs_desc' => 'Indiquer le nom du fichier, sans le chemin. ! avant le nom du fichier permet de l\'exclure. Utiliser * pour activer les logs sur tous les fichiers',
                         'add_file' => 'Ajouter le fichier',
                         'destination_explain' => 'Les destinations sont chargées de stocker ou d\'afficher les logs. Par exemple, ils seront affichés à l\'écran, stockés dans un fichier, ou envoyés par e-mail...
-                            Vous pouvez choisir et paramétrer une ou plusieurs destinations ci-dessous.'
+                            Vous pouvez choisir et paramétrer une ou plusieurs destinations ci-dessous.',
+            
+            
+                        //tool box
+                        'next' => 'suivant',
+                        'previous' => 'précédent',
+                        'preview' => 'visualiser',
 		);
 
 ?>
