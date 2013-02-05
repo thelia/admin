@@ -149,8 +149,9 @@
 			'Montant' => 'Importe',
 			'Statut' => 'Estado',
 			'CREER_COMMANDE' => 'CREAR UN PEDIDO',
-                        'CancelOrderWarning' => 'Estáis seguro de anular el pedido siguiente :',
-                        'cancel' => 'anular',
+			'Creation_commande' => 'Crear un pedido',
+            'CancelOrderWarning' => 'Estáis seguro de anular el pedido siguiente :',
+            'cancel' => 'anular',
 
 			//commande_creer
 			'Gestion_commandes' => 'Gestión de los pedidos',

@@ -39,6 +39,37 @@ class ActionsAdminOrder extends ActionsAdminBase
                     $request->request->get("pays")
                 );
                 break;
+            case "createOrder":
+                OrderAdmin::getInstance()->createOrder(
+                    $request->request->get("facturation_raison"),
+                    $request->request->get("facturation_entreprise"), 
+                    $request->request->get("facturation_nom"), 
+                    $request->request->get("facturation_prenom"), 
+                    $request->request->get("facturation_adresse1"), 
+                    $request->request->get("facturation_adresse2"), 
+                    $request->request->get("facturation_adresse3"), 
+                    $request->request->get("facturation_cpostal"), 
+                    $request->request->get("facturation_ville"), 
+                    $request->request->get("facturation_tel"), 
+                    $request->request->get("facturation_pays"),
+                    $request->request->get("livraison_raison"),
+                    $request->request->get("livraison_entreprise"), 
+                    $request->request->get("livraison_nom"), 
+                    $request->request->get("livraison_prenom"), 
+                    $request->request->get("livraison_adresse1"), 
+                    $request->request->get("livraison_adresse2"), 
+                    $request->request->get("livraison_adresse3"), 
+                    $request->request->get("livraison_cpostal"), 
+                    $request->request->get("livraison_ville"), 
+                    $request->request->get("livraison_tel"), 
+                    $request->request->get("livraison_pays"),
+                    $request->request->get("type_paiement"),
+                    $request->request->get("type_transport"),
+                    $request->request->get("fraisport"),
+                    $request->request->get("remise"),
+                    new Panier()
+                );
+                break;
         }
     }
 }

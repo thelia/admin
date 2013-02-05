@@ -148,8 +148,9 @@
 			'Montant' => 'Montant',
 			'Statut' => 'Statut',
 			'CREER_COMMANDE' => 'CREER UNE COMMANDE',
-                        'CancelOrderWarning' => 'Voulez vous vraiment annuler la commande suivante :',
-                        'cancel' => 'annuler',
+			'Creation_commande' => 'Création d\'une commande',
+            'CancelOrderWarning' => 'Voulez vous vraiment annuler la commande suivante :',
+            'cancel' => 'annuler',
 
 			//commande_creer
 			'Gestion_commandes' => 'Gestion des commandes',

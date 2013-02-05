@@ -152,14 +152,15 @@
 			'Montant' => 'Amount',
 			'Statut' => 'Status',
 			'CREER_COMMANDE' => 'CREATE AN ORDER',
-                        'CancelOrderWarning' => 'Are you sure you want to cancel the folowing order :',
-                        'cancel' => 'cancel',
+            'CancelOrderWarning' => 'Are you sure you want to cancel the folowing order :',
+            'cancel' => 'cancel',
 
 			//commande_creer
 			'Gestion_commandes' => 'Orders management',
 			'CREATION_COMMANDE'=> 'CREATE AN ORDER',
+			'Creation_commande' => 'Create an order',
 			'Choix_client' => 'Choose a customer',
-                        'Choix_parrain' => 'Chosse a Mentor',
+            'Choix_parrain' => 'Chosse a Mentor',
 			'commencer' => '(start entering the customer\'s details in the field)',
 			'Ou_creer_client' => 'Or create a customer',
 			'creer_client' => 'Create a customer',

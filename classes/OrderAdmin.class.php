@@ -22,6 +22,85 @@ class OrderAdmin extends Commande
         return $orderAdmin;
     }
     
+    public function getPaymentTypesList()
+    {
+        $q = "select * from " . Modules::TABLE . " where type=1 and actif=1";
+        return $this->query_liste($q, 'Modules');
+    }
+    
+    public function getDeliveryTypesList()
+    {
+        $q = "select * from " . Modules::TABLE . " where type=2 and actif=1";
+        return $this->query_liste($q, 'Modules');
+    }
+    
+    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, \Panier $panier)
+    {
+        $facturationAddress = new Venteadr();
+        $facturationAddress->raison = $facturation_raison;
+        $facturationAddress->entreprise = $facturation_entreprise;
+        $facturationAddress->prenom = $facturation_prenom;
+        $facturationAddress->nom = $facturation_nom;
+        $facturationAddress->adresse1 = $facturation_adresse1;
+        $facturationAddress->adresse2 = $facturation_adresse2;
+        $facturationAddress->adresse3 = $facturation_adresse3;
+        $facturationAddress->cpostal = $facturation_cpostal;
+        $facturationAddress->ville = $facturation_ville;
+        $facturationAddress->tel = $facturation_tel;
+        $facturationAddress->pays = $facturation_pays;
+        
+        $livraisonAddress = new Venteadr();
+        $livraisonAddress->raison = $livraison_raison;
+        $livraisonAddress->entreprise = $livraison_entreprise;
+        $livraisonAddress->prenom = $livraison_prenom;
+        $livraisonAddress->nom = $livraison_nom;
+        $livraisonAddress->adresse1 = $livraison_adresse1;
+        $livraisonAddress->adresse2 = $livraison_adresse2;
+        $livraisonAddress->adresse3 = $livraison_adresse3;
+        $livraisonAddress->cpostal = $livraison_cpostal;
+        $livraisonAddress->ville = $livraison_ville;
+        $livraisonAddress->tel = $livraison_tel;
+        $livraisonAddress->pays = $livraison_pays;
+        
+        $order = new Commande();
+        //$order->client = $client->id;
+        $order->date = date("Y-m-d H:i:s");
+        $order->livraison = "L" . date("ymdHis") . strtoupper(ereg_caracspec(substr($client->prenom,0, 3)));
+        $order->transport = $type_transport;
+        $order->paiement = $type_paiement;
+        $order->port = $fraisport;
+        $order->remise = $remise;
+        $order->statut = Commande::NONPAYE;
+        
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1)
+        {
+            $facturationAddress->id = $facturationAddress->add();
+            $livraisonAddress->id = $livraisonAddress->add();
+            
+            $devise = ActionsDevises::instance()->get_devise_courante();
+            
+            $order->adrfact = $facturationAddress->id;
+            $order->adrlivr = $livraisonAddress->id;
+            $order->client = $client->id;
+            $order->devise = $devise->id;
+            $commande->taux = $devise->taux;
+            
+            $commande->lang = ActionsLang::instance()->get_id_langue_courante();
+            
+            $order->id = $order->add();
+            
+            $order->ref = "C" . date("ymdHi") . genid($order->id, 6);
+
+            $order->maj();
+        }
+        else
+        {
+            throw new TheliaAdminException("error creating order",  TheliaAdminException::ORDER_ADD_ERROR);
+        }
+        
+       //$this->redirect();
+    }
+    
     public function getRequest($type = 'list', $search = '', $critere = 'date', $order = 'DESC', $debut = 0, $nbres = 30)
     {
         if($type == 'count')

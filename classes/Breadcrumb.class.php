@@ -146,6 +146,16 @@ class Breadcrumb
         return $this->getBreadcrumb();
     }
     
+    public function getOrderList($title, $url = "", $editTitle = "")
+    {
+        $this->addValue("#", trad('Gestion_commandes', 'admin'));
+        $this->addValue($url, $title);
+        if($editTitle)
+            $this->addValue("", $editTitle);
+        
+        return $this->getBreadcrumb();
+    }
+    
     public function getConfigurationList($title, $url = "", $editTitle = "")
     {
         $this->addValue("#", trad('Configuration', 'admin'));

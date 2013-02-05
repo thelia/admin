@@ -152,6 +152,7 @@
 			//commande_creer
 			'Gestion_commandes' => 'Gestione degli ordini',
 			'CREATION_COMMANDE'=> 'CREARE UN ORDINE',
+			'Creation_commande' => 'Creare un ordine',
 			'Choix_client' => 'Scelta del Padrino',
                         'Choix_parrain' => 'Scelta del Patrocinador',
 			'commencer' => '(cominciare a scrivere i dati del cliente)',

@@ -64,7 +64,15 @@ require_once("entete.php");
 ?>
     <div class="row-fluid">
         <div class="span12">
-            <h3><?php echo trad('LISTE_COMMANDES', 'admin'); ?></h3>
+            <h3>
+                <?php echo trad('LISTE_COMMANDES', 'admin'); ?>
+                
+                <div class="btn-group">
+                    <a class="btn btn-large" title="<?php echo trad('ajouter', 'admin'); ?>" href="commande_creer.php">
+                        <i class="icon-plus-sign icon-white"></i>
+                    </a>
+                </div>
+            </h3>
             <div class="bigtable">
             <table class="table table-striped">
                 <thead>

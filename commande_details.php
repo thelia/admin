@@ -423,7 +423,7 @@ catch(TheliaAdminException $e)
                                 </tr>
                             </tbody>
                         </table>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -548,6 +548,7 @@ catch(TheliaAdminException $e)
     }
     ?>
                                         </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><?php echo trad('Telephone', 'admin'); ?></td>
@@ -677,6 +678,7 @@ catch(TheliaAdminException $e)
     }
     ?>
                                         </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><?php echo trad('Telephone', 'admin'); ?></td>
