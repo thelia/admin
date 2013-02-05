@@ -36,6 +36,8 @@ class OrderAdmin extends Commande
     
     public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, \Panier $panier)
     {
+        
+        
         $facturationAddress = new Venteadr();
         $facturationAddress->raison = $facturation_raison;
         $facturationAddress->entreprise = $facturation_entreprise;

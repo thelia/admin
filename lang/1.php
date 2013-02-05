@@ -156,7 +156,7 @@
 			'Gestion_commandes' => 'Gestion des commandes',
 			'CREATION_COMMANDE'=> 'CRÉATION D\'UNE COMMANDE',
 			'Choix_client' => 'Choix du client',
-                        'Choix_parrain' => 'Choix du parrain',
+             'Choix_parrain' => 'Choix du parrain',
 			'commencer' => '(commencer à taper les coordonnées du client dans le champs)',
 			'Ou_creer_client' => 'Ou créer un client',
 			'creer_client' => 'Créer un client',
@@ -171,6 +171,10 @@
 			'Prix_unitaire' => 'Prix unitaire',
 			'TVA_applicable_sur_produit' => 'TVA applicable sur ce produit',
 			'Quantite' => 'Quantite',
+			'Client' => 'Client',
+			'too_much_email' => 'trop d\'emails correspondent',
+			'results' => 'résultats',
+			'Copy_facturation_to_delivery' => 'copier l\'adresse de facturation',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'INFORMATIONS COMPLÉMENTAIRES',

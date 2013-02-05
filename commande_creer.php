@@ -64,6 +64,40 @@ require_once("entete.php");
                     <table class="table table-striped">
                         <caption>
                             <h4>
+                                <?php echo trad('Client', 'admin'); ?>
+                            </h4>
+                        </caption>
+                        <tbody>
+                            
+                            <tr>
+                                <td><strong><?php echo trad('E-mail', 'admin'); ?></strong></td>
+                                <td>
+                                    <input class="span12" type="text" id="email" name="email" value="<?php echo $createError?$email:''; ?>">
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <ul id="client_matched" style="display:none">
+                                    </ul>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="row-fluid">
+                
+                <div class="span12">
+                    
+                    <table class="table table-striped">
+                        <caption>
+                            <h4>
                                 <?php echo trad('ADRESSE_FACTURATION', 'admin'); ?>
                             </h4>
                         </caption>
@@ -176,8 +210,11 @@ while($rListCountries && $theCountry = $paysFacturation->fetch_object($rListCoun
                     <table class="table table-striped">
                         <caption>
                             <h4>
-                                <?php echo trad('ADRESSE_LIVRAISON', 'admin'); ?>
+                                <?php echo trad('ADRESSE_LIVRAISON', 'admin'); ?> 
                             </h4>
+                            <a href="#" id="copy_facturation_to_delivery">
+                                <?php echo trad('Copy_facturation_to_delivery', 'admin'); ?>
+                            </a>
                         </caption>
                         <tbody>
                             <tr class="<?php if($createError && empty($livraison_raison)){ ?>error<?php } ?>">
@@ -375,7 +412,110 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
 
 jQuery(function($)
 {
+    $('#copy_facturation_to_delivery').click(function(e)
+    {
+        e.preventDefault();
+        
+        console.log($('select[name="facturation_raison"]').val());
+        
+        $('select[name="livraison_raison"]').val( $('select[name="facturation_raison"]').val() );
+        $('input[name="livraison_entreprise"]').val( $('input[name="facturation_entreprise"]').val() );
+        $('input[name="livraison_nom"]').val( $('input[name="facturation_nom"]').val() );
+        $('input[name="livraison_prenom"]').val( $('input[name="facturation_prenom"]').val() );
+        $('input[name="livraison_adresse1"]').val( $('input[name="facturation_adresse1"]').val() );
+        $('input[name="livraison_adresse2"]').val( $('input[name="facturation_adresse2"]').val() );
+        $('input[name="livraison_adresse3"]').val( $('input[name="facturation_adresse3"]').val() );
+        $('input[name="livraison_cpostal"]').val( $('input[name="facturation_cpostal"]').val() );
+        $('input[name="livraison_ville"]').val( $('input[name="facturation_ville"]').val() );
+        $('select[name="livraison_pays"]').val( $('select[name="facturation_pays"]').val() );
+        $('input[name="livraison_tel"]').val( $('input[name="facturation_tel"]').val() );
+    });
     
+    var matching = false;
+    $('#email').keyup(function($e)
+    {
+        
+        if(matching)
+            matching.abort();
+
+        matching = $.post(
+            'ajax/client.php',
+            {
+                action:         "match",
+                email:          $(this).val(),
+                nom:          $(this).val(),
+                max_accepted:   10
+            },
+            function(retour)
+            {
+                if(retour != 'KO')
+                {
+                    if(retour.substr(0,8) == 'TOO_MUCH')
+                    {   
+                        $('#client_matched').empty();
+                        $('#client_matched').show();
+                        $('#client_matched').prepend(
+                            $('<li />').html(
+                                '<?php echo htmlentities(trad('too_much_email', 'admin'), ENT_QUOTES, 'UTF-8'); ?> : ' + retour.substr(9) + ' <?php echo htmlentities(trad('results', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'
+                            )
+                        );
+                    }
+                    else
+                    {
+                        $('#client_matched').empty();
+                        $('#client_matched').show();
+
+                        var resultat = $.parseJSON(retour);
+
+                        $(resultat).each(function(k, v)
+                        {
+                            $('#client_matched').prepend(
+                                $('<li />').append(
+                                    $('<span />').html(v.email + ' : '),
+                                    $('<a />').attr('href', '#').html('utiliser ce client').click(function(e)
+                                    {
+                                        e.preventDefault();
+                                        
+                                        $('select[name="facturation_raison"]').val(v.raison);
+                                        $('input[name="facturation_entreprise"]').val(v.entreprise);
+                                        $('input[name="facturation_nom"]').val(v.nom);
+                                        $('input[name="facturation_prenom"]').val(v.prenom);
+                                        $('input[name="facturation_adresse1"]').val(v.adresse1);
+                                        $('input[name="facturation_adresse2"]').val(v.adresse2);
+                                        $('input[name="facturation_adresse3"]').val(v.adresse3);
+                                        $('input[name="facturation_cpostal"]').val(v.cpostal);
+                                        $('input[name="facturation_ville"]').val(v.ville);
+                                        $('select[name="facturation_pays"]').val(v.pays);
+                                        $('input[name="facturation_tel"]').val(v.tel);
+                                        
+                                        $('select[name="livraison_raison"]').val(v.raison);
+                                        $('input[name="livraison_entreprise"]').val(v.entreprise);
+                                        $('input[name="livraison_nom"]').val(v.nom);
+                                        $('input[name="livraison_prenom"]').val(v.prenom);
+                                        $('input[name="livraison_adresse1"]').val(v.adresse1);
+                                        $('input[name="livraison_adresse2"]').val(v.adresse2);
+                                        $('input[name="livraison_adresse3"]').val(v.adresse3);
+                                        $('input[name="livraison_cpostal"]').val(v.cpostal);
+                                        $('input[name="livraison_ville"]').val(v.ville);
+                                        $('select[name="livraison_pays"]').val(v.pays);
+                                        $('input[name="livraison_tel"]').val(v.tel);
+                                        
+                                        $('#email').val(v.email);
+                                        
+                                        $('#client_matched').hide();
+                                    })
+                                )
+                            );
+                        });
+                    }
+                }
+                else
+                {
+                    $('#client_matched').hide();
+                }
+            }
+        );
+    });
 });
 
 </script>

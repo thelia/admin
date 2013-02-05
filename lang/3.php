@@ -174,9 +174,13 @@
 			'Prix_unitaire' => 'Precio unitario',
 			'TVA_applicable_sur_produit' => 'IVA aplicable a este producto',
 			'Quantite' => 'Cantidad',
+			'Client' => 'Cliente',
+			'too_much_email' => 'too many emails matched',
+			'results' => 'results',
+			'Copy_facturation_to_delivery' => 'Copy facturation address',
 
 			//commande_details
-                        'INFO_COMPLEMENTAIRE' => 'INFORMACIÓN ADICIONAL',
+            'INFO_COMPLEMENTAIRE' => 'INFORMACIÓN ADICIONAL',
 			'INFO_COMMANDE' => 'INFORMACIÓN SOBRE EL PEDIDO',
 			'Designation' => 'Denominación',
 			'INFO_FACTURE' => 'INFORMACIÓN SOBRE LA FACTURA',

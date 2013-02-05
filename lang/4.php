@@ -146,8 +146,8 @@
 			'Montant' => 'Importo',
 			'Statut' => 'Stato',
 			'CREER_COMMANDE' => 'CREARE UN ORDINE',
-                        'CancelOrderWarning' => 'Volete realmente cancellare l\'ordine seguente :',
-                        'cancel' => 'cancellare',
+            'CancelOrderWarning' => 'Volete realmente cancellare l\'ordine seguente :',
+            'cancel' => 'cancellare',
 
 			//commande_creer
 			'Gestion_commandes' => 'Gestione degli ordini',
@@ -168,6 +168,10 @@
 			'Prix_unitaire' => 'Prezzo unitario',
 			'TVA_applicable_sur_produit' => 'IVA applicabile su questo prodotto',
 			'Quantite' => 'Quantità',
+			'client' => 'Cliente',
+			'too_much_email' => 'too many emails matched',
+			'results' => 'results',
+			'Copy_facturation_to_delivery' => 'Copy facturation address',
 
 			//commande_details
 			'INFO_COMMANDE' => 'INFORMAZIONI SUL ORDINE',

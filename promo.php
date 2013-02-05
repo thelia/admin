@@ -467,7 +467,7 @@ var Thelia_promo = {
                         $('<div />').addClass('control-group').append(
                             $('<select />').attr('id', 'promo_edit_type').addClass('input-medium').append(
                                 $('<option />').attr("value","<?php echo Promo::TYPE_SOMME; ?>").html("<?php echo htmlentities(trad('somme', 'admin'), ENT_QUOTES, 'UTF-8'); ?>"),
-                                $('<option />').attr("value","<?php echo Promo::TYPE_POURCENTAGE; ?>").html("<?php echo htmlentities(trad('pourcentage', 'admin', ENT_QUOTES, 'UTF-8')); ?>")
+                                $('<option />').attr("value","<?php echo Promo::TYPE_POURCENTAGE; ?>").html("<?php echo htmlentities(trad('pourcentage', 'admin'), ENT_QUOTES, 'UTF-8'); ?>")
                             ).val(type)
                         )
                     ),

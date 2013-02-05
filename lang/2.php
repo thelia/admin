@@ -175,6 +175,10 @@
 			'Prix_unitaire' => 'Unit price',
 			'TVA_applicable_sur_produit' => 'Applicable VAT on this product',
 			'Quantite' => 'Quantity',
+			'Client' => 'Customer',
+			'too_much_email' => 'too many emails matched',
+			'results' => 'results',
+			'Copy_facturation_to_delivery' => 'Copy facturation address',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'COMPLEMENTARY INFORMATION',
