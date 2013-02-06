@@ -59,6 +59,16 @@ a {
 	box-shadow: inset 0px 0px 2px rgba(250,250,250,0.5), 0px 1px 3px rgba(0,0,0,0.2);
 	color: white;
 }
+
+.row-fluid h4 {
+    position: relative;
+}
+.row-fluid h4 .btn-group {
+    position: absolute;
+    right: 0;
+    top: -13px;
+}
+
 .row h3 .btn-large:hover, .row-fluid h3 .btn-large:hover, .row-fluid h4 .btn-large:hover, .btn-primary:hover {
 	background: #e9730f;
 	background-image: linear-gradient(bottom, rgb(227,83,11) 0%, rgb(243,153,34) 100%);
