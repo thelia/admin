@@ -279,13 +279,19 @@ while($resul && $filleul = $listepar->fetch_object($resul, 'Client'))
         
         <div class="span6">
             
+<?php
+$previous = ToolBoxAdmin::getPrevious($client, false, 'nom');
+$next = ToolBoxAdmin::getNext($client, false, 'nom');
+if($next!==false || $previous!==false)
+{
+?>
+            
             <div class="row-fluid">
                 <span class="12">
                     <div class="littletable">
                         <ul class="nav nav-pills">
                             <li class="">
                                 <?php
-                                $previous = ToolBoxAdmin::getPrevious($client, false, 'nom');
                                 if($previous !== false)
                                 {
                                 ?>
@@ -298,7 +304,6 @@ while($resul && $filleul = $listepar->fetch_object($resul, 'Client'))
                             </li>
                             <li class="">
                                 <?php
-                                $next = ToolBoxAdmin::getNext($client, false, 'nom');
                                 if($next !== false)
                                 {
                                 ?>
@@ -313,6 +318,9 @@ while($resul && $filleul = $listepar->fetch_object($resul, 'Client'))
                     </div>
                 </span>
             </div>
+<?php
+}
+?>
             
             <div class="row-fluid">
 

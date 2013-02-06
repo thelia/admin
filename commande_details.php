@@ -346,13 +346,19 @@ catch(TheliaAdminException $e)
                 </table>
             </div>
             <div class="span4">
-                <div class="row-fluide">
+                
+<?php
+$previous = ToolBoxAdmin::getPrevious($commande, false, 'id');
+$next = ToolBoxAdmin::getNext($commande, false, 'id');
+if($next!==false || $previous!==false)
+{
+?>
+                <div class="row-fluid">
                     <div class="span12">
                         <div class="littletable">
                             <ul class="nav nav-pills">
                                 <li class="">
                                     <?php
-                                    $previous = ToolBoxAdmin::getPrevious($commande, false, 'id');
                                     if($previous !== false)
                                     {
                                     ?>
@@ -365,7 +371,6 @@ catch(TheliaAdminException $e)
                                 </li>
                                 <li class="">
                                     <?php
-                                    $next = ToolBoxAdmin::getNext($commande, false, 'id');
                                     if($next !== false)
                                     {
                                     ?>
@@ -380,7 +385,11 @@ catch(TheliaAdminException $e)
                         </div>
                     </div>
                 </div>
-                <div class="row-fluide">
+<?php
+}
+?>
+                
+                <div class="row-fluid">
                     <div class="span12">
                         <div class="littletable">
                         <table class="table table-striped">
