@@ -104,6 +104,8 @@ class OrderAdmin extends Commande
         
         if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1 && $clientOK && $email!='' && !$existeDeja && !$badFormat)
         {
+            exit;
+            
             $facturationAddress->id = $facturationAddress->add();
             $livraisonAddress->id = $livraisonAddress->add();
             if(!$client->id)

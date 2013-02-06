@@ -12,13 +12,14 @@ class Breadcrumb
      * 
      * @return \Breadcrumb
      */
-    public static function getInstance()
+    public static function getInstance($header = true)
     {
-        return new Breadcrumb();
+        return new Breadcrumb($header);
     }
     
-    public function __construct() {
-        $this->addValue( "accueil.php", trad('Accueil', 'admin') );
+    public function __construct($header = true) {
+        if($header)
+            $this->addValue( "accueil.php", trad('Accueil', 'admin') );
     }
     
     /**
@@ -67,6 +68,24 @@ class Breadcrumb
             }
            
             
+        }
+        
+        return $this->getBreadcrumb();
+    }
+    
+    /**
+     * 
+     * generate Breadcrumb for "commande" part
+     * 
+     * @param int $parent
+     */
+    public function getFastBrowserCategoryList($parent)
+    {
+        $this->addValue("0", trad('Root', 'admin'));
+        
+        foreach(CategoryAdmin::getInstance()->getBreadcrumbList($parent) as $breadcrumb)
+        {
+            $this->addValue($breadcrumb->rubrique, $breadcrumb->titre );
         }
         
         return $this->getBreadcrumb();

@@ -394,7 +394,7 @@ while($rListCountries && $theCountry = $paysLivraison->fetch_object($rListCountr
             
             <div class="row-fluid">
                 
-                <span class="12">
+                <span class="span12">
                 
                     <table class="table table-striped">
                         <caption>
@@ -465,6 +465,32 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
                 
             </div>
             
+            <div class="row-fluid">
+                
+                <span class="span12">
+                
+                    <table class="table table-striped">
+                        <caption>
+                            <h4>
+                                <?php echo trad('CART', 'admin'); ?>
+                                <div class="btn-group">
+                                    <a href="#addProductModal" class="btn btn-large" title="<?php echo trad('add_product', 'admin'); ?>" data-toggle="modal">
+                                        <i class="icon-plus-sign icon-white"></i>
+                                    </a>
+                                </div>
+                            </h4>
+                        </caption>
+                        <tbody>
+                            <tr>
+                                <td><?php echo trad('cart_is_empty', 'admin'); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </span>
+                
+            </div>
+            
         </div>
         
     </div>
@@ -475,6 +501,99 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
     
     </form>
     
+    <div class="modal hide" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <div>
+                <h3>
+                    <?php echo trad('ADD_PRODUCT', 'admin'); ?>
+                </h3>
+            </div>
+                    </div>
+                    <div class="modal-body">
+
+    <?php if($facturationError){ ?>
+                        <div class="alert alert-block alert-error fade in">
+                            <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
+                        <p><?php echo trad('check_information', 'admin'); ?></p>
+                        </div>
+    <?php } ?>
+
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td class="span3"><?php echo trad('search_reference', 'admin'); ?></td>
+                                    <td class="span9">
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <?php echo trad('or_browse', 'admin'); ?>
+                                    </td>
+                                    <td>
+                                        <table class="table-bordered"">
+                                            <tr>
+                                                <td colspan="2" id="fastBrowser_breadcrumb"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="span6">
+                                                    <?php echo trad('categories_list', 'admin'); ?>
+                                                </th>
+                                                <th class="span6">
+                                                    <?php echo trad('products_list', 'admin'); ?>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td id="fastBrowser_categories"></td>
+                                                <td id="fastBrowser_products"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr class="productToAddInformation" style="display: none;">
+                                    <td><?php echo trad('Reference', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" id="productToAdd_ref" class="input-xlarge" readonly>
+                                    </td>
+                                </tr>
+                                <tr class="productToAddInformation" style="display: none;">
+                                    <td><?php echo trad('titre', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" id="productToAdd_titre" class="input-xlarge" readonly>
+                                    </td>
+                                </tr>
+                                <tr class="productToAddInformation" style="display: none;">
+                                    <td><?php echo trad('Quantite', 'admin'); ?></td>
+                                    <td>
+                                        <div class="input-append">
+                                            <input type="text" id="productToAdd_quantite" class="input-xlarge">
+                                            <span class="add-on"><span id="productToAdd_stock"></span> <?php echo trad('in_stock', 'admin'); ?></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="productToAddInformation" style="display: none;">
+                                    <td><?php echo trad('Prix', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" id="productToAdd_prix" class="input-xlarge">
+                                    </td>
+                                </tr>
+                                <tr class="productToAddInformation" style="display: none;">
+                                    <td><?php echo trad('TVA', 'admin'); ?></td>
+                                    <td>
+                                        <input type="text" id="productToAdd_tva" class="input-xlarge">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+                        <button class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
+                    </div>
+    </div>
+    
 <?php require_once("pied.php");?>
 
     
@@ -482,6 +601,8 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
 
 jQuery(function($)
 {
+    loadFastBrowser(0);
+    
     $('#copy_facturation_to_delivery').click(function(e)
     {
         e.preventDefault();
@@ -669,6 +790,78 @@ function emptyAddressesVal()
     $('input[name="livraison_ville"]').val('');
     $('select[name="livraison_pays"]').val('');
     $('input[name="livraison_tel"]').val('');
+}
+
+function loadFastBrowser(root)
+{
+    $.post(
+        'ajax/catalogFastBrowser.php',
+        {
+            root:           root
+        },
+        function(retour)
+        {
+            console.log(retour);
+            
+            var resultat = $.parseJSON(retour);
+            
+            var breadcrumb = $('<div />');
+            $(resultat.breadcrumb).each(function(k, v)
+            {
+                breadcrumb.append(
+                    $('<span />').html(' > '),
+                    $('<a />').attr('href', '#').html(v.display).click(function(e)
+                    {
+                        e.preventDefault();
+                        
+                        loadFastBrowser(v.url)
+                    })
+                );
+            });
+            
+            var categories = $('<div />');
+            $(resultat.categories).each(function(k, v)
+            {
+                categories.append(
+                    $('<p />').append(
+                        $('<a />').attr('href', '#').html(v.titre).click(function(e)
+                        {
+                            e.preventDefault();
+
+                            loadFastBrowser(v.id)
+                        })
+                    )
+                );
+            });
+            
+            var products = $('<div />');
+            $(resultat.products).each(function(k, v)
+            {
+                products.append(
+                    $('<p />').append(
+                        $('<a />').attr('href', '#').html(v.titre).click(function(e)
+                        {
+                            e.preventDefault();
+
+                            /*ici*/
+                            $('#productToAdd_ref').val(v.ref)
+                            $('#productToAdd_titre').val(v.titre)
+                            $('#productToAdd_quantite').val(1)
+                            $('#productToAdd_stock').html(v.stock)
+                            $('#productToAdd_prix').val(v.promo?v.prix:v.prix2)
+                            $('#productToAdd_tva').val(v.tva)
+                            
+                            $('.productToAddInformation').show();
+                        })
+                    )
+                );
+            });
+            
+            $('#fastBrowser_breadcrumb').unbind().empty().append(breadcrumb);
+            $('#fastBrowser_categories').unbind().empty().append(categories);
+            $('#fastBrowser_products').unbind().empty().append(products);
+        }
+    );
 }
 
 </script>

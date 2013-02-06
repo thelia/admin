@@ -181,6 +181,16 @@
 			'Search_client' => 'Search client',
 			'cancel_choice' => 'Cancel client choice',
 			'beg_for_facturation' => 'Please set up the invoice address to fulfill the client information',
+			'CART' => 'CART',
+			'ADD_PRODUCT' => 'ADD PRODUCT',
+			'add_product' => 'add product',
+			'cart_is_empty' => 'Cart is empty',
+			'search_reference' => 'search reference',
+			'or_browse' => 'or browse',
+			'Root' => 'Root',
+			'categories_list' => 'categories list',
+			'products_list' => 'products list',
+			'in_stock' => 'in stock',
 
 			//commande_details
             'INFO_COMPLEMENTAIRE' => 'INFORMACIÓN ADICIONAL',

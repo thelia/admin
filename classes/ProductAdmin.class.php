@@ -365,9 +365,9 @@ class ProductAdmin extends Produit {
         $return = array();
 
 	if($alpha == "alpha"){
-		$query = "select p.id, p.ref, p.rubrique, p.stock, p.prix, p.prix2, p.promo, p.ligne, p.nouveaute, p.classement from ".Produit::TABLE." p LEFT JOIN ".Produitdesc::TABLE." pd ON pd.produit = p.id and lang="  . ActionsLang::instance()->get_id_langue_courante() . " where p.rubrique=\"$rubrique\" order by pd.$critere $order";
+		$query = "select p.id, p.ref, p.rubrique, p.stock, p.prix, p.prix2, p.promo, p.ligne, p.nouveaute, p.classement, p.tva from ".Produit::TABLE." p LEFT JOIN ".Produitdesc::TABLE." pd ON pd.produit = p.id and lang="  . ActionsLang::instance()->get_id_langue_courante() . " where p.rubrique=\"$rubrique\" order by pd.$critere $order";
 	}else{
-		$query = "select id, ref, rubrique, stock, prix, prix2, promo, ligne, nouveaute, classement from ".Produit::TABLE." where rubrique=\"$rubrique\" order by $critere $order";
+		$query = "select id, ref, rubrique, stock, prix, prix2, promo, ligne, nouveaute, classement, tva from ".Produit::TABLE." where rubrique=\"$rubrique\" order by $critere $order";
 	}
                 
 	$resul = $this->query($query);
@@ -397,6 +397,7 @@ class ProductAdmin extends Produit {
                     "ligne" => $row->ligne,
                     "nouveaute" => $row->nouveaute,
                     "classement" => $row->classement,
+                    "tva" => $row->tva,
                     "titre" => $produitdesc->titre,
                     "langue_courante" => $produitdesc->est_langue_courante(),
                     "image" => array(
