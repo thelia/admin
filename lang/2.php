@@ -178,7 +178,10 @@
 			'Client' => 'Customer',
 			'too_much_email' => 'too many emails matched',
 			'results' => 'results',
-			'Copy_facturation_to_delivery' => 'Copy facturation address',
+			'Copy_facturation_to_delivery' => 'Copy invoice address',
+			'Search_client' => 'Search client',
+			'cancel_choice' => 'Cancel client choice',
+			'beg_for_facturation' => 'Please set up the invoice address to fulfill the client information',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'COMPLEMENTARY INFORMATION',

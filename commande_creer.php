@@ -31,6 +31,14 @@ catch(TheliaAdminException $e)
         case TheliaAdminException::ORDER_ADD_ERROR:
             $createError = 1;
             break;
+        case TheliaAdminException::EMAIL_FORMAT_ERROR:
+            $createError = 1;
+            $emailBadFormat = 1;
+            break;
+        case TheliaAdminException::EMAIL_ALREADY_EXISTS:
+            $createError = 1;
+            $emailAlreadyExists = 1;
+            break;
     }
 }
 ?>
@@ -61,31 +69,87 @@ require_once("entete.php");
                 
                 <div class="span12">
                     
-                    <table class="table table-striped">
-                        <caption>
-                            <h4>
-                                <?php echo trad('Client', 'admin'); ?>
-                            </h4>
-                        </caption>
-                        <tbody>
-                            
-                            <tr>
-                                <td><strong><?php echo trad('E-mail', 'admin'); ?></strong></td>
-                                <td>
-                                    <input class="span12" type="text" id="email" name="email" value="<?php echo $createError?$email:''; ?>">
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <ul id="client_matched" style="display:none">
-                                    </ul>
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
+                    <ul id="mainTabs" class="nav nav-tabs">
+                        <li class="<?php echo !$createError || $client_selected?'active':''; ?>">
+                            <a href="#searchClientTab" data-toggle="tab"><?php echo trad('Search_client', 'admin'); ?></a>
+                        </li>
+                        <li class="<?php echo $createError && !$client_selected?'active':''; ?>">
+                            <a href="#newClientTab" data-toggle="tab"><?php echo trad('creer_client', 'admin'); ?></a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        
+                        <div class="tab-pane <?php echo !$createError || $client_selected?'active':''; ?>" id="searchClientTab">
+                            <div class="row-fluid">
+                                <div class="span12">
+                    
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong><?php echo trad('Reference', 'admin'); ?></strong></td>
+                                                <td>
+                                                    <input class="span12 clientSearch" type="text" name="ref" id="ref" value="<?php echo $createError?$ref:''; ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong><?php echo trad('Nom', 'admin'); ?></strong></td>
+                                                <td>
+                                                    <input class="span12 clientSearch" type="text" id="nom" name="nom_search" value="<?php echo $createError && $client_selected?$nom_search:''; ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong><?php echo trad('E-mail', 'admin'); ?></strong></td>
+                                                <td>
+                                                    <input class="span12 clientSearch" type="text" id="email" name="email_search" value="<?php echo $createError && $client_selected?$email_search:''; ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="span12">
+                                                    <input type="hidden" name="client_selected" value="<?php echo $createError && $client_selected?1:0; ?>" />
+                                                    <div id="client_matched" style="display:none;">
+                                                        <?php echo $createError && $client_selected?'':''; ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane <?php echo $createError && !$client_selected?'active':''; ?>" id="newClientTab">
+                            <div class="row-fluid">
+                                <div class="span12">
+                    
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr class="<?php if($createError && !$client_selected && (empty($email) || $emailAlreadyExists || $emailBadFormat) ){ ?>error<?php } ?>">
+                                                <td>
+                                                    <strong><?php echo trad('E-mail', 'admin'); ?></strong>
+<?php if($createError && $emailBadFormat){ ?>
+                                                    <br /><?php echo trad('email_bad_format', 'admin'); ?><?php }
+elseif($createError && $emailAlreadyExists){ ?>
+                                                    <br /><?php echo trad('email_already_exists', 'admin'); ?>
+<?php } ?>
+                                                </td>
+                                                <td>
+                                                    <input class="span12" type="text" name="email" value="<?php echo $createError?$email:''; ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <?php echo trad('beg_for_facturation', 'admin'); ?>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                     
                 </div>
                 
@@ -416,8 +480,6 @@ jQuery(function($)
     {
         e.preventDefault();
         
-        console.log($('select[name="facturation_raison"]').val());
-        
         $('select[name="livraison_raison"]').val( $('select[name="facturation_raison"]').val() );
         $('input[name="livraison_entreprise"]').val( $('input[name="facturation_entreprise"]').val() );
         $('input[name="livraison_nom"]').val( $('input[name="facturation_nom"]').val() );
@@ -431,9 +493,30 @@ jQuery(function($)
         $('input[name="livraison_tel"]').val( $('input[name="facturation_tel"]').val() );
     });
     
+    $('a[data-toggle="tab"]').on('shown', function (e) {
+        
+        if($(e.target).attr('href') != '#searchClientTab')
+        {
+            changeClient(null);
+        }
+    });
+    
+<?php
+if($createError && $client_selected) {
+?>
+    $('.clientSearch').attr('readonly', true);
+    
+    displayChangeClientMessage();
+    $('#client_matched').show();
+<?php
+}
+?>
+    
     var matching = false;
-    $('#email').keyup(function($e)
+    $('.clientSearch').keyup(function($e)
     {
+        if($(this).attr('readonly') == 'readonly')
+            return;
         
         if(matching)
             matching.abort();
@@ -442,8 +525,9 @@ jQuery(function($)
             'ajax/client.php',
             {
                 action:         "match",
-                email:          $(this).val(),
-                nom:          $(this).val(),
+                email:          $('#email').val(),
+                nom:            $('#nom').val(),
+                ref:            $('#ref').val(),
                 max_accepted:   10
             },
             function(retour)
@@ -455,14 +539,14 @@ jQuery(function($)
                         $('#client_matched').empty();
                         $('#client_matched').show();
                         $('#client_matched').prepend(
-                            $('<li />').html(
+                            $('<span />').html(
                                 '<?php echo htmlentities(trad('too_much_email', 'admin'), ENT_QUOTES, 'UTF-8'); ?> : ' + retour.substr(9) + ' <?php echo htmlentities(trad('results', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'
                             )
                         );
                     }
                     else
                     {
-                        $('#client_matched').empty();
+                        $('#client_matched').unbind().empty();
                         $('#client_matched').show();
 
                         var resultat = $.parseJSON(retour);
@@ -471,7 +555,7 @@ jQuery(function($)
                         {
                             $('#client_matched').prepend(
                                 $('<li />').append(
-                                    $('<span />').html(v.email + ' : '),
+                                    $('<span />').html(v.nom + ' ' + v.prenom + ' - ' + v.email + ' : '),
                                     $('<a />').attr('href', '#').html('utiliser ce client').click(function(e)
                                     {
                                         e.preventDefault();
@@ -488,7 +572,7 @@ jQuery(function($)
                                         $('select[name="facturation_pays"]').val(v.pays);
                                         $('input[name="facturation_tel"]').val(v.tel);
                                         
-                                        $('select[name="livraison_raison"]').val(v.raison);
+                                        /*$('select[name="livraison_raison"]').val(v.raison);
                                         $('input[name="livraison_entreprise"]').val(v.entreprise);
                                         $('input[name="livraison_nom"]').val(v.nom);
                                         $('input[name="livraison_prenom"]').val(v.prenom);
@@ -498,11 +582,17 @@ jQuery(function($)
                                         $('input[name="livraison_cpostal"]').val(v.cpostal);
                                         $('input[name="livraison_ville"]').val(v.ville);
                                         $('select[name="livraison_pays"]').val(v.pays);
-                                        $('input[name="livraison_tel"]').val(v.tel);
+                                        $('input[name="livraison_tel"]').val(v.tel);*/
+                                        
+                                        $('input[name="email"]').val(v.email);
                                         
                                         $('#email').val(v.email);
+                                        $('#nom').val(v.nom);
+                                        $('#ref').val(v.ref);
                                         
-                                        $('#client_matched').hide();
+                                        $('.clientSearch').attr('readonly', true);
+                                        
+                                        displayChangeClientMessage();
                                     })
                                 )
                             );
@@ -517,6 +607,61 @@ jQuery(function($)
         );
     });
 });
+
+function displayChangeClientMessage()
+{
+    $('input[name="client_selected"]').val(1);
+    $('#client_matched').unbind().empty().append(
+        $('<a />').attr('href', '#').html(
+            '<?php echo htmlentities(trad('cancel_choice', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'
+        ).click(function(e)
+        {
+            changeClient(e)
+        })
+    );
+}
+
+function changeClient(e)
+{
+    if(e !== null)
+        e.preventDefault();
+
+    $('.clientSearch').attr('readonly', false);
+    $('.clientSearch').val('');
+
+    $('#client_matched').hide();
+
+    $('input[name="client_selected"]').val(0);
+    
+    emptyAddressesVal();
+}
+
+function emptyAddressesVal()
+{
+    $('select[name="facturation_raison"]').val('');
+    $('input[name="facturation_entreprise"]').val('');
+    $('input[name="facturation_nom"]').val('');
+    $('input[name="facturation_prenom"]').val('');
+    $('input[name="facturation_adresse1"]').val('');
+    $('input[name="facturation_adresse2"]').val('');
+    $('input[name="facturation_adresse3"]').val('');
+    $('input[name="facturation_cpostal"]').val('');
+    $('input[name="facturation_ville"]').val('');
+    $('select[name="facturation_pays"]').val('');
+    $('input[name="facturation_tel"]').val('');
+
+    $('select[name="livraison_raison"]').val('');
+    $('input[name="livraison_entreprise"]').val('');
+    $('input[name="livraison_nom"]').val('');
+    $('input[name="livraison_prenom"]').val('');
+    $('input[name="livraison_adresse1"]').val('');
+    $('input[name="livraison_adresse2"]').val('');
+    $('input[name="livraison_adresse3"]').val('');
+    $('input[name="livraison_cpostal"]').val('');
+    $('input[name="livraison_ville"]').val('');
+    $('select[name="livraison_pays"]').val('');
+    $('input[name="livraison_tel"]').val('');
+}
 
 </script>
     

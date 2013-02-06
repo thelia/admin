@@ -9,20 +9,26 @@ if(isset($_POST['action'])) $action = $_POST['action'];
 else $action = '';
 
 switch($action) {
-    case 'match_email' : match_email(); break;
+    case 'match' : checkMatch(); break;
 }
 
-function match_email()
+function checkMatch()
 {
-    $term = $_POST['email']?:'';
+    $email = $_POST['email']?:'';
+    $nom = $_POST['nom']?:'';
+    $ref = $_POST['ref']?:'';
     $max_accepted = $_POST['max_accepted']?:5;
     
-    if(strlen($term) == 0)
+    if(strlen($email) == 0 && strlen($nom) == 0 && strlen($ref) == 0)
         die('KO');
     
     $client = new Client();
 
-    $q = "SELECT * FROM $client->table WHERE email LIKE '$term%'";
+    $q = "SELECT * FROM $client->table WHERE
+            email LIKE '$email%'
+            AND nom LIKE '$nom%'
+            AND ref LIKE '$ref%'
+        ";
     $r = $client->query($q);
     
     if($client->num_rows($r) == 0)
@@ -34,6 +40,7 @@ function match_email()
     $retour = array();
     while($r && $a = $client->fetch_object($r, 'Client')) {
         $retour[] = array(
+            "ref"           =>  $a->ref,
             "email"         =>  $a->email,
             "raison"        =>  $a->raison,
             "entreprise"    =>  $a->entreprise,

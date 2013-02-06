@@ -34,9 +34,34 @@ class OrderAdmin extends Commande
         return $this->query_liste($q, 'Modules');
     }
     
-    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, \Panier $panier)
+    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, $client_selected, $ref, $email, \Panier $panier)
     {
+        $client = new Client();
         
+        if($client_selected == 1)
+            $clientOK = $client->charger_ref($ref);
+        else
+        {
+            if($email != '' && $client->charger_mail($email))
+                $existeDeja = 1;
+            elseif($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL))
+                $badFormat = 1;
+            else
+            {
+                $client->email = $email;
+                $client->raison = $facturation_raison;
+                $client->entreprise = $facturation_entreprise;
+                $client->prenom = $facturation_prenom;
+                $client->nom = $facturation_nom;
+                $client->adresse1 = $facturation_adresse1;
+                $client->adresse2 = $facturation_adresse2;
+                $client->adresse3 = $facturation_adresse3;
+                $client->cpostal = $facturation_cpostal;
+                $client->ville = $facturation_ville;
+                $client->tel = $facturation_tel;
+                $client->pays = $facturation_pays;
+            }
+        }
         
         $facturationAddress = new Venteadr();
         $facturationAddress->raison = $facturation_raison;
@@ -74,10 +99,16 @@ class OrderAdmin extends Commande
         $order->remise = $remise;
         $order->statut = Commande::NONPAYE;
         
-        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1)
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1 && $clientOK && $email!='' && !$existeDeja && !$badFormat)
         {
             $facturationAddress->id = $facturationAddress->add();
             $livraisonAddress->id = $livraisonAddress->add();
+            if(!$client->id)
+            {
+                $client->id = $client->add();
+                $client->ref = date("ymdHi") . genid($client->id, 6);
+		$client->maj();
+            }
             
             $devise = ActionsDevises::instance()->get_devise_courante();
             
@@ -97,7 +128,12 @@ class OrderAdmin extends Commande
         }
         else
         {
-            throw new TheliaAdminException("error creating order",  TheliaAdminException::ORDER_ADD_ERROR);
+            if($existeDeja)
+                throw new TheliaAdminException("error creating order",  TheliaAdminException::EMAIL_ALREADY_EXISTS);
+            if($badFormat)
+                throw new TheliaAdminException("error creating order",  TheliaAdminException::EMAIL_FORMAT_ERROR);
+            else
+                throw new TheliaAdminException("error creating order",  TheliaAdminException::ORDER_ADD_ERROR);
         }
         
        //$this->redirect();

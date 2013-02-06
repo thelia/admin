@@ -175,6 +175,9 @@
 			'too_much_email' => 'trop d\'emails correspondent',
 			'results' => 'résultats',
 			'Copy_facturation_to_delivery' => 'copier l\'adresse de facturation',
+			'Search_client' => 'Recherche un client',
+			'cancel_choice' => 'Choisir un autre client',
+			'beg_for_facturation' => 'Renseignez l\'adresse de facturation pour créer le client.',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'INFORMATIONS COMPLÉMENTAIRES',

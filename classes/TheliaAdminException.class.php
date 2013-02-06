@@ -71,4 +71,7 @@ class TheliaAdminException extends Exception
     
     const CARAC_TITLE_EMPTY = 600;
     
+    const EMAIL_FORMAT_ERROR = 701;
+    const EMAIL_ALREADY_EXISTS = 702;
+    
 }

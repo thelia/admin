@@ -67,6 +67,9 @@ class ActionsAdminOrder extends ActionsAdminBase
                     $request->request->get("type_transport"),
                     $request->request->get("fraisport"),
                     $request->request->get("remise"),
+                    $request->request->get("client_selected"),
+                    $request->request->get("ref"),
+                    $request->request->get("email"),
                     new Panier()
                 );
                 break;
