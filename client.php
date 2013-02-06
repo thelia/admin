@@ -56,6 +56,8 @@ if(!empty($action))
                 $clientToAdd->ref = date("ymdHi") . genid($clientToAdd->id, 6);
                 $clientToAdd->maj();
 
+                ClientAdmin::getInstance()->sendMailCreation($clientToAdd, $pass);
+                
                 ActionsModules::instance()->appel_module("ajoutclient", $clientToAdd);
 
                 redirige('client_visualiser.php?ref=' . $clientToAdd->ref);

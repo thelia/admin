@@ -93,6 +93,12 @@ require_once("entete.php");
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td><strong><?php echo trad('Prenom', 'admin'); ?></strong></td>
+                                                <td>
+                                                    <input class="span12 clientSearch" type="text" id="prenom" name="prenom_search" value="<?php echo $createError && $client_selected?$prenom_search:''; ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td><strong><?php echo trad('Nom', 'admin'); ?></strong></td>
                                                 <td>
                                                     <input class="span12 clientSearch" type="text" id="nom" name="nom_search" value="<?php echo $createError && $client_selected?$nom_search:''; ?>">
@@ -526,6 +532,7 @@ if($createError && $client_selected) {
             {
                 action:         "match",
                 email:          $('#email').val(),
+                prenom:         $('#prenom').val(),
                 nom:            $('#nom').val(),
                 ref:            $('#ref').val(),
                 max_accepted:   10
@@ -555,7 +562,7 @@ if($createError && $client_selected) {
                         {
                             $('#client_matched').prepend(
                                 $('<li />').append(
-                                    $('<span />').html(v.nom + ' ' + v.prenom + ' - ' + v.email + ' : '),
+                                    $('<span />').html(v.prenom + ' ' + v.nom + ' - ' + v.email + ' : '),
                                     $('<a />').attr('href', '#').html('utiliser ce client').click(function(e)
                                     {
                                         e.preventDefault();
@@ -572,7 +579,7 @@ if($createError && $client_selected) {
                                         $('select[name="facturation_pays"]').val(v.pays);
                                         $('input[name="facturation_tel"]').val(v.tel);
                                         
-                                        /*$('select[name="livraison_raison"]').val(v.raison);
+                                        $('select[name="livraison_raison"]').val(v.raison);
                                         $('input[name="livraison_entreprise"]').val(v.entreprise);
                                         $('input[name="livraison_nom"]').val(v.nom);
                                         $('input[name="livraison_prenom"]').val(v.prenom);
@@ -582,12 +589,13 @@ if($createError && $client_selected) {
                                         $('input[name="livraison_cpostal"]').val(v.cpostal);
                                         $('input[name="livraison_ville"]').val(v.ville);
                                         $('select[name="livraison_pays"]').val(v.pays);
-                                        $('input[name="livraison_tel"]').val(v.tel);*/
+                                        $('input[name="livraison_tel"]').val(v.tel);
                                         
                                         $('input[name="email"]').val(v.email);
                                         
                                         $('#email').val(v.email);
                                         $('#nom').val(v.nom);
+                                        $('#prenom').val(v.prenom);
                                         $('#ref').val(v.ref);
                                         
                                         $('.clientSearch').attr('readonly', true);

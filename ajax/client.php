@@ -15,17 +15,19 @@ switch($action) {
 function checkMatch()
 {
     $email = $_POST['email']?:'';
+    $prenom = $_POST['prenom']?:'';
     $nom = $_POST['nom']?:'';
     $ref = $_POST['ref']?:'';
     $max_accepted = $_POST['max_accepted']?:5;
     
-    if(strlen($email) == 0 && strlen($nom) == 0 && strlen($ref) == 0)
+    if(strlen($email) == 0 && strlen($prenom) == 0 && strlen($nom) == 0 && strlen($ref) == 0)
         die('KO');
     
     $client = new Client();
 
     $q = "SELECT * FROM $client->table WHERE
             email LIKE '$email%'
+            AND prenom LIKE '$prenom%'
             AND nom LIKE '$nom%'
             AND ref LIKE '$ref%'
         ";

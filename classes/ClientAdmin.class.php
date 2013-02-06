@@ -258,6 +258,40 @@ class ClientAdmin extends Client
         }
     }
     
+    public function sendMailCreation($client, $password)
+    {
+        $message = new Message("creation_client");
+        $messagedesc = new Messagedesc($message->id);
+
+        $sujet = $this->subSendMailCreation($messagedesc->titre, $client, $password);
+        $corps = $this->subSendMailCreation($messagedesc->description, $client, $password);
+        $corpstext = $this->subSendMailCreation($messagedesc->descriptiontext, $client, $password);
+
+        Mail::envoyer(
+            $client->prenom . " " . $client->nom, $client->email,
+            Variable::lire("nomsite"), Variable::lire("emailfrom"),
+            $sujet,
+            $corps, $corpstext);
+    }
+    
+    public function subSendMailCreation($corps, $client, $password)
+    {
+        $corps = str_replace("__NOMSITE__",Variable::lire("nomsite"),$corps);
+        $corps = str_replace("__EMAIL__",$client->email,$corps);
+        $corps = str_replace("__MOTDEPASSE__",$password,$corps);
+        $corps = str_replace("__URLSITE__",Variable::lire("urlsite"),$corps);
+        $corps = str_replace("__NOM__",$client->nom,$corps);
+        $corps = str_replace("__PRENOM__",$client->prenom,$corps);
+        $corps = str_replace("__ADRESSE1__",$client->adresse1,$corps);
+        $corps = str_replace("__ADRESSE2__",$client->adresse2,$corps);
+        $corps = str_replace("__ADRESSE3__",$client->adresse3,$corps);
+        $corps = str_replace("__VILLE__",$client->ville,$corps);
+        $corps = str_replace("__CPOSTAL__",$client->cpostal,$corps);
+        $corps = str_replace("__TELEPHONE__",$client->telfixe,$corps);
+        $corps = str_replace("__CIVILITE__",$raison[$client->raison],$corps);
+        $corps = str_replace("__PAYS__",$paysdesc->titre,$corps);
+    }
+    
     public function redirect()
     {
         redirige("client_visualiser.php?ref=".$this->ref);

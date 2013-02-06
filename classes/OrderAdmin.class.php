@@ -60,6 +60,9 @@ class OrderAdmin extends Commande
                 $client->ville = $facturation_ville;
                 $client->tel = $facturation_tel;
                 $client->pays = $facturation_pays;
+                
+                $pass = genpass(8);
+                $client->motdepasse = $pass;
             }
         }
         
@@ -105,9 +108,11 @@ class OrderAdmin extends Commande
             $livraisonAddress->id = $livraisonAddress->add();
             if(!$client->id)
             {
+                $client->crypter();
                 $client->id = $client->add();
                 $client->ref = date("ymdHi") . genid($client->id, 6);
 		$client->maj();
+                ClientAdmin::getInstance()->sendMailCreation($client, $pass);
             }
             
             $devise = ActionsDevises::instance()->get_devise_courante();
