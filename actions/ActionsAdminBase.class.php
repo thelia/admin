@@ -62,6 +62,8 @@ class ActionsAdminBase extends ActionsBase
     protected function extractResult(Request $request, array $results, array $mapping, $method = "query")
     {
         
+        //print_r($request);exit;
+        
         $return = array();
         $firstKey = array_shift(array_keys($mapping));
         

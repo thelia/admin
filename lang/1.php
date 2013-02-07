@@ -188,6 +188,10 @@
 			'categories_list' => 'catégories',
 			'products_list' => 'produits',
 			'in_stock' => 'en stock',
+			'use_this_client' => 'utiliser ce client',
+			'use_this_product' => 'utiliser ce product',
+			'too_much_products' => 'trop de clients correspondent',
+			'variants' => 'variants',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'INFORMATIONS COMPLÉMENTAIRES',

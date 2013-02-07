@@ -191,6 +191,10 @@
 			'categories_list' => 'categories list',
 			'products_list' => 'products list',
 			'in_stock' => 'in stock',
+			'use_this_client' => 'use this client',
+			'use_this_product' => 'use this product',
+			'too_much_products' => 'too much products matched',
+			'variants' => 'variants',
 
 			//commande_details
             'INFO_COMPLEMENTAIRE' => 'INFORMACIÓN ADICIONAL',

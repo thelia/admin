@@ -325,7 +325,7 @@ require_once("entete.php");
                                                             <td><?php echo($declidispdesc->titre); ?></td>
                                                             <td><input class="input-small" type="text" name="stock<?php echo($row2->id); ?>" value="<?php echo($stock->valeur); ?>" ></td>
                                                             <td><input class="input-small" type="text" name="surplus<?php echo($row2->id); ?>" value="<?php echo($stock->surplus); ?>" ></td>
-                                                            <td><input type="checkbox" <?php echo $res ? '' : 'checked="checked"' ?> name="moddecli-<?php echo($declidispdesc->declidisp); ?>" ></td>
+                                                            <td><input type="checkbox" <?php echo $res ? '' : 'checked="checked"' ?> name="exdecprod<?php echo($declidispdesc->declidisp); ?>" ></td>
                                                         </tr>
     <?php }
 }

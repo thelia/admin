@@ -113,9 +113,7 @@ require_once("entete.php");
                                             <tr>
                                                 <td colspan="2" class="span12">
                                                     <input type="hidden" name="client_selected" value="<?php echo $createError && $client_selected?1:0; ?>" />
-                                                    <div id="client_matched" style="display:none;">
-                                                        <?php echo $createError && $client_selected?'':''; ?>
-                                                    </div>
+                                                    <div id="client_matched" style="display:none;"></div>
                                                 </td>
                                             </tr>
 
@@ -509,89 +507,97 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
                     <?php echo trad('ADD_PRODUCT', 'admin'); ?>
                 </h3>
             </div>
-                    </div>
-                    <div class="modal-body">
+        </div>
+        <div class="modal-body">
 
-    <?php if($facturationError){ ?>
-                        <div class="alert alert-block alert-error fade in">
-                            <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
-                        <p><?php echo trad('check_information', 'admin'); ?></p>
-                        </div>
-    <?php } ?>
-
-                        <table class="table table-striped">
-                            <tbody>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td class="span3"><?php echo trad('search_reference', 'admin'); ?></td>
+                        <td class="span9">
+                            <input type="text" id="searchProductRef">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div id="products_matched" style="display:none;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo trad('or_browse', 'admin'); ?>
+                        </td>
+                        <td>
+                            <table class="table-bordered"">
                                 <tr>
-                                    <td class="span3"><?php echo trad('search_reference', 'admin'); ?></td>
-                                    <td class="span9">
-                                        
-                                    </td>
+                                    <td colspan="2" id="fastBrowser_breadcrumb"></td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <?php echo trad('or_browse', 'admin'); ?>
-                                    </td>
-                                    <td>
-                                        <table class="table-bordered"">
-                                            <tr>
-                                                <td colspan="2" id="fastBrowser_breadcrumb"></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="span6">
-                                                    <?php echo trad('categories_list', 'admin'); ?>
-                                                </th>
-                                                <th class="span6">
-                                                    <?php echo trad('products_list', 'admin'); ?>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td id="fastBrowser_categories"></td>
-                                                <td id="fastBrowser_products"></td>
-                                            </tr>
-                                        </table>
-                                    </td>
+                                    <th class="span6">
+                                        <?php echo trad('categories_list', 'admin'); ?>
+                                    </th>
+                                    <th class="span6">
+                                        <?php echo trad('products_list', 'admin'); ?>
+                                    </th>
                                 </tr>
-                                <tr class="productToAddInformation" style="display: none;">
-                                    <td><?php echo trad('Reference', 'admin'); ?></td>
-                                    <td>
-                                        <input type="text" id="productToAdd_ref" class="input-xlarge" readonly>
-                                    </td>
+                                <tr>
+                                    <td id="fastBrowser_categories"></td>
+                                    <td id="fastBrowser_products"></td>
                                 </tr>
-                                <tr class="productToAddInformation" style="display: none;">
-                                    <td><?php echo trad('titre', 'admin'); ?></td>
-                                    <td>
-                                        <input type="text" id="productToAdd_titre" class="input-xlarge" readonly>
-                                    </td>
-                                </tr>
-                                <tr class="productToAddInformation" style="display: none;">
-                                    <td><?php echo trad('Quantite', 'admin'); ?></td>
-                                    <td>
-                                        <div class="input-append">
-                                            <input type="text" id="productToAdd_quantite" class="input-xlarge">
-                                            <span class="add-on"><span id="productToAdd_stock"></span> <?php echo trad('in_stock', 'admin'); ?></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="productToAddInformation" style="display: none;">
-                                    <td><?php echo trad('Prix', 'admin'); ?></td>
-                                    <td>
-                                        <input type="text" id="productToAdd_prix" class="input-xlarge">
-                                    </td>
-                                </tr>
-                                <tr class="productToAddInformation" style="display: none;">
-                                    <td><?php echo trad('TVA', 'admin'); ?></td>
-                                    <td>
-                                        <input type="text" id="productToAdd_tva" class="input-xlarge">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('Reference', 'admin'); ?></td>
+                        <td>
+                            <input type="text" id="productToAdd_ref" class="input-xlarge" readonly>
+                        </td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('titre', 'admin'); ?></td>
+                        <td>
+                            <input type="text" id="productToAdd_titre" class="input-xlarge" readonly>
+                        </td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('variants', 'admin'); ?></td>
+                        <td id="productToAdd_variant"></td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('Quantite', 'admin'); ?></td>
+                        <td>
+                            <div class="input-append">
+                                <input type="text" id="productToAdd_quantite" class="input-xlarge">
+                                <span class="add-on"><span id="productToAdd_stock"></span> <?php echo trad('in_stock', 'admin'); ?></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('Prix', 'admin'); ?></td>
+                        <td>
+                            <div class="input-append">
+                                <input type="text" id="productToAdd_prix" class="input-xlarge">
+                                <span class="add-on">€ TTC</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="productToAddInformation" style="display: none;">
+                        <td><?php echo trad('TVA', 'admin'); ?></td>
+                        <td>
+                            <div class="input-append">
+                                <input type="text" id="productToAdd_tva" class="input-xlarge">
+                                <span class="add-on">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
-                        <button class="btn btn-primary"><?php echo trad('Ajouter', 'admin'); ?></button>
-                    </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+            <button class="btn btn-primary" id="btn_ajout_produit" style="display: none;"><?php echo trad('Ajouter', 'admin'); ?></button>
+        </div>
     </div>
     
 <?php require_once("pied.php");?>
@@ -638,9 +644,73 @@ if($createError && $client_selected) {
 <?php
 }
 ?>
+    var matching = false; //one ajax call at a time
+    $('#searchProductRef').keyup(function($e)
+    {
+        if(matching)
+            matching.abort();
+
+        matching = $.post(
+            'ajax/produit.php',
+            {
+                action:         "match",
+                ref:            $(this).val(),
+                max_accepted:   10
+            },
+            function(retour)
+            {
+                if(retour != 'KO')
+                {
+                    if(retour.substr(0,8) == 'TOO_MUCH')
+                    {   
+                        $('#products_matched').unbind().empty().show().prepend(
+                            $('<span />').html(
+                                '<?php echo htmlentities(trad('too_much_products', 'admin'), ENT_QUOTES, 'UTF-8'); ?> : ' + retour.substr(9) + ' <?php echo htmlentities(trad('results', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'
+                            )
+                        );
+                    }
+                    else
+                    {
+                        $('#products_matched').unbind().empty().show();
+                        
+                        var resultat = $.parseJSON(retour);
+
+                        $(resultat).each(function(k, v)
+                        {
+                            $('#products_matched').prepend(
+                                $('<li />').append(
+                                    $('<span />').html(v.ref + ' - ' + v.titre + ' : '),
+                                    $('<a />').attr('href', '#').html('<?php echo htmlentities(trad('use_this_product', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').click(function(e)
+                                    {
+                                        e.preventDefault();
+                                        
+                                        $('#productToAdd_ref').val(v.ref);
+                                        $('#productToAdd_titre').val(v.titre);
+                                        $('#productToAdd_quantite').val(1);
+                                        
+                                        manageStock(v.stock, v.promo?v.prix2:v.prix);
+                                        
+                                        $('#productToAdd_tva').val(v.tva);
+
+                                        $('.productToAddInformation').show();
+                                        $('#btn_ajout_produit').show();
+                                        
+                                        loadFastBrowser(v.rubrique);
+                                    })
+                                )
+                            );
+                        });
+                    }
+                }
+                else
+                {
+                    $('#products_matched').hide();
+                }
+            }
+        );
+    });
     
-    var matching = false;
-    $('.clientSearch').keyup(function($e)
+    $('.clientSearch').keyup(function(e)
     {
         if($(this).attr('readonly') == 'readonly')
             return;
@@ -664,9 +734,7 @@ if($createError && $client_selected) {
                 {
                     if(retour.substr(0,8) == 'TOO_MUCH')
                     {   
-                        $('#client_matched').empty();
-                        $('#client_matched').show();
-                        $('#client_matched').prepend(
+                        $('#client_matched').unbind().empty().show().prepend(
                             $('<span />').html(
                                 '<?php echo htmlentities(trad('too_much_email', 'admin'), ENT_QUOTES, 'UTF-8'); ?> : ' + retour.substr(9) + ' <?php echo htmlentities(trad('results', 'admin'), ENT_QUOTES, 'UTF-8'); ?>'
                             )
@@ -674,8 +742,7 @@ if($createError && $client_selected) {
                     }
                     else
                     {
-                        $('#client_matched').unbind().empty();
-                        $('#client_matched').show();
+                        $('#client_matched').unbind().empty().show();
 
                         var resultat = $.parseJSON(retour);
 
@@ -684,7 +751,7 @@ if($createError && $client_selected) {
                             $('#client_matched').prepend(
                                 $('<li />').append(
                                     $('<span />').html(v.prenom + ' ' + v.nom + ' - ' + v.email + ' : '),
-                                    $('<a />').attr('href', '#').html('utiliser ce client').click(function(e)
+                                    $('<a />').attr('href', '#').html('<?php echo htmlentities(trad('use_this_client', 'admin'), ENT_QUOTES, 'UTF-8'); ?>').click(function(e)
                                     {
                                         e.preventDefault();
                                         
@@ -800,9 +867,7 @@ function loadFastBrowser(root)
             root:           root
         },
         function(retour)
-        {
-            console.log(retour);
-            
+        {   
             var resultat = $.parseJSON(retour);
             
             var breadcrumb = $('<div />');
@@ -843,15 +908,16 @@ function loadFastBrowser(root)
                         {
                             e.preventDefault();
 
-                            /*ici*/
-                            $('#productToAdd_ref').val(v.ref)
-                            $('#productToAdd_titre').val(v.titre)
-                            $('#productToAdd_quantite').val(1)
-                            $('#productToAdd_stock').html(v.stock)
-                            $('#productToAdd_prix').val(v.promo?v.prix:v.prix2)
-                            $('#productToAdd_tva').val(v.tva)
+                            $('#productToAdd_ref').val(v.ref);
+                            $('#productToAdd_titre').val(v.titre);
+                            $('#productToAdd_quantite').val(1);
+                            
+                            manageStock(v.variants, v.promo?v.prix2:v.prix);
+                            
+                            $('#productToAdd_tva').val(v.tva);
                             
                             $('.productToAddInformation').show();
+                            $('#btn_ajout_produit').show();
                         })
                     )
                 );
@@ -862,6 +928,54 @@ function loadFastBrowser(root)
             $('#fastBrowser_products').unbind().empty().append(products);
         }
     );
+}
+
+function manageStock(stock, basePrice)
+{
+    if($.isArray(stock) || $.isPlainObject(stock))
+    {
+        //variants
+        $('#productToAdd_variant').unbind().empty();
+        $.each(stock, function(k2, v2)
+        {
+            var variantsList = $('<select />').change(function(e)
+            {
+                $('#productToAdd_stock').html($(this).children('option:selected').attr('js-stock'));
+                $('#productToAdd_prix').val(
+                    parseFloat($('#productToAdd_prix').attr('js-prix-orig')) + parseFloat($(this).children('option:selected').attr('js-surplus'))
+                );
+            });
+            $.each(v2.declinaisons, function(k3, v3)
+            {
+                variantsList.append(
+                    $('<option />').val(v3.declidisp_id).html(v3.declidisp_titre).attr('js-stock', v3.declidisp_stock).attr('js-surplus', v3.declidisp_surplus)
+                );
+            });
+
+            $('#productToAdd_variant').append(
+                $('<div />').append(
+                    $('<label />').html(v2.titre),
+                    variantsList
+                )
+            );
+
+            $('#productToAdd_prix').attr('js-prix-orig', basePrice);
+
+            variantsList.trigger('change');
+        });
+
+        $('#productToAdd_variant').attr('disabled', false);
+    }
+    else
+    {
+        //no variants
+        $('#productToAdd_stock').html(stock);
+        $('#productToAdd_variant').unbind().empty().append(
+            $('<span />').attr('selected', true).html('Ø')
+        );
+        $('#productToAdd_variant').attr('disabled', true);
+        $('#productToAdd_prix').val(basePrice).attr('js-prix-orig', basePrice);
+    }
 }
 
 </script>

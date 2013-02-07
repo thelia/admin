@@ -280,7 +280,25 @@ class ProductAdmin extends Produit {
                $stock->surplus = $value["surplus"];
                
                $stock->maj();
-            }   
+            }
+            
+            $exdecprod = new Exdecprod();
+            if($value['exdecprod'] == '')
+            {
+                if(!$exdecprod->charger($this->id, $index))
+                {
+                    $exdecprod->produit = $this->id;
+                    $exdecprod->declidisp = $index;
+                    $exdecprod->id = $exdecprod->add();
+                }
+            }
+            else
+            {
+                if($exdecprod->charger($this->id, $index))
+                {
+                    $exdecprod->delete();
+                }
+            }
         }
         
         if($nb > 0) $this->stock = $nb;
@@ -391,6 +409,7 @@ class ProductAdmin extends Produit {
                     "id" => $row->id,
                     "rubrique" => $row->rubrique,
                     "stock" => $row->stock,
+                    "variants" => $this->getVariants($row->id),
                     "prix" => $row->prix,
                     "prix2" => $row->prix2,
                     "promo" => $row->promo,
@@ -470,5 +489,96 @@ class ProductAdmin extends Produit {
 	}
         
         return $return;
+    }
+    
+    public function match($ref, $max_accepted = 5)
+    {
+        if(strlen($ref) == 0)
+            return('KO');
+
+        $product = new Produit();
+
+        $q =    "SELECT p.id, p.ref, pd.titre, p.prix, p.prix2, p.promo, p.tva, p.rubrique
+                FROM $product->table p
+                    LEFT JOIN " . Produitdesc::TABLE . " pd
+                        ON p.id=pd.produit AND pd.lang='" . ActionsLang::instance()->get_id_langue_courante() . "'
+                WHERE
+                    p.ref LIKE '$ref%'
+                ";
+        $r = $product->query($q);
+
+        if($product->num_rows($r) == 0)
+            return('KO');
+
+        if($product->num_rows($r) > $max_accepted)
+            return('TOO_MUCH:' . $product->num_rows($r));
+
+        
+        $retour = array();
+        while($r && $a = $product->fetch_object($r)) {
+            $retour[] = array(
+                "ref"       =>  $a->ref,
+                "titre"     =>  $a->titre,
+                "prix"      =>  $a->prix,
+                "prix2"     =>  $a->prix2,
+                "promo"     =>  $a->promo,
+                "tva"       =>  $a->tva,
+                "rubrique"  =>  $a->rubrique,
+                "stock"     =>  $this->getVariants($a->id),
+            );
+        }
+
+        return(json_encode($retour));
+    }
+    
+    public function getVariants($id = 0)
+    {
+        if($id)
+            $this->charger_id($id);
+        
+        if(!$this->id)
+            return 0;
+        
+        $q =    "SELECT dd.declinaison  AS declinaison_id, dd.id AS declidisp_id, ddd.titre  AS declidisp_titre, d.titre AS declinaison_titre, s.valeur AS declidisp_stock, s.surplus AS declidisp_surplus
+                FROM " . Stock::TABLE . " s
+                    LEFT JOIN " . Declidisp::TABLE . " dd
+                        ON dd.id=s.declidisp
+                    LEFT JOIN " . Declidispdesc::TABLE . " ddd
+                        ON ddd.declidisp=dd.id AND ddd.lang='" . ActionsLang::instance()->get_id_langue_courante() . "'
+                    LEFT JOIN " . Declinaisondesc::TABLE . " d
+                        ON d.declinaison=dd.declinaison AND ddd.lang='" . ActionsLang::instance()->get_id_langue_courante() . "'
+                    LEFT JOIN " . Exdecprod::TABLE . " edp
+                        ON edp.produit='$this->id' AND edp.declidisp=dd.id
+                    LEFT JOIN " . Rubdeclinaison::TABLE . " rd
+                        ON rd.rubrique='$this->rubrique' AND rd.declinaison=dd.declinaison
+                WHERE s.produit='$this->id' AND ISNULL(edp.id) AND NOT ISNULL(rd.id)";
+        $r = $this->query($q);
+        if($this->num_rows($r) == 0)
+            return $this->stock;
+        
+        $retour = array();
+        while($r && $a = $this->fetch_object($r)) {
+            if(!$retour[$a->declinaison_id] || count($retour[$a->declinaison_id])==0)
+                $retour[$a->declinaison_id] = array(
+                    'titre'         =>  $a->declinaison_titre,
+                    'declinaisons'  =>  array(
+                        array(
+                            "declidisp_id"      =>  $a->declidisp_id,
+                            "declidisp_titre"   =>  $a->declidisp_titre,
+                            "declidisp_stock"   =>  $a->declidisp_stock,
+                            "declidisp_surplus" =>  $a->declidisp_surplus,
+                        )
+                    ),
+                );
+            else
+                $retour[$a->declinaison_id]['declinaisons'][] = array(
+                    "declidisp_id"      =>  $a->declidisp_id,
+                    "declidisp_titre"   =>  $a->declidisp_titre,
+                    "declidisp_stock"   =>  $a->declidisp_stock,
+                    "declidisp_surplus" =>  $a->declidisp_surplus,
+                );
+        }
+        
+        return $retour;
     }
 }

@@ -96,7 +96,8 @@ class ActionsAdminProduct extends ActionsAdminBase
         
         $return = $this->extractResult($request, $product->query_liste($query), array(
             "stock" => "stock",
-            "surplus" => "surplus"
+            "surplus" => "surplus",
+            "exdecprod" => "exdecprod",
         ));
         
         return $return;
