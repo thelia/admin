@@ -13,12 +13,7 @@
       </footer>
 </div> <!-- fin div class=bg-image -->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/general.js"></script>
+    
      <?php
  	ActionsAdminModules::instance()->inclure_module_admin("post");
 
