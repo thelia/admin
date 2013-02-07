@@ -22,7 +22,7 @@ try
 <body>
 <?php
 $menu = "configuration";
-$breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Configuration', 'admin'));
+$breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion des pays', 'admin'));
 require_once("entete.php");
 ?>
     <div class="row-fluid">

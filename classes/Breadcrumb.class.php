@@ -177,7 +177,7 @@ class Breadcrumb
     
     public function getConfigurationList($title, $url = "", $editTitle = "")
     {
-        $this->addValue("#", trad('Configuration', 'admin'));
+        $this->addValue("configuration.php", trad('Configuration', 'admin'));
         $this->addValue($url, $title);
         if($editTitle)
             $this->addValue("", $editTitle);

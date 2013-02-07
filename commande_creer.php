@@ -40,6 +40,8 @@ catch(TheliaAdminException $e)
             $emailAlreadyExists = 1;
             break;
     }
+    
+    $panier = ActionsAdminOrder::getInstance()->getPanier($request);
 }
 ?>
 <!DOCTYPE html>
@@ -89,7 +91,7 @@ require_once("entete.php");
                                             <tr>
                                                 <td><strong><?php echo trad('Reference', 'admin'); ?></strong></td>
                                                 <td>
-                                                    <input class="span12 clientSearch" type="text" name="ref" id="ref" value="<?php echo $createError?$ref:''; ?>">
+                                                    <input class="span12 clientSearch" type="text" name="ref_client" id="ref" value="<?php echo $createError?$ref:''; ?>">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -478,10 +480,55 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
                                 </div>
                             </h4>
                         </caption>
-                        <tbody>
+                        <thead>
                             <tr>
-                                <td><?php echo trad('cart_is_empty', 'admin'); ?></td>
+                                <th><?php echo trad('ref', 'admin'); ?></th>
+                                <th><?php echo trad('title', 'admin'); ?></th>
+                                <th><?php echo trad('variant', 'admin'); ?></th>
+                                <th><?php echo trad('UP', 'admin'); ?></th>
+                                <th><?php echo trad('qty', 'admin'); ?></th>
+                                <th><?php echo trad('TTC', 'admin'); ?></th>
+                                <th><?php echo trad('TVA', 'admin'); ?></th>
+                                <th></th>
                             </tr>
+                        </thead>
+                        <tbody id="products_in_cart">
+<?php
+if($createError && $panier)
+{
+    for($i=0; $i<$panier->nbart; $i++)
+    {
+        if($panier->tabarticle[$i]->perso[0])
+        {
+            $declinaison = new Declinaisondesc($panier->tabarticle[$i]->perso[0]->declinaison, ActionsLang::instance()->get_id_langue_courante());
+            $declidisp = new Declidispdesc($panier->tabarticle[$i]->perso[0]->valeur, ActionsLang::instance()->get_id_langue_courante());
+        }
+?>
+                            <tr>
+                                <td><?php echo $panier->tabarticle[$i]->produit->ref; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->produitdesc->titre; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->perso[0] ? $declinaison->titre . " : " . $declidisp->titre:''; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->produit->prix; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->quantite; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->produit->prix * $panier->tabarticle[$i]->quantite; ?></td>
+                                <td><?php echo $panier->tabarticle[$i]->produit->tva; ?></td>
+                                <td>
+                                    <input type="hidden" name="ref[]" value="<?php echo $panier->tabarticle[$i]->produit->ref; ?>">
+                                    <input type="hidden" name="perso[]" value="<?php echo $panier->tabarticle[$i]->perso[0] ? $declinaison->titre . "_" . $declidisp->titre:''; ?>">
+                                    <input type="hidden" name="quantite[]" value="<?php echo $panier->tabarticle[$i]->quantite; ?>">
+                                    <input type="hidden" name="prixu[]" value="<?php echo $panier->tabarticle[$i]->produit->prix; ?>">
+                                    <input type="hidden" name="tva[]" value="<?php echo $panier->tabarticle[$i]->produit->tva; ?>">
+                                    
+                                    <a href="#" class="js-remove-from-cart">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+<?php
+    }
+    
+}
+?>
                         </tbody>
                     </table>
 
@@ -802,7 +849,61 @@ if($createError && $client_selected) {
             }
         );
     });
+    
+    $('#btn_ajout_produit').click(function(e)
+    {
+        e.preventDefault();
+        
+        $('#products_in_cart').append(
+            $('<tr />').append(
+                $('<td />').html(
+                    $('#productToAdd_ref').val()
+                ),
+                $('<td />').html(
+                    $('#productToAdd_titre').val()
+                ),
+                $('<td />').html(
+                    $('#productToAdd_variant').children('div').children('label').html() ? $('#productToAdd_variant').children('div').children('label').html() + ' : ' + $('#productToAdd_variant').children('div').children('select').children('option:selected').html() : 'Ø'
+                ),
+                $('<td />').html(
+                    $('#productToAdd_prix').val()
+                ),
+                $('<td />').html(
+                    $('#productToAdd_quantite').val()
+                ),
+                $('<td />').html(
+                    $('#productToAdd_prix').val() * $('#productToAdd_quantite').val()
+                ),
+                $('<td />').html(
+                    $('#productToAdd_tva').val()
+                ),
+                $('<td />').append(
+                    $('<input />').attr('type', 'hidden').attr('name', 'ref[]').val($('#productToAdd_ref').val()),
+                    $('<input />').attr('type', 'hidden').attr('name', 'perso[]').val(
+                        $('#productToAdd_variant').children('div').children('label').html() ? $('#productToAdd_variant').children('div').children('label').attr('js-id') + '_' + $('#productToAdd_variant').children('div').children('select').children('option:selected').attr('js-id') : ''
+                    ),
+                    $('<input />').attr('type', 'hidden').attr('name', 'quantite[]').val($('#productToAdd_quantite').val()),
+                    $('<input />').attr('type', 'hidden').attr('name', 'prixu[]').val($('#productToAdd_prix').val()),
+                    $('<input />').attr('type', 'hidden').attr('name', 'tva[]').val($('#productToAdd_tva').val()),
+                    $('<a />').attr('href', '#').addClass('js-remove-from-cart').append(
+                        $('<i />').addClass('icon-trash')
+                    )
+                )
+            )
+        )
+        
+        $('#addProductModal').modal('hide');
+    });
+    
+    $('.js-remove-from-cart').live('click', function(e)
+    {
+        e.preventDefault();
+
+        $(this).parent().parent().unbind().remove();
+    });
 });
+
+
 
 function displayChangeClientMessage()
 {
@@ -948,13 +1049,13 @@ function manageStock(stock, basePrice)
             $.each(v2.declinaisons, function(k3, v3)
             {
                 variantsList.append(
-                    $('<option />').val(v3.declidisp_id).html(v3.declidisp_titre).attr('js-stock', v3.declidisp_stock).attr('js-surplus', v3.declidisp_surplus)
+                    $('<option />').val(v3.declidisp_id).html(v3.declidisp_titre).attr('js-id', v3.declidisp_id).attr('js-stock', v3.declidisp_stock).attr('js-surplus', v3.declidisp_surplus)
                 );
             });
 
             $('#productToAdd_variant').append(
                 $('<div />').append(
-                    $('<label />').html(v2.titre),
+                    $('<label />').html(v2.titre).attr('js-id', k2),
                     variantsList
                 )
             );

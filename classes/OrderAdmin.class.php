@@ -34,12 +34,12 @@ class OrderAdmin extends Commande
         return $this->query_liste($q, 'Modules');
     }
     
-    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, $client_selected, $ref, $email, \Panier $panier)
+    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, $client_selected, $ref_client, $email, \Panier $panier)
     {
         $client = new Client();
         
         if($client_selected == 1)
-            $clientOK = $client->charger_ref($ref);
+            $clientOK = $client->charger_ref($ref_client);
         else
         {
             if($email != '' && $client->charger_mail($email))
@@ -93,7 +93,6 @@ class OrderAdmin extends Commande
         $livraisonAddress->pays = $livraison_pays;
         
         $order = new Commande();
-        //$order->client = $client->id;
         $order->date = date("Y-m-d H:i:s");
         $order->livraison = "L" . date("ymdHis") . strtoupper(ereg_caracspec(substr($client->prenom,0, 3)));
         $order->transport = $type_transport;
@@ -102,8 +101,9 @@ class OrderAdmin extends Commande
         $order->remise = $remise;
         $order->statut = Commande::NONPAYE;
         
-        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1 && $clientOK && $email!='' && !$existeDeja && !$badFormat)
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
         {
+            echo 5;
             exit;
             
             $facturationAddress->id = $facturationAddress->add();

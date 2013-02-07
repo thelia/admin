@@ -68,11 +68,48 @@ class ActionsAdminOrder extends ActionsAdminBase
                     $request->request->get("fraisport"),
                     $request->request->get("remise"),
                     $request->request->get("client_selected"),
-                    $request->request->get("ref"),
+                    $request->request->get("ref_client"),
                     $request->request->get("email"),
-                    new Panier()
+                    $this->getPanier($request)
                 );
                 break;
         }
+    }
+    
+    public function getPanier(Request $request)
+    {        
+        $panier = new Panier();
+        
+        $listeRef =$request->request->get("ref");
+        $listeVariants =$request->request->get("perso");
+        $listeQuantite =$request->request->get("quantite");
+        $listePrixU =$request->request->get("prixu");
+        $listeTVA =$request->request->get("tva");
+        
+        for($i=0; $i<count($listeRef); $i++)
+        {   
+            if($listeVariants[$i])
+            {
+                $tabPersoRecu = explode('_', $listeVariants[$i]);
+                $ps = new Perso();
+                $ps->declinaison = $tabPersoRecu[0];
+                $ps->valeur = $tabPersoRecu[1];
+            }
+            
+            if($article = $panier->ajouter(
+                $listeRef[$i],
+                $listeQuantite[$i],
+                ($listeVariants[$i] ? array($ps) : array()),
+                0,
+                1
+            ))
+            {
+                $panier->tabarticle[$article]->produit->prix = $listePrixU[$i];
+                $panier->tabarticle[$article]->produit->promo = 0;
+                $panier->tabarticle[$article]->produit->tva = $listeTVA[$i];
+            }
+        }
+        
+        return $panier;
     }
 }
