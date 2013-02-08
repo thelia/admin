@@ -992,8 +992,10 @@ if($createError && $client_selected) {
     $('.js-remove-from-cart').live('click', function(e)
     {
         e.preventDefault();
-
+        
         $(this).parent().parent().unbind().remove();
+        
+        checkTotal($('input[name="apply_client_discount"]').is(':checked') && $('#clientDiscountVal').html() > 0);
     });
 });
 
