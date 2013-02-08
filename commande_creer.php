@@ -727,6 +727,9 @@ if($createError && $panier)
     
 <script type="text/javascript">
 
+/*variables from PHP*/
+var PHP_verifstock = <?php echo Variable::lire("verifstock", 0) == 1 ? 'true' : 'false' ; ?>;
+
 jQuery(function($)
 {
     loadFastBrowser(0);
@@ -839,7 +842,7 @@ if($createError && $client_selected) {
     
     $('.js-change-total').keyup(function(e)
     {
-        checkTotal();    
+        checkTotal($('input[name="apply_client_discount"]').is(':checked') && $('#clientDiscountVal').html() > 0);    
     });
     
     $('.clientSearch').keyup(function(e)
@@ -945,6 +948,57 @@ if($createError && $client_selected) {
     $('#btn_ajout_produit').click(function(e)
     {
         e.preventDefault();
+        
+        /*check data*/
+        var correct = true;
+        /*quantity*/
+        if(
+            parseInt($('#productToAdd_quantite').val()) != $('#productToAdd_quantite').val()
+            || $('#productToAdd_quantite').val()<=0
+            || (
+                PHP_verifstock
+                && parseInt($('#productToAdd_quantite').val())>parseInt($('#productToAdd_stock').html())
+            )
+        )
+        {
+            correct = false;
+            $('#productToAdd_quantite').parent().parent().parent().addClass('error');
+        }
+        else
+        {
+            $('#productToAdd_quantite').parent().parent().parent().removeClass('error');
+        }
+        
+        /*price*/
+        if(
+            parseFloat($('#productToAdd_prix').val()) != $('#productToAdd_prix').val()
+            || $('#productToAdd_prix').val()<0
+        )
+        {
+            correct = false;
+            $('#productToAdd_prix').parent().parent().parent().addClass('error');
+        }
+        else
+        {
+            $('#productToAdd_prix').parent().parent().parent().removeClass('error');
+        }
+        
+        /*tva*/
+        if(
+            parseFloat($('#productToAdd_tva').val()) != $('#productToAdd_tva').val()
+            || $('#productToAdd_tva').val()<0
+        )
+        {
+            correct = false;
+            $('#productToAdd_tva').parent().parent().parent().addClass('error');
+        }
+        else
+        {
+            $('#productToAdd_tva').parent().parent().parent().removeClass('error');
+        }
+        
+        if(!correct)
+            return;
         
         $('#products_in_cart').append(
             $('<tr />').append(
@@ -1143,7 +1197,7 @@ function manageStock(stock, basePrice)
             {
                 $('#productToAdd_stock').html($(this).children('option:selected').attr('js-stock'));
                 $('#productToAdd_prix').val(
-                    parseFloat($('#productToAdd_prix').attr('js-prix-orig').replace(',', '.')) + parseFloat($(this).children('option:selected').attr('js-surplus').replace(',', '.'))
+                    parseFloat($('#productToAdd_prix').attr('js-prix-orig')) + parseFloat($(this).children('option:selected').attr('js-surplus'))
                 );
             });
             $.each(v2.declinaisons, function(k3, v3)
@@ -1184,14 +1238,14 @@ function checkSubTotal(discountIsUsed)
     var subTotalNoDiscount = 0;
     $('.js-cart-ttc-prices').each(function(k, v)
     {
-        subTotalNoDiscount += parseFloat($(v).html().replace(',', '.'));
+        subTotalNoDiscount += parseFloat($(v).html());
     });
     
     if(discountIsUsed)
     {
         $('#sousTotal').html(
             Math.round(
-                (subTotalNoDiscount - subTotalNoDiscount * parseFloat($('#clientDiscountVal').html().replace(',', '.')) / 100) * 100
+                (subTotalNoDiscount - subTotalNoDiscount * parseFloat($('#clientDiscountVal').html()) / 100) * 100
             ) / 100
             
         );
@@ -1212,14 +1266,14 @@ function checkTotal(discountIsUsed)
     $('.js-change-total').each(function(k, v)
     {
         if($(this).is('.js-minus'))
-            sousTotal2 -= $(v).val()=='' || parseFloat($(v).val().replace(',', '.'))!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val().replace(',', '.')) ;
+            sousTotal2 -= $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
         else
-            sousTotal2 += $(v).val()=='' || parseFloat($(v).val().replace(',', '.'))!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val().replace(',', '.')) ;
+            sousTotal2 += $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
     });
             
     $('#total').html(
         Math.round(
-            (parseFloat($('#sousTotal').html().replace(',', '.')) + sousTotal2 > 0 ? parseFloat($('#sousTotal').html().replace(',', '.')) + sousTotal2 : 0)
+            (parseFloat($('#sousTotal').html()) + sousTotal2 > 0 ? parseFloat($('#sousTotal').html()) + sousTotal2 : 0)
             * 100
         ) / 100
     );

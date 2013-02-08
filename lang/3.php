@@ -141,6 +141,8 @@
 			'E-MAIL' => 'CORREO ELECTRÓNICO',
 
 			//commande
+			'All_orders' => 'All',
+			'Create_order' => 'Create order',
 			'LISTE_COMMANDES' => 'LISTA DE LOS PEDIDOS',
 			'Num_commande' => 'N° de pedido',
 			'Num_transaction' => 'N° de la transacción',

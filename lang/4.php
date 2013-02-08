@@ -138,6 +138,8 @@
 			'E-MAIL' => 'E-MAIL',
 
 			//commande
+			'All_orders' => 'All',
+			'Create_order' => 'Create order',
 			'LISTE_COMMANDES' => 'ELENCO DEGLI ORDINI',
 			'Num_commande' => 'Numero del ordine',
 			'Num_transaction' => 'Numero della transazione',

@@ -103,7 +103,7 @@ class OrderAdmin extends Commande
         $module_paiement = new Modules();
 	$module_paiement->charger_id($type_paiement);
         
-        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && is_numeric($order->port) && $order->port>=0 && is_numeric($order->remise) && $order->remise>=0 && $module_paiement->actif && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && is_numeric($fraisport) && $fraisport>=0 && is_numeric($remise) && $remise>=0 && $module_paiement->actif && $order->paiement != "" && $panier->nbart > 0 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
         {
             $facturationAddress->id = $facturationAddress->add();
             $livraisonAddress->id = $livraisonAddress->add();
@@ -133,8 +133,6 @@ class OrderAdmin extends Commande
             $order->maj();
             
             $total = 0;
-            $poids = 0;
-            $nbart = 0;
             
             foreach($panier->tabarticle as $pos => $article) {
                 $venteprod = new Venteprod();
@@ -212,8 +210,6 @@ class OrderAdmin extends Commande
                 ActionsModules::instance()->appel_module("apresVenteprodAdmin", $venteprod, $pos);
 
                 $total += $venteprod->prixu * $venteprod->quantite;
-                $nbart++;
-                $poids += $article->produit->poids;
             }
             
             foreach($correspondanceParent as $id_panier => $id_venteprod) {
@@ -227,22 +223,23 @@ class OrderAdmin extends Commande
             if ($client->pourcentage>0 && $applyClientDiscount)
                 $order->remise = $total * $client->pourcentage / 100;
             
-            
-            $total -= $order->remise;
-            
             $order->remise += $remise;
             if($order->remise > $total)
                 $order->remise = $total;
             
             $order->port = $fraisport;
             
+            $order->maj();
+            
             ActionsModules::instance()->appel_module("aprescommandeadmin", $order);
             
             if($callMail)
-                $module_paiement->mail($order);
+                ActionsModules::instance()->instancier($module_paiement->nom)->mail($order);
 
             if($callPayment)
-                $module_paiement->paiement($order);
+                ActionsModules::instance()->instancier($module_paiement->nom)->paiement($order);
+            else
+                self::getInstance($order->id)->redirect();
         }
         else
         {
@@ -252,9 +249,8 @@ class OrderAdmin extends Commande
                 throw new TheliaAdminException("error creating order",  TheliaAdminException::EMAIL_FORMAT_ERROR);
             else
                 throw new TheliaAdminException("error creating order",  TheliaAdminException::ORDER_ADD_ERROR);
-        }
-        
-       //$this->redirect();
+        } 
+       
     }
     
     public function getRequest($type = 'list', $search = '', $critere = 'date', $order = 'DESC', $debut = 0, $nbres = 30)

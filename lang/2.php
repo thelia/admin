@@ -144,6 +144,8 @@
 			'E-MAIL' => 'E-MAIL',
 
 			//commande
+			'All_orders' => 'All',
+			'Create_order' => 'Create order',
 			'LISTE_COMMANDES' => 'ORDERS LIST',
 			'Num_commande' => 'Order N°',
 			'Num_transaction' => 'Transaction N°',
@@ -202,9 +204,6 @@
 			'TOTAL' => 'TOTAL',
 			'client_percent' => 'this client has a discount',
 			'use_it' => 'use it',
-			'client_percent' => 'wwwww',
-			'client_percent' => 'wwwww',
-			'client_percent' => 'wwwww',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'COMPLEMENTARY INFORMATION',

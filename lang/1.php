@@ -140,6 +140,8 @@
 			'E-MAIL' => 'E-MAIL',
 
 			//commande
+			'All_orders' => 'Toutes',
+			'Create_order' => 'Créer une commande',
 			'LISTE_COMMANDES' => 'LISTE DES COMMANDES',
 			'Num_commande' => 'N° de commande',
 			'Num_transaction' => 'N° de transaction',

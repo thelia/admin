@@ -70,12 +70,13 @@ $statAdmin = new StatAdmin();
                 <li class="dropdown <?php activemenu($menu, "commande");?>" id="menucommande" data-toggle="dropdown">
                         <a href="#" data-toggle="dropdown" ><?php echo trad('Commandes', 'admin'); ?><span class="caret"></span></a>
                         <ul class="dropdown-menu config_menu" role="menu">
-                            <li role="menuitem"><a data-target="commande.php" href="commande.php">Toutes <span class="badge badge-important"><?php echo $statAdmin->getNbCommand(); ?></span></a></li>
+                            <li role="menuitem"><a data-target="commande.php" href="commande.php"><?php echo trad('All_orders', 'admin'); ?> <span class="badge badge-important"><?php echo $statAdmin->getNbCommand(); ?></span></a></li>
                             <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::NONPAYE; ?>" href="commande.php?statut=<?php echo Commande::NONPAYE; ?>">Non Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandToPaid(); ?></span></a></li>
                             <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::PAYE; ?>" href="commande.php?statut=<?php echo Commande::PAYE; ?>">Pay&eacute;es <span class="badge badge-important"><?php echo $statAdmin->getNbCommandPaid(); ?></span></a></li>
                             <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::TRAITEMENT; ?>" href="commande.php?statut=<?php echo Commande::TRAITEMENT; ?>">En cours de traitement <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandProcessed(); ?></span></a></li>
                             <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::EXPEDIE; ?>" href="commande.php?statut=<?php echo Commande::EXPEDIE; ?>">Exp&eacute;di&eacute;es <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandSend(); ?></span></a></li>
                             <li role="menuitem"><a data-target="commande.php?statut=<?php echo Commande::ANNULE; ?>" href="commande.php?statut=<?php echo Commande::ANNULE; ?>">Annul&eacute;es <span class="badge badge-warning"><?php echo $statAdmin->getNbCommandCanceled(); ?></span></a></li>
+                            <li role="menuitem"><a data-target="commande_creer.php" href="commande_creer.php"><?php echo trad('Create_order', 'admin'); ?></a></li>
                         </ul>
                 </li>
                 <?php } ?>

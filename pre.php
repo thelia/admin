@@ -23,6 +23,7 @@
         Tlog::error("Timezone not set, set to Europe/Paris for no errors");
     }
     
-    setlocale(LC_ALL, 'fr_FR');
+    setlocale(LC_TIME,      'fr_FR','fr_FR.utf8');
+    setlocale(LC_NUMERIC,   'en_US','en_US.utf8');
 
 ?>
