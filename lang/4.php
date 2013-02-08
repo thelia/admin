@@ -189,6 +189,12 @@
 			'use_this_product' => 'use this product',
 			'too_much_products' => 'too much products matched',
 			'variants' => 'variants',
+			'call_mail' => 'send e-mails to client and admin',
+			'call_payment' => 'call the payment process',
+			'SUB_TOTAL' => 'SUB TOTAL',
+			'TOTAL' => 'TOTAL',
+			'client_percent' => 'this client has a discount',
+			'use_it' => 'use it',
 
 			//commande_details
 			'INFO_COMMANDE' => 'INFORMAZIONI SUL ORDINE',

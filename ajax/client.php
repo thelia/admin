@@ -55,6 +55,7 @@ function checkMatch()
             "ville"         =>  $a->ville,
             "pays"          =>  $a->pays,
             "tel"           =>  $a->tel,
+            "pourcentage"   =>  $a->pourcentage,
         );
     }
     

@@ -34,7 +34,7 @@ class OrderAdmin extends Commande
         return $this->query_liste($q, 'Modules');
     }
     
-    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, $client_selected, $ref_client, $email, \Panier $panier)
+    public function createOrder($facturation_raison, $facturation_entreprise, $facturation_nom, $facturation_prenom, $facturation_adresse1, $facturation_adresse2, $facturation_adresse3, $facturation_cpostal, $facturation_ville, $facturation_tel, $facturation_pays, $livraison_raison, $livraison_entreprise, $livraison_nom, $livraison_prenom, $livraison_adresse1, $livraison_adresse2, $livraison_adresse3, $livraison_cpostal, $livraison_ville, $livraison_tel, $livraison_pays, $type_paiement, $type_transport, $fraisport, $remise, $client_selected, $ref_client, $email, \Panier $panier, $applyClientDiscount, $callMail, $callPayment)
     {
         $client = new Client();
         
@@ -100,11 +100,15 @@ class OrderAdmin extends Commande
         $order->port = $fraisport;
         $order->remise = $remise;
         $order->statut = Commande::NONPAYE;
+        $order->transaction = genid($order->id, 6);
         
-        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
+        $module_paiement = new Modules();
+	$module_paiement->charger_id($type_paiement);
+        
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && is_numeric($order->port) && is_numeric($order->remise) && $module_paiement->actif && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
         {
-            echo 5;
-            exit;
+            
+            echo 6;exit;
             
             $facturationAddress->id = $facturationAddress->add();
             $livraisonAddress->id = $livraisonAddress->add();
@@ -123,15 +127,115 @@ class OrderAdmin extends Commande
             $order->adrlivr = $livraisonAddress->id;
             $order->client = $client->id;
             $order->devise = $devise->id;
-            $commande->taux = $devise->taux;
+            $order->taux = $devise->taux;
             
-            $commande->lang = ActionsLang::instance()->get_id_langue_courante();
+            $order->lang = ActionsLang::instance()->get_id_langue_courante();
             
             $order->id = $order->add();
             
             $order->ref = "C" . date("ymdHi") . genid($order->id, 6);
 
             $order->maj();
+            
+            $total = 0;
+            $poids = 0;
+            $nbart = 0;
+            
+            foreach($panier->tabarticle as $pos => $article) {
+                $venteprod = new Venteprod();
+
+                $dectexte = "\n";
+
+                $stock = new Stock();
+
+                foreach($article->perso as $perso) {
+
+                    $declinaison = new Declinaison();
+                    $declinaisondesc = new Declinaisondesc();
+
+                    if(is_numeric($perso->valeur) && ActionsModules::instance()->instancier($module_paiement->nom)->defalqcmd) {
+
+                        // diminution des stocks de déclinaison si on est sur un module de paiement qui défalque de suite
+                        $stock->charger($perso->valeur, $article->produit->id);
+                        $stock->valeur-=$article->quantite;
+                        $stock->maj();
+                    }
+
+                    $declinaison->charger($perso->declinaison);
+                    $declinaisondesc->charger($declinaison->id);
+
+                    // recup valeur declidisp ou string
+                    if($declinaison->isDeclidisp($perso->declinaison)){
+                        $declidisp = new Declidisp();
+                        $declidispdesc = new Declidispdesc();
+                        $declidisp->charger($perso->valeur);
+                        $declidispdesc->charger_declidisp($declidisp->id);
+                        $dectexte .= "- " . $declinaisondesc->titre . " : " . $declidispdesc->titre . "\n";
+                    }
+                    else
+                        $dectexte .= "- " . $declinaisondesc->titre . " : " . $perso->valeur . "\n";
+
+                }
+
+                // diminution des stocks classiques si on est sur un module de paiement qui défalque de suite
+
+                $produit = new Produit($article->produit->ref);
+
+                if(ActionsModules::instance()->instancier($module_paiement->nom)->defalqcmd) {
+                    $produit->stock-=$article->quantite;
+                    $produit->maj();
+                }
+
+                $venteprod->quantite =  $article->quantite;
+                $venteprod->prixu =  $article->produit->prix;
+
+                $venteprod->ref = $article->produit->ref;
+                $venteprod->titre = $article->produitdesc->titre . " " . $dectexte;
+                $venteprod->chapo = $article->produitdesc->chapo;
+                $venteprod->description = $article->produitdesc->description;
+                $venteprod->tva =  $article->produit->tva;
+
+                $venteprod->commande = $order->id;
+                $venteprod->id = $venteprod->add();
+
+                $correspondanceParent[]=$venteprod->id;
+
+                // ajout dans ventedeclisp des declidisp associées au venteprod
+                foreach($article->perso as $perso){
+                    $declinaison = new Declinaison();
+                    $declinaison->charger($perso->declinaison);
+
+                    // si declidisp (pas un champs libre)
+                    if($declinaison->isDeclidisp($perso->declinaison)){
+                        $vdec = new Ventedeclidisp();
+                        $vdec->venteprod = $venteprod->id;
+                        $vdec->declidisp = $perso->valeur;
+                        $vdec->add();
+                    }
+                }
+
+                ActionsModules::instance()->appel_module("apresVenteprodAdmin", $venteprod, $pos);
+
+                $total += $venteprod->prixu * $venteprod->quantite;
+                $nbart++;
+                $poids += $article->produit->poids;
+            }
+            
+            foreach($correspondanceParent as $id_panier => $id_venteprod) {
+                if($panier->tabarticle[$id_panier]->parent>=0) {
+                    $venteprod->charger($id_venteprod);
+                    $venteprod->parent = $correspondanceParent[$panier->tabarticle[$id_panier]->parent];
+                    $venteprod->maj();
+                }
+            }
+            
+            ActionsModules::instance()->appel_module("aprescommandeadmin", $commande);
+            
+            if($callMail)
+                $modpaiement->mail($commande);
+
+            if($callPayment)
+                $modpaiement->paiement($commande);
         }
         else
         {

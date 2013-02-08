@@ -70,7 +70,10 @@ class ActionsAdminOrder extends ActionsAdminBase
                     $request->request->get("client_selected"),
                     $request->request->get("ref_client"),
                     $request->request->get("email"),
-                    $this->getPanier($request)
+                    $this->getPanier($request),
+                    $request->request->get("apply_client_discount") == 'on',
+                    $request->request->get("call_mail") == 'on',
+                    $request->request->get("call_payment") == 'on'
                 );
                 break;
         }

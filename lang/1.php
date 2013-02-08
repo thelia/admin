@@ -192,6 +192,12 @@
 			'use_this_product' => 'utiliser ce product',
 			'too_much_products' => 'trop de clients correspondent',
 			'variants' => 'variants',
+			'call_mail' => 'envoyer un email au client et à l\'admin',
+			'call_payment' => 'suivre le processus de paiement',
+			'SUB_TOTAL' => 'SOUS TOTAL',
+			'TOTAL' => 'TOTAL',
+			'client_percent' => 'ce client à une remise',
+			'use_it' => 'l\'appliquer',
 
 			//commande_details
                         'INFO_COMPLEMENTAIRE' => 'INFORMATIONS COMPLÉMENTAIRES',

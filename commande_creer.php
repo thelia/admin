@@ -8,10 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 $request = Request::createFromGlobals();
 
-$commande = new Commande();
-
-$adrFacturation = new Venteadr();
-$adrLivraison = new Venteadr();
+$client = new Client();
+$client->charger_ref($ref_client);
 
 $paysFacturation = new Paysdesc();
 $paysLivraison = new Paysdesc();
@@ -91,7 +89,7 @@ require_once("entete.php");
                                             <tr>
                                                 <td><strong><?php echo trad('Reference', 'admin'); ?></strong></td>
                                                 <td>
-                                                    <input class="span12 clientSearch" type="text" name="ref_client" id="ref" value="<?php echo $createError?$ref:''; ?>">
+                                                    <input class="span12 clientSearch" type="text" name="ref_client" id="ref" value="<?php echo $createError?$ref_client:''; ?>">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -441,21 +439,15 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong><?php echo trad('Montant_frais_port', 'admin'); ?></strong></td>
+                                <td><strong><?php echo trad('call_mail', 'admin'); ?> ?</strong></td>
                                 <td>
-                                    <div class="input-append">
-                                        <input type="text" name="fraisport" value="<?php echo $commande->port; ?>">
-                                        <span class="add-on">€ TTC</span>
-                                    </div>
+                                    <input type="checkbox" name="call_mail" <?php echo $createError && $call_mail != 'on' ? '' : 'checked' ; ?> />
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong><?php echo trad('Remise', 'admin'); ?></strong></td>
+                                <td><strong><?php echo trad('call_payment', 'admin'); ?> ?</strong></td>
                                 <td>
-                                    <div class="input-append">
-                                        <input type="text" name="remise" value="<?php echo $commande->remise; ?>">
-                                        <span class="add-on">€ TTC</span>
-                                    </div>
+                                    <input type="checkbox" name="call_payment" <?php echo $createError && $call_payment != 'on' ? '' : 'checked' ; ?> />
                                 </td>
                             </tr>
                         </tbody>
@@ -494,6 +486,8 @@ foreach(OrderAdmin::getInstance()->getDeliveryTypesList() as $deliveryType)
                         </thead>
                         <tbody id="products_in_cart">
 <?php
+$total = 0;
+$soustotal = 0;
 if($createError && $panier)
 {
     for($i=0; $i<$panier->nbart; $i++)
@@ -503,6 +497,8 @@ if($createError && $panier)
             $declinaison = new Declinaisondesc($panier->tabarticle[$i]->perso[0]->declinaison, ActionsLang::instance()->get_id_langue_courante());
             $declidisp = new Declidispdesc($panier->tabarticle[$i]->perso[0]->valeur, ActionsLang::instance()->get_id_langue_courante());
         }
+        
+        $soustotal += $panier->tabarticle[$i]->produit->prix * $panier->tabarticle[$i]->quantite;
 ?>
                             <tr>
                                 <td><?php echo $panier->tabarticle[$i]->produit->ref; ?></td>
@@ -514,7 +510,7 @@ if($createError && $panier)
                                 <td><?php echo $panier->tabarticle[$i]->produit->tva; ?></td>
                                 <td>
                                     <input type="hidden" name="ref[]" value="<?php echo $panier->tabarticle[$i]->produit->ref; ?>">
-                                    <input type="hidden" name="perso[]" value="<?php echo $panier->tabarticle[$i]->perso[0] ? $declinaison->titre . "_" . $declidisp->titre:''; ?>">
+                                    <input type="hidden" name="perso[]" value="<?php echo $panier->tabarticle[$i]->perso[0] ? $declinaison->id . "_" . $declidisp->id:''; ?>">
                                     <input type="hidden" name="quantite[]" value="<?php echo $panier->tabarticle[$i]->quantite; ?>">
                                     <input type="hidden" name="prixu[]" value="<?php echo $panier->tabarticle[$i]->produit->prix; ?>">
                                     <input type="hidden" name="tva[]" value="<?php echo $panier->tabarticle[$i]->produit->tva; ?>">
@@ -526,10 +522,89 @@ if($createError && $panier)
                             </tr>
 <?php
     }
-    
+    $soustotalNoDiscount = $soustotal;
+    if($client->pourcentage > 0 && $apply_client_discount == 'on')
+        $soustotal = $soustotal - $soustotal * $client->pourcentage * 0.01;
+    $total = $soustotal;
+    if(is_numeric($remise))
+        $total -= $remise;
+    if(is_numeric($fraisport))
+        $total += $fraisport;
+    if($total<0)
+        $total = 0;
 }
 ?>
                         </tbody>
+                        <tfoot>
+                            <tr id="clientDiscountRow" <?php if(!$createError || ($createError && $client->pourcentage == 0) ){ ?>style="display: none;"<?php } ?>>
+                                <td colspan="4">
+                                    <strong>
+                                        <?php echo trad('client_percent', 'admin'); ?> (<span id="clientDiscountVal"><?php echo $client->pourcentage; ?></span>%)
+                                    </strong>
+                                </td>
+                                <td colspan="2">
+                                    <strong>
+                                        <?php echo trad('use_it', 'admin'); ?> ?
+                                    </strong>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="apply_client_discount" <?php echo $createError && $apply_client_discount != 'on' ? '' : 'checked' ; ?> />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <strong>
+                                        <?php echo trad('SUB_TOTAL', 'admin'); ?>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong id="sousTotal" js-no-discount="<?php echo $soustotalNoDiscount; ?>">
+                                        <?php echo $soustotal; ?>
+                                    </strong>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                            
+                            <tr class="<?php if($createError && !is_numeric($remise)){ ?>error<?php } ?>">
+                                <td colspan="5">
+                                    <strong>
+                                        <?php echo trad('Remise', 'admin'); ?>*
+                                    </strong>
+                                </td>
+                                <td colspan="3">
+                                    <div class="input-append">
+                                        <input type="text" class="input-mini js-change-total js-minus" name="remise" value="<?php echo $createError?$remise:0; ?>">
+                                        <span class="add-on">€ TTC</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="<?php if($createError && !is_numeric($fraisport)){ ?>error<?php } ?>">
+                                <td colspan="5">
+                                    <strong>
+                                        <?php echo trad('Montant_frais_port', 'admin'); ?>*
+                                    </strong>
+                                </td>
+                                <td colspan="3">
+                                    <div class="input-append">
+                                        <input type="text" class="input-mini js-change-total" name="fraisport" value="<?php echo $createError?$fraisport:0; ?>">
+                                        <span class="add-on">€ TTC</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <strong>
+                                        <?php echo trad('TOTAL', 'admin'); ?>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong id="total">
+                                        <?php echo $total; ?>
+                                    </strong>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
                     </table>
 
                 </span>
@@ -757,6 +832,17 @@ if($createError && $client_selected) {
         );
     });
     
+    $('input[name="apply_client_discount"]').change(function(e)
+    {
+        checkSubTotal($(this).is(':checked'));
+        checkTotal();
+    });
+    
+    $('.js-change-total').keyup(function(e)
+    {
+        checkTotal();    
+    });
+    
     $('.clientSearch').keyup(function(e)
     {
         if($(this).attr('readonly') == 'readonly')
@@ -832,6 +918,12 @@ if($createError && $client_selected) {
                                         $('#nom').val(v.nom);
                                         $('#prenom').val(v.prenom);
                                         $('#ref').val(v.ref);
+                                        
+                                        if(v.pourcentage > 0)
+                                        {
+                                            $('#clientDiscountRow').show();
+                                            $('#clientDiscountVal').html(v.pourcentage);
+                                        }
                                         
                                         $('.clientSearch').attr('readonly', true);
                                         
@@ -929,6 +1021,8 @@ function changeClient(e)
     $('#client_matched').hide();
 
     $('input[name="client_selected"]').val(0);
+    
+    $('#clientDiscountRow').hide();
     
     emptyAddressesVal();
 }
@@ -1077,6 +1171,38 @@ function manageStock(stock, basePrice)
         $('#productToAdd_variant').attr('disabled', true);
         $('#productToAdd_prix').val(basePrice).attr('js-prix-orig', basePrice);
     }
+}
+
+function checkSubTotal(isUsed)
+{
+    if(isUsed)
+    {
+        $('#sousTotal').html(
+            $('#sousTotal').attr('js-no-discount') - $('#sousTotal').attr('js-no-discount') * $('#clientDiscountVal').html() * 0.01
+        );
+    }
+    else
+    {
+        $('#sousTotal').html(
+            $('#sousTotal').attr('js-no-discount')
+        );
+    }
+}
+
+function checkTotal()
+{
+    var sousTotal2 = 0;
+    $('.js-change-total').each(function(k, v)
+    {
+        if($(this).is('.js-minus'))
+            sousTotal2 -= $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
+        else
+            sousTotal2 += $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
+    });
+
+    $('#total').html(
+        parseFloat($('#sousTotal').html()) + sousTotal2 > 0 ? parseFloat($('#sousTotal').html()) + sousTotal2 : 0
+    );
 }
 
 </script>
