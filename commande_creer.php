@@ -506,7 +506,7 @@ if($createError && $panier)
                                 <td><?php echo $panier->tabarticle[$i]->perso[0] ? $declinaison->titre . " : " . $declidisp->titre:''; ?></td>
                                 <td><?php echo $panier->tabarticle[$i]->produit->prix; ?></td>
                                 <td><?php echo $panier->tabarticle[$i]->quantite; ?></td>
-                                <td><?php echo $panier->tabarticle[$i]->produit->prix * $panier->tabarticle[$i]->quantite; ?></td>
+                                <td class="js-cart-ttc-prices"><?php echo $panier->tabarticle[$i]->produit->prix * $panier->tabarticle[$i]->quantite; ?></td>
                                 <td><?php echo $panier->tabarticle[$i]->produit->tva; ?></td>
                                 <td>
                                     <input type="hidden" name="ref[]" value="<?php echo $panier->tabarticle[$i]->produit->ref; ?>">
@@ -524,7 +524,7 @@ if($createError && $panier)
     }
     $soustotalNoDiscount = $soustotal;
     if($client->pourcentage > 0 && $apply_client_discount == 'on')
-        $soustotal = $soustotal - $soustotal * $client->pourcentage * 0.01;
+        $soustotal = round( $soustotal - $soustotal * $client->pourcentage / 100 , 2);
     $total = $soustotal;
     if(is_numeric($remise))
         $total -= $remise;
@@ -537,7 +537,7 @@ if($createError && $panier)
                         </tbody>
                         <tfoot>
                             <tr id="clientDiscountRow" <?php if(!$createError || ($createError && $client->pourcentage == 0) ){ ?>style="display: none;"<?php } ?>>
-                                <td colspan="4">
+                                <td colspan="5">
                                     <strong>
                                         <?php echo trad('client_percent', 'admin'); ?> (<span id="clientDiscountVal"><?php echo $client->pourcentage; ?></span>%)
                                     </strong>
@@ -558,7 +558,7 @@ if($createError && $panier)
                                     </strong>
                                 </td>
                                 <td>
-                                    <strong id="sousTotal" js-no-discount="<?php echo $soustotalNoDiscount; ?>">
+                                    <strong id="sousTotal">
                                         <?php echo $soustotal; ?>
                                     </strong>
                                 </td>
@@ -834,8 +834,7 @@ if($createError && $client_selected) {
     
     $('input[name="apply_client_discount"]').change(function(e)
     {
-        checkSubTotal($(this).is(':checked'));
-        checkTotal();
+        checkTotal($(this).is(':checked') && $('#clientDiscountVal').html() > 0);
     });
     
     $('.js-change-total').keyup(function(e)
@@ -923,6 +922,7 @@ if($createError && $client_selected) {
                                         {
                                             $('#clientDiscountRow').show();
                                             $('#clientDiscountVal').html(v.pourcentage);
+                                            checkTotal($('input[name="apply_client_discount"]').is(':checked') && v.pourcentage>0);
                                         }
                                         
                                         $('.clientSearch').attr('readonly', true);
@@ -963,7 +963,7 @@ if($createError && $client_selected) {
                 $('<td />').html(
                     $('#productToAdd_quantite').val()
                 ),
-                $('<td />').html(
+                $('<td />').addClass('js-cart-ttc-prices').html(
                     $('#productToAdd_prix').val() * $('#productToAdd_quantite').val()
                 ),
                 $('<td />').html(
@@ -983,6 +983,8 @@ if($createError && $client_selected) {
                 )
             )
         )
+        
+        checkTotal($('input[name="apply_client_discount"]').is(':checked') && $('#clientDiscountVal').html() > 0);
         
         $('#addProductModal').modal('hide');
     });
@@ -1023,6 +1025,8 @@ function changeClient(e)
     $('input[name="client_selected"]').val(0);
     
     $('#clientDiscountRow').hide();
+    
+    checkTotal(false);
     
     emptyAddressesVal();
 }
@@ -1137,7 +1141,7 @@ function manageStock(stock, basePrice)
             {
                 $('#productToAdd_stock').html($(this).children('option:selected').attr('js-stock'));
                 $('#productToAdd_prix').val(
-                    parseFloat($('#productToAdd_prix').attr('js-prix-orig')) + parseFloat($(this).children('option:selected').attr('js-surplus'))
+                    parseFloat($('#productToAdd_prix').attr('js-prix-orig').replace(',', '.')) + parseFloat($(this).children('option:selected').attr('js-surplus').replace(',', '.'))
                 );
             });
             $.each(v2.declinaisons, function(k3, v3)
@@ -1173,35 +1177,49 @@ function manageStock(stock, basePrice)
     }
 }
 
-function checkSubTotal(isUsed)
+function checkSubTotal(discountIsUsed)
 {
-    if(isUsed)
+    var subTotalNoDiscount = 0;
+    $('.js-cart-ttc-prices').each(function(k, v)
+    {
+        subTotalNoDiscount += parseFloat($(v).html().replace(',', '.'));
+    });
+    
+    if(discountIsUsed)
     {
         $('#sousTotal').html(
-            $('#sousTotal').attr('js-no-discount') - $('#sousTotal').attr('js-no-discount') * $('#clientDiscountVal').html() * 0.01
+            Math.round(
+                (subTotalNoDiscount - subTotalNoDiscount * parseFloat($('#clientDiscountVal').html().replace(',', '.')) / 100) * 100
+            ) / 100
+            
         );
     }
     else
     {
         $('#sousTotal').html(
-            $('#sousTotal').attr('js-no-discount')
+            subTotalNoDiscount
         );
     }
 }
 
-function checkTotal()
+function checkTotal(discountIsUsed)
 {
+    checkSubTotal(discountIsUsed);
+    
     var sousTotal2 = 0;
     $('.js-change-total').each(function(k, v)
     {
         if($(this).is('.js-minus'))
-            sousTotal2 -= $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
+            sousTotal2 -= $(v).val()=='' || parseFloat($(v).val().replace(',', '.'))!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val().replace(',', '.')) ;
         else
-            sousTotal2 += $(v).val()=='' || parseFloat($(v).val())!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val()) ;
+            sousTotal2 += $(v).val()=='' || parseFloat($(v).val().replace(',', '.'))!=$(v).val() || $(v).val()<0 ? 0 : parseFloat($(v).val().replace(',', '.')) ;
     });
-
+            
     $('#total').html(
-        parseFloat($('#sousTotal').html()) + sousTotal2 > 0 ? parseFloat($('#sousTotal').html()) + sousTotal2 : 0
+        Math.round(
+            (parseFloat($('#sousTotal').html().replace(',', '.')) + sousTotal2 > 0 ? parseFloat($('#sousTotal').html().replace(',', '.')) + sousTotal2 : 0)
+            * 100
+        ) / 100
     );
 }
 

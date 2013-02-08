@@ -99,14 +99,15 @@ class ActionsAdminOrder extends ActionsAdminBase
                 $ps->valeur = $tabPersoRecu[1];
             }
             
-            if($article = $panier->ajouter(
+            $article = $panier->ajouter(
                 $listeRef[$i],
                 $listeQuantite[$i],
                 ($listeVariants[$i] ? array($ps) : array()),
                 0,
                 1
-            ))
-            {
+            );
+                    
+            if($panier->tabarticle[$article]->produit->ref == $listeRef[$i] && $panier->tabarticle[$article]->perso == ($listeVariants[$i] ? array($ps) : array()) ) {
                 $panier->tabarticle[$article]->produit->prix = $listePrixU[$i];
                 $panier->tabarticle[$article]->produit->promo = 0;
                 $panier->tabarticle[$article]->produit->tva = $listeTVA[$i];
