@@ -526,9 +526,9 @@ if($createError && $panier)
     if($client->pourcentage > 0 && $apply_client_discount == 'on')
         $soustotal = round( $soustotal - $soustotal * $client->pourcentage / 100 , 2);
     $total = $soustotal;
-    if(is_numeric($remise))
+    if(is_numeric($remise) && $remise>=0)
         $total -= $remise;
-    if(is_numeric($fraisport))
+    if(is_numeric($fraisport) && $remise>=0)
         $total += $fraisport;
     if($total<0)
         $total = 0;
@@ -565,7 +565,7 @@ if($createError && $panier)
                                 <td colspan="2"></td>
                             </tr>
                             
-                            <tr class="<?php if($createError && !is_numeric($remise)){ ?>error<?php } ?>">
+                            <tr class="<?php if($createError && (!is_numeric($remise) || $remise<0) ){ ?>error<?php } ?>">
                                 <td colspan="5">
                                     <strong>
                                         <?php echo trad('Remise', 'admin'); ?>*
@@ -578,7 +578,7 @@ if($createError && $panier)
                                     </div>
                                 </td>
                             </tr>
-                            <tr class="<?php if($createError && !is_numeric($fraisport)){ ?>error<?php } ?>">
+                            <tr class="<?php if($createError && (!is_numeric($fraisport) || $fraisport<0) ){ ?>error<?php } ?>">
                                 <td colspan="5">
                                     <strong>
                                         <?php echo trad('Montant_frais_port', 'admin'); ?>*

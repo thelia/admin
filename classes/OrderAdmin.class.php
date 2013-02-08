@@ -17,7 +17,7 @@ class OrderAdmin extends Commande
     
     public static function getInstanceByRef($ref = '')
     {
-        $orderAdmin = new OrderAdmin($id);
+        $orderAdmin = new OrderAdmin();
         $orderAdmin->charger_ref($ref);
         return $orderAdmin;
     }
@@ -97,19 +97,14 @@ class OrderAdmin extends Commande
         $order->livraison = "L" . date("ymdHis") . strtoupper(ereg_caracspec(substr($client->prenom,0, 3)));
         $order->transport = $type_transport;
         $order->paiement = $type_paiement;
-        $order->port = $fraisport;
-        $order->remise = $remise;
         $order->statut = Commande::NONPAYE;
         $order->transaction = genid($order->id, 6);
         
         $module_paiement = new Modules();
 	$module_paiement->charger_id($type_paiement);
         
-        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && is_numeric($order->port) && is_numeric($order->remise) && $module_paiement->actif && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
+        if($facturationAddress->raison!="" && $facturationAddress->prenom!="" && $facturationAddress->nom!="" && $facturationAddress->adresse1 !="" && $facturationAddress->cpostal!="" && $facturationAddress->ville !="" && $facturationAddress->pays !="" && $livraisonAddress->raison!="" && $livraisonAddress->prenom!="" && $livraisonAddress->nom!="" && $livraisonAddress->adresse1 !="" && $livraisonAddress->cpostal!="" && $livraisonAddress->ville !="" && $livraisonAddress->pays !="" && $order->transport != "" && is_numeric($order->port) && $order->port>=0 && is_numeric($order->remise) && $order->remise>=0 && $module_paiement->actif && $order->paiement != "" && $panier->nbart > 1 && ( $clientOK || ($client_selected!=1 && !$existeDeja && !$badFormat) ) && $email!='')
         {
-            
-            echo 6;exit;
-            
             $facturationAddress->id = $facturationAddress->add();
             $livraisonAddress->id = $livraisonAddress->add();
             if(!$client->id)
@@ -229,13 +224,25 @@ class OrderAdmin extends Commande
                 }
             }
             
-            ActionsModules::instance()->appel_module("aprescommandeadmin", $commande);
+            if ($client->pourcentage>0 && $applyClientDiscount)
+                $order->remise = $total * $client->pourcentage / 100;
+            
+            
+            $total -= $order->remise;
+            
+            $order->remise += $remise;
+            if($order->remise > $total)
+                $order->remise = $total;
+            
+            $order->port = $fraisport;
+            
+            ActionsModules::instance()->appel_module("aprescommandeadmin", $order);
             
             if($callMail)
-                $modpaiement->mail($commande);
+                $module_paiement->mail($order);
 
             if($callPayment)
-                $modpaiement->paiement($commande);
+                $module_paiement->paiement($order);
         }
         else
         {
