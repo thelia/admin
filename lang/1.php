@@ -192,7 +192,7 @@
 			'in_stock' => 'en stock',
 			'use_this_client' => 'utiliser ce client',
 			'use_this_product' => 'utiliser ce product',
-			'too_much_products' => 'trop de produits correspondent',
+			'too_much_products' => 'trop de clients correspondent',
 			'variants' => 'variants',
 			'call_mail' => 'envoyer un email au client et à l\'admin',
 			'call_payment' => 'suivre le processus de paiement',
