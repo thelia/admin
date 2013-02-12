@@ -102,7 +102,6 @@ require_once("entete.php");
             </ul>
             <form method="post" action="contenu_modifier.php" enctype="multipart/form-data" id="formulaire">
                 <input type="hidden" name="id" value="<?php echo $contenu->id; ?>">
-                <input type="hidden" name="dossier" value="<?php echo $contenu->dossier; ?>">
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>">
                 <input type="hidden" name="action" value="modifier">
                 <input type="hidden" name="tab" value="<?php echo $tab; ?>">

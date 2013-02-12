@@ -137,14 +137,11 @@ class ContentAdmin extends Contenu {
         
         $this->datemodif = date('Y-m-d H:i:s');
         
-       
         
         if($this->dossier != $folder){
             $this->checkRewrite($folder);
             $this->checkOrder($folder);
         }
-        
-        
         
         $this->ligne = ($online == 'on')?1:0;
 
@@ -186,7 +183,7 @@ class ContentAdmin extends Contenu {
     {
         //in old folder
         $this->modifier_classement($this->id, $this->getMaxRanking($this->oldFolder) + 1);
-
+        $this->dossier = $folder;
         //in new folder
         $this->classement = $this->getMaxRanking($folder) + 1;        
     }
@@ -204,10 +201,8 @@ class ContentAdmin extends Contenu {
             $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $folder);
 
             $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
-
             $resul_reec = $this->query($query_reec);
-
-            while($row_reec = $this->fetch_object($resul_reec)) {
+            while($resul_reec && $row_reec = $this->fetch_object($resul_reec)) {
 
                 $tmpreec = new Reecriture();
                 $tmpreec->charger_id($row_reec->id);
