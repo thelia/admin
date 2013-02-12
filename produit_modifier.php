@@ -115,7 +115,6 @@ require_once("entete.php");
                         </p>    
                         <input type="hidden" name="ref" value="<?php echo $produit->ref ?>">
                         <input type="hidden" name="lang" value="<?php echo $lang; ?>">
-                        <input type="hidden" name="rubrique" value="<?php echo($produit->rubrique); ?>" >
                         <input type="hidden" name="action" value="modifier" >
                         <input type="hidden" name="tab" value="<?php echo $tab; ?>" >
                         <div class="tab-content">
@@ -221,6 +220,17 @@ require_once("entete.php");
                                                 <tr>
                                                     <td>ID</td>
                                                     <td><?php echo $produit->id; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo trad('Appartenance', 'admin'); ?></td>
+                                                    <td>
+                                                        <select name="rubrique">
+                                                            <option value="0"><?php echo trad('A la racine', 'admin'); ?></option>
+                                                            <?php 
+                                                                  echo arbreOption(0, 1, $produit->rubrique, 0);
+                                                            ?>
+                                                        </select>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td><?php echo trad('Derniere_modif', 'admin'); ?></td>
