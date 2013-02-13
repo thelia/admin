@@ -149,6 +149,7 @@ class AdministrateurAdmin extends Administrateur
         $this->motdepasse = $password;
         $this->crypter();
         $this->lang = $lang;
+        $this->profil = $profil;
         $this->id = parent::add();
         
         foreach($this->query_liste("SELECT autorisation, lecture, ecriture FROM ".Autorisation_profil::TABLE." WHERE profil=".$profil) as $authProfil)
