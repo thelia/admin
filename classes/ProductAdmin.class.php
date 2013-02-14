@@ -223,7 +223,10 @@ class ProductAdmin extends Produit {
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
         
-        ActionsModules::instance()->appel_module("modprod", $this);
+        $produit = new Produit();
+        $produit->charger($this->ref);
+        
+        ActionsModules::instance()->appel_module("modprod", $produit);
         
         if ($urlsuiv)
         {
