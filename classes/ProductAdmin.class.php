@@ -193,7 +193,7 @@ class ProductAdmin extends Produit {
         $this->prix2 = self::cleanPrice($price2);
         $this->ecotaxe = self::cleanPrice($ecotaxe);
         
-        $this->rubrique = $category;
+      //  $this->rubrique = $category;
         
         $this->checkRewrite($category);
         
