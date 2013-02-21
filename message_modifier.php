@@ -58,11 +58,11 @@ require_once("entete.php");
                     </tr>
                     <tr>
                         <td><?php echo trad('Intitule_message', 'admin'); ?></td>
-                        <td><input type="text" name="intitule" value="<?php echo $messagedesc->intitule; ?>" class="span12"></td>
+                        <td><input type="text" name="intitule" value="<?php echo htmlspecialchars($messagedesc->intitule); ?>" class="span12"></td>
                     </tr>
                     <tr>
                         <td><?php echo trad('Titre_message', 'admin'); ?></td>
-                        <td><input type="text" name="titre" value="<?php echo $messagedesc->titre; ?>" class="span12"></td>
+                        <td><input type="text" name="titre" value="<?php echo htmlspecialchars($messagedesc->titre); ?>" class="span12"></td>
                     </tr>
                     <tr>
                         <td><p><?php echo trad('Chapo', 'admin'); ?></p><p><small><?php echo trad('courte_descript_format_texte', 'admin'); ?></small></p></td>

@@ -68,7 +68,7 @@ require_once("entete.php");
                         <td>
                             <?php echo trad('Titre_caracteristique', 'admin'); ?>
                         </td>
-                        <td><input class="input-xlarge" type="text" name="titre" value="<?php echo $caractDisp->titre; ?>"></td>
+                        <td><input class="input-xlarge" type="text" name="titre" value="<?php echo htmlspecialchars($caractDisp->titre); ?>"></td>
                     </tr>
                     <tr>
                         <td>
