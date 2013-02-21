@@ -195,7 +195,7 @@ class ProductAdmin extends Produit {
         
       //  $this->rubrique = $category;
         
-        $this->checkRewrite($category);
+        $this->checkRewrite($category, $lang);
         
         
         $this->promo = ($promo == 'on')?1:0;
@@ -212,7 +212,7 @@ class ProductAdmin extends Produit {
         $produitdesc->titre = $title;
         $produitdesc->postscriptum = $postscriptum;
         $produitdesc->description = $description;
-        
+
         $this->maj();
         $produitdesc->maj();
                 
@@ -309,7 +309,7 @@ class ProductAdmin extends Produit {
         if($nb > 0) $this->stock = $nb;
     }
     
-    public function checkRewrite($category){
+    public function checkRewrite($category, $lang){
         if($this->rubrique != $category) {
             $query = "select max(classement) as maxClassement from ".Produit::TABLE." where rubrique='" . $category . "'";
             $resul = $this->query($query);
@@ -317,12 +317,12 @@ class ProductAdmin extends Produit {
 
             $param_old = Produitdesc::calculer_clef_url_reecrite($this->id, $this->rubrique);
             $param_new = Produitdesc::calculer_clef_url_reecrite($this->id, $category);
-
+            
             $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
 
             $resul_reec = $this->query($query_reec);
 
-            while($row_reec = $this->fetch_object($resul_reec)) {
+            while($resul_reec && $row_reec = $this->fetch_object($resul_reec)) {
 
                 $tmpreec = new Reecriture();
                 $tmpreec->charger_id($row_reec->id);
