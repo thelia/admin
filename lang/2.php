@@ -398,6 +398,10 @@
 			'Autorisation' => 'Authorization',
 			'Module' => 'Plugin',
 			'Acces' => 'Access',
+			'Edit_permissions' => 'Edit permissions',
+			'Change_password' => 'Change password',
+			'Droits_profil' => 'PROFILE',
+			'Personalized_profile' => 'Personalized profile',
 
 			//listdos
 			'LISTE_DOSSIERS_CONTENU' => 'CONTENT FOLDERS LIST',

@@ -165,6 +165,21 @@ class Breadcrumb
         return $this->getBreadcrumb();
     }
     
+    public function getMultipleList()
+    {
+        $argList = func_get_args();
+        
+        for($i=0; $i<func_num_args(); $i++)
+        {
+            if(is_array($argList[$i]))
+            {
+                $this->addValue($argList[$i][1], $argList[$i][0]);
+            }
+        }
+        
+        return $this->getBreadcrumb();
+    }
+    
     public function getOrderList($title, $url = "", $editTitle = "")
     {
         $this->addValue("#", trad('Gestion_commandes', 'admin'));

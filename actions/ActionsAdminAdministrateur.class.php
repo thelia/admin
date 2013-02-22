@@ -52,6 +52,8 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
                 {
                     throw new TheliaAdminException("multiple errors", TheliaAdminException::ADMIN_MULTIPLE_ERRORS, null, $error);
                 }
+                
+                AdministrateurAdmin::getInstance($id)->redirect();
                 break;
             case "supprimer":
                 AdministrateurAdmin::getInstance($request->query->get("id"))->delete();
@@ -71,6 +73,13 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
                 AdministrateurAdmin::getInstance($request->request->get("id"))->modifyPassword(
                     $request->request->get("password"),
                     $request->request->get("verifyPassword")
+                );
+                break;
+            case "change_droits_admin":
+                AdministrateurAdmin::getInstance($request->request->get("administrateur"))->changePermissions(
+                    $request->request->get("profil"),
+                    $request->request->get("droits_g"),
+                    $request->request->get("droits_m")
                 );
                 break;
                 

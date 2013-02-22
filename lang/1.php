@@ -362,6 +362,10 @@
 			'Autorisation' => 'Autorisation',
 			'Module' => 'Module',
 			'Acces' => 'Accès',
+			'Edit_permissions' => 'Editer les permissions',
+			'Change_password' => 'Changer le mot de passe',
+			'Droits_profil' => 'PROFIL',
+			'Personalized_profile' => 'Personaliser le profil',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURATION',

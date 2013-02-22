@@ -40,6 +40,9 @@ $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_administrateurs', 'admin'));
 require_once("entete.php");
 ?>
+    <form method="post" action="gestadm.php">
+        <input type="hidden" name="action" value="modifier">
+    
     <div class="row-fluid">
         <div class="span12">
             <h3>
@@ -51,8 +54,7 @@ require_once("entete.php");
             </div>
             </h3>
             <div class="bigtable">
-                <form method="post" action="gestadm.php">
-                <input type="hidden" name="action" value="modifier">
+                
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -78,7 +80,18 @@ require_once("entete.php");
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-mini js-edit-admin"admin-id="<?php echo $admin->id; ?>"><i class="icon-edit"></i></button>
+                                        <button type="button" title="<?php echo trad("Change_password", "admin"); ?>" class="btn btn-mini js-edit-admin" admin-id="<?php echo $admin->id; ?>">
+                                            <i class="icon-lock"></i>
+                                        </button>
+                                    <?php
+                                    if($admin->id != $_SESSION['util']->id) {
+                                    ?>
+                                        <a type="button" title="<?php echo trad("Edit_permissions", "admin"); ?>" href="gestadm_droits.php?administrateur=<?php echo $admin->id; ?>" class="btn btn-mini">
+                                            <i class="icon-edit"></i>
+                                        </a>
+                                    <?php
+                                    }
+                                    ?>
                                     </div>
                                 </td>
                                 
@@ -98,13 +111,24 @@ require_once("entete.php");
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <p>
-                    <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
-                </p>
-                </form>
+                
             </div>
         </div>
     </div>
+    
+    <div class="row-fluid">
+        <div class="span12">
+            <?php
+                ActionsAdminModules::instance()->inclure_module_admin("gestadm");
+            ?>
+        </div>
+    </div>
+    
+    <p>
+        <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
+    </p>
+    </form>
+    
     <div class="modal hide fade in" id="adminAddModal">
         <form method="post" action="gestadm.php">
         <input type="hidden" name="action" value="ajouter">

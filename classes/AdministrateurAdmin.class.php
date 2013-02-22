@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../classes/Profil.php';
 
 class AdministrateurAdmin extends Administrateur
 {
+    const ID_SUPERADMINISTRATEUR = 1;
     
     public function __construct($id = 0) {
         parent::__construct();
@@ -47,14 +48,14 @@ class AdministrateurAdmin extends Administrateur
      */
     public function modify($nom, $prenom, $identifiant, $lang)
     {
-        $this->veirfyLoaded();
-        
-        
+        $this->verifyLoaded();
         
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->identifiant = $identifiant;
         $this->lang = $lang;
+        
+        $this->maj();
         
         if($this->id == $_SESSION['util']->id)
         {
@@ -63,10 +64,6 @@ class AdministrateurAdmin extends Administrateur
             $_SESSION["util"] = new Administrateur();
             $_SESSION["util"] = $admin;
         }
-        
-        $this->maj();
-        
-        $this->redirect();
     }
     
     /**
@@ -81,7 +78,7 @@ class AdministrateurAdmin extends Administrateur
      */
     public function modifyPassword($password, $verifyPassword)
     {
-        $this->veirfyLoaded();
+        $this->verifyLoaded();
      
         $password = $this->verifyPassword($password, $verifyPassword);
         
@@ -103,7 +100,7 @@ class AdministrateurAdmin extends Administrateur
      */
     public function delete()
     {
-        $this->veirfyLoaded();
+        $this->verifyLoaded();
         
         if($this->id == $_SESSION['util']->id)
         {
@@ -165,9 +162,132 @@ class AdministrateurAdmin extends Administrateur
         $this->redirect();
     }
     
-    protected function redirect()
+    public function changePermissions($profil, $generalPermissions, $pluginsPermissions)
+    {   
+        $this->verifyLoaded();
+        
+        if($generalPermissions === null) $generalPermissions = array();
+        if($pluginsPermissions === null) $pluginsPermissions = array();
+        
+        $testProfil = new Profil();
+        if(!$testProfil->charger_id($profil) && $profil!=0)
+            throw new TheliaAdminException('Incorrect parameter $profil : could not load Profil.',  TheliaAdminException::PROFIL_NOT_FOUND);
+        
+        if($profil != 0)
+        {
+            $this->profil = $profil;
+            $this->maj();
+        }
+        
+        if($this->profil != self::ID_SUPERADMINISTRATEUR) {
+            foreach($this->query_liste("SELECT * FROM " . Autorisation::TABLE) as $row) {
+                $autorisation_administrateur = new Autorisation_administrateur();
+                $autorisation_administrateur->charger($row->id, $this->id);
+
+                if(array_key_exists($row->id, $generalPermissions) && $generalPermissions[$row->id] == 'on') {
+                    if(!$autorisation_administrateur->id) {
+                        $autorisation_administrateur->administrateur = $this->id;
+                        $autorisation_administrateur->autorisation = $row->id;
+                        $autorisation_administrateur->lecture = 0;
+                        $autorisation_administrateur->ecriture = 0;
+                        $autorisation_administrateur->id = $autorisation_administrateur->add();
+                    }
+    
+                    $autorisation_administrateur->lecture = 1;
+                    $autorisation_administrateur->ecriture = 1;
+                    $autorisation_administrateur->maj();
+                } else {
+                    if($autorisation_administrateur->id)
+                    {
+                        $autorisation_administrateur->lecture = 0;
+                        $autorisation_administrateur->ecriture = 0;
+                        $autorisation_administrateur->maj();
+                    }
+                }
+            }
+
+            foreach(ActionsAdminModules::instance()->lister(false, true) as $module) {
+                if (ActionsAdminModules::instance()->est_administrable($module->nom)) {
+                    $autorisation_modules = new Autorisation_modules();
+                    $autorisation_modules->charger($module->id, $this->id);
+
+                    if(array_key_exists($module->id, $pluginsPermissions) && $pluginsPermissions[$module->id] == 'on') {
+                        if(!$autorisation_modules->id) {
+                            $autorisation_modules->administrateur = $this->id;
+                            $autorisation_modules->module = $module->id;
+                            $autorisation_modules->id = $autorisation_modules->add();
+                        }
+
+                        $autorisation_modules->autorise = 1;
+                        $autorisation_modules->maj();
+                    } else {
+                        if($autorisation_modules->id)
+                        {
+                            $autorisation_modules->autorise = 0;
+                            $autorisation_modules->maj();
+                        }
+                    }
+                }
+            }
+        }
+        
+        redirige('gestadm_droits.php?administrateur=' . $this->id);
+    }
+    
+    public function redirect()
     {
         redirige("gestadm.php");
+    }
+    
+    /**
+     * 
+     * @return int (0 si profil personnalisé)
+     */
+    public function getProfile()
+    {
+        $this->verifyLoaded();
+        
+        if($this->profil == self::ID_SUPERADMINISTRATEUR)
+            return self::ID_SUPERADMINISTRATEUR;
+        
+        $adminProfile = array();
+        foreach($this->query_liste("SELECT autorisation, lecture, ecriture FROM " . Autorisation_administrateur::TABLE . " WHERE administrateur=" . $this->id . " ORDER BY autorisation ASC") as $authProfil)
+        {
+            if($authProfil->lecture . $authProfil->ecriture !== '00')
+                $adminProfile[$authProfil->autorisation] = $authProfil->lecture . $authProfil->ecriture;
+        }
+        
+            
+        foreach($this->query_liste("SELECT * FROM " . Profil::TABLE . " WHERE id <> " . self::ID_SUPERADMINISTRATEUR) as $profil)
+        {
+            $thisProfile = array();
+            //echo "SELECT autorisation, lecture, ecriture FROM " . Autorisation_profil::TABLE . " WHERE profil=" . $profil->id . " ORDER BY autorisation ASC";
+            foreach($this->query_liste("SELECT autorisation, lecture, ecriture FROM " . Autorisation_profil::TABLE . " WHERE profil=" . $profil->id . " ORDER BY autorisation ASC") as $authProfil)
+            {
+                if($authProfil->lecture . $authProfil->ecriture !== '00')
+                    $thisProfile[$authProfil->autorisation] = $authProfil->lecture . $authProfil->ecriture;
+            }
+            
+           // var_dump($thisProfile);
+            
+            
+            
+            if(
+                !key_exists(
+                    0,
+                    array_merge(
+                        array_diff_assoc($adminProfile, $thisProfile),
+                        array_diff_assoc($thisProfile, $adminProfile)
+                    )
+                )
+            )
+            {
+                return $profil->id;
+            }
+            //echo '<hr />';
+        }
+        //exit;
+        return 0;
     }
     
     /**
@@ -228,9 +348,12 @@ class AdministrateurAdmin extends Administrateur
      * 
      * @throws TheliaAdminException ADMIN_NOT_FOUND
      */
-    protected function veirfyLoaded()
+    protected function verifyLoaded()
     {
-        if(!$this->id) throw new TheliaAdminException("Admin not found", TheliaAdminException::ADMIN_NOT_FOUND);
+        if(!$this->id) 
+        {
+            throw new TheliaAdminException("Admin not found", TheliaAdminException::ADMIN_NOT_FOUND);
+        }
     }
     
 }

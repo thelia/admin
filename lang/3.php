@@ -366,6 +366,10 @@
                         'plugin_error_110' => 'Upload failed',
                         'plugin_error_111' => 'Les prérequis du module %s ne sont pas vérifiés',
                         'plugin_error' => 'HAY UN ERROR',
+			'Edit_permissions' => 'Edit permissions',
+			'Change_password' => 'Change password',
+			'Droits_profil' => 'PROFILE',
+			'Personalized_profile' => 'Personalized profile',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURACIÓN',

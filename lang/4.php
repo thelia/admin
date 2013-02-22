@@ -348,6 +348,10 @@
 			'Autorisation' => 'Autorisazione',
 			'Module' => 'Moduli',
 			'Acces' => 'Accesso',
+			'Edit_permissions' => 'Edit permissions',
+			'Change_password' => 'Change password',
+			'Droits_profil' => 'PROFILE',
+			'Personalized_profile' => 'Personalized profile',
 
 			//cache
 			'CONFIGURATION' => 'IMPOSTAZIONE',
