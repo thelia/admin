@@ -278,7 +278,7 @@ while($resul && $filleul = $listepar->fetch_object($resul, 'Client'))
             <div class="row-fluid">
                 <div class="span12">
                     <?php
-                            ActionsAdminModules::instance()->inclure_module_admin("commandedetailsgauche");
+                            ActionsAdminModules::instance()->inclure_module_admin("clientvisualisergauche");
                     ?>
                 </div>
             </div>
@@ -425,7 +425,7 @@ while($rListAddresses && $theAddress = $address->fetch_object($rListAddresses, '
             <div class="row-fluid">
                 <div class="span12">
                     <?php
-                            ActionsAdminModules::instance()->inclure_module_admin("commandedetailsdroite");
+                            ActionsAdminModules::instance()->inclure_module_admin("clientvisualiserdroite");
                     ?>
                 </div>
             </div>
@@ -437,7 +437,7 @@ while($rListAddresses && $theAddress = $address->fetch_object($rListAddresses, '
     <div class="row-fluid">
         <div class="span12">
             <?php
-                    ActionsAdminModules::instance()->inclure_module_admin("commandedetails");
+                    ActionsAdminModules::instance()->inclure_module_admin("clientvisualiser");
             ?>
         </div>
     </div>
