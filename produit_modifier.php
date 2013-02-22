@@ -125,7 +125,7 @@ require_once("entete.php");
                                             <tbody>
                                                 <tr>
                                                     <td class="span4"><?php echo trad('Titre', 'admin'); ?></td> 
-                                                    <td class="span8"><input class="span12" type="text" name="titre" value="<?php echo $produitdesc->titre; ?>"></td>
+                                                    <td class="span8"><input class="span12" type="text" name="titre" value="<?php echo htmlspecialchars($produitdesc->titre); ?>"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="span4">

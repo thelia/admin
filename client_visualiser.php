@@ -500,19 +500,19 @@ while($rListAddresses && $theAddress = $address->fetch_object($rListAddresses, '
                             <tr>
                                 <td><?php echo trad('Societe', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$request->request->get("entreprise"):$client->entreprise ?>" name="entreprise"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($request->request->get("entreprise")):htmlspecialchars($client->entreprise) ?>" name="entreprise"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Siret', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$request->request->get("siret"):$client->siret ?>"" name="siret"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($request->request->get("siret")):htmlspecialchars($client->siret) ?>" name="siret"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Numintracom', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$request->request->get("intracom"):$client->intracom ?>" name="intracom"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($request->request->get("intracom")):htmlspecialchars($client->intracom) ?>" name="intracom"  />
                                 </td>
                             </tr>
                             <tr>
@@ -538,31 +538,31 @@ while($rListTitles && $theTitle = $raisondesc->fetch_object($rListTitles, 'Raiso
                             <tr class="<?php if($errorCode && empty($nom)){ ?>error<?php } ?>">
                                 <td><?php echo trad('Nom', 'admin'); ?> *</td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$nom:$client->nom ?>" name="nom"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($nom):htmlspecialchars($client->nom) ?>" name="nom"  />
                                 </td>
                             </tr>
                             <tr class="<?php if($errorCode && empty($prenom)){ ?>error<?php } ?>">
                                 <td><?php echo trad('Prenom', 'admin'); ?> *</td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$prenom:$client->prenom ?>" name="prenom"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($prenom):htmlspecialchars($client->prenom) ?>" name="prenom"  />
                                 </td>
                             </tr>
                             <tr class="<?php if($errorCode && empty($adresse1)){ ?>error<?php } ?>">
                                 <td><?php echo trad('Adresse', 'admin'); ?> *</td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$adresse1:$client->adresse1 ?>" name="adresse1"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($adresse1):htmlspecialchars($client->adresse1) ?>" name="adresse1"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Adressesuite', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$adresse2:$client->adresse2 ?>" name="adresse2"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($adresse2):htmlspecialchars($client->adresse2) ?>" name="adresse2"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Adressesuite', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$adresse3:$client->adresse3 ?>" name="adresse3"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($adresse3):htmlspecialchars($client->adresse3) ?>" name="adresse3"  />
                                 </td>
                             </tr>
                             <tr class="<?php if($errorCode && empty($cpostal)){ ?>error<?php } ?>">
@@ -574,7 +574,7 @@ while($rListTitles && $theTitle = $raisondesc->fetch_object($rListTitles, 'Raiso
                             <tr  class="<?php if($errorCode && empty($ville)){ ?>error<?php } ?>">
                                 <td><?php echo trad('Ville', 'admin'); ?> *</td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$ville:$client->ville ?>" name="ville"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($ville):htmlspecialchars($client->ville) ?>" name="ville"  />
                                 </td>
                             </tr>
                             <tr>
@@ -599,13 +599,13 @@ while($rListCountries && $theCountry = $paysdesc->fetch_object($rListCountries, 
                             <tr>
                                 <td><?php echo trad('Telfixe', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$telfixe:$client->telfixe ?>" name="telfixe"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($telfixe):htmlspecialchars($client->telfixe) ?>" name="telfixe"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Telport', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$telport:$client->telport ?>" name="telport"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($telport):htmlspecialchars($client->telport) ?>" name="telport"  />
                                 </td>
                             </tr>
                             <tr class="<?php if($errorCode && (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || ($email!=$client->email && $client->existe($email)))){ ?>error<?php } ?>">
@@ -615,13 +615,13 @@ while($rListCountries && $theCountry = $paysdesc->fetch_object($rListCountries, 
                                     elseif($errorCode && $client->existe($email)){ ?><br /><?php echo trad('email_already_exists', 'admin'); ?><?php } ?>
                                 </td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$email:$client->email ?>" name="email"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($email):htmlspecialchars($client->email) ?>" name="email"  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><?php echo trad('Remise', 'admin'); ?></td>
                                 <td>
-                                    <input type="text" value="<?php echo $errorCode?$pourcentage:$client->pourcentage ?>" name="pourcentage"  />
+                                    <input type="text" value="<?php echo $errorCode?htmlspecialchars($pourcentage):htmlspecialchars($client->pourcentage) ?>" name="pourcentage"  />
                                  %</td>
                             </tr>
                             <tr>

@@ -52,8 +52,8 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
                 {
                     throw new TheliaAdminException("multiple errors", TheliaAdminException::ADMIN_MULTIPLE_ERRORS, null, $error);
                 }
-                
-                AdministrateurAdmin::getInstance($id)->redirect();
+
+                redirige("gestadm.php");
                 break;
             case "supprimer":
                 AdministrateurAdmin::getInstance($request->query->get("id"))->delete();

@@ -234,7 +234,7 @@ class AdministrateurAdmin extends Administrateur
         redirige('gestadm_droits.php?administrateur=' . $this->id);
     }
     
-    public function redirect()
+    protected function redirect()
     {
         redirige("gestadm.php");
     }
