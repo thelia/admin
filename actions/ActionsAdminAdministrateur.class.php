@@ -84,7 +84,5 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
                 break;
                 
         }
-        
-        ActionsModules::instance()->appel_module("modadmin", $request);
     }
 }
