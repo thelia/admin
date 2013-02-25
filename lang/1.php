@@ -368,6 +368,8 @@
 			'Personalized_profile' => 'Personaliser le profil',
 			'Gestion_profils' => 'Gestion des profils',
 			'DeleteAdminWarning' => 'Voulez vous vraiment supprimer l\'administrateur suivant ?',
+            'ADD_PROFILE' => 'AJOUTER UN PROFIL',
+            'DeleteProfileWarning' => 'Voulez vous vraiment supprimer le profil suivant ?',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURATION',

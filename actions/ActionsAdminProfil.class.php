@@ -32,11 +32,21 @@ class ActionsAdminProfil extends ActionsAdminBase
         {
             case "modify":
                 ProfilAdmin::getInstance($request->request->get("profil"))->modifiy(
+                    $request->request->get("name"),
+                    $request->request->get("description"),
                     $request->request->get("droits_g")
                 );
-                redirige("droits.php");
                 break;
-                
+            case "addProfile":
+                ProfilAdmin::getInstance($request->request->get("profil"))->create(
+                    $request->request->get("formulation"),
+                    $request->request->get("name"),
+                    $request->request->get("description")
+                );
+                break;
+            case "delete":
+                ProfilAdmin::getInstance($request->query->get("profil"))->delete();
+                break;
         }
     }
 }

@@ -239,7 +239,7 @@ require_once("entete.php");
         </form>
     </div>
     
-    <!-- client delation -->
+    <!-- admin delation -->
     <div class="modal hide" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

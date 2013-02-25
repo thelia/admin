@@ -63,18 +63,36 @@ class ProfilAdmin extends Profil
         if(!$this->id) throw new TheliaAdminException("Profile not found", TheliaAdminException::PROFIL_NOT_FOUND);
     }
     
+    protected function checkFormulation($formulation)
+    {
+        if(
+            !preg_match('#[a-zA-Z0-9]+#', $formulation)
+        )
+        {
+            throw new TheliaAdminException("Bad profile formulation", TheliaAdminException::BAD_PROFILE_FORMULATION);
+        }
+    }
+    
     public function getList()
     {
         return $this->query_liste("SELECT profil, titre FROM ".Profildesc::TABLE." WHERE lang=" . ActionsLang::instance()->get_id_langue_courante());
     }
     
-    public function modifiy($generalPermissions)
+    public function modifiy($name, $description, $generalPermissions)
     {
         if($this->id == ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) {
             throw new TheliaAdminException("Caanot change Superadministrator permissions", TheliaAdminException::CANNOT_CHANGE_SUPERADMINISTRATOR_PERMISSIONS);
         }
         
         $this->verifyLoaded();
+        
+        $profileDescription = new Profildesc();
+        if($profileDescription->charger($this->id))
+        {
+            $profileDescription->titre = $name;
+            $profileDescription->description = $description;
+            $profileDescription->maj();
+        }
         
         if($generalPermissions === null) $generalPermissions = array();
         
@@ -103,5 +121,35 @@ class ProfilAdmin extends Profil
                 }
             }
         }
+        
+        redirige("droits.php?profil=" . $this->id);
+    }
+    
+    public function create($formulation, $name, $description)
+    {
+        $this->checkFormulation($formulation);
+        
+        $this->nom = $formulation;
+        $this->id = $this->add();
+        
+        $profileDesc = new Profildesc();
+        $profileDesc->profil = $this->id;
+        $profileDesc->titre = $name;
+        $profileDesc->description = $description;
+        $profileDesc->lang = ActionsLang::instance()->get_id_langue_courante();
+        $profileDesc->id = $profileDesc->add();
+        
+        redirige("droits.php?profil=" . $this->id);
+    }
+    
+    public function delete()
+    {
+        $this->verifyLoaded();
+        
+        $this->query('DELETE FROM '.  Profildesc::TABLE.' WHERE profil='.$this->id);
+        
+        parent::delete();
+        
+        redirige("droits.php");
     }
 }

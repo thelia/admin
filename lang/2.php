@@ -403,7 +403,9 @@
 			'Droits_profil' => 'PROFILE',
 			'Personalized_profile' => 'Personalized profile',
 			'Gestion_profils' => 'Manage profiles',
-                        'DeleteClientWarning' => 'Are you sure you want to delete the folowing administrator :',
+            'DeleteClientWarning' => 'Are you sure you want to delete the folowing administrator :',
+            'ADD_PROFILE' => 'ADD PROFILE',
+            'DeleteProfileWarning' => 'Are you sure you want to delete the folowing profile :',
 
 			//listdos
 			'LISTE_DOSSIERS_CONTENU' => 'CONTENT FOLDERS LIST',

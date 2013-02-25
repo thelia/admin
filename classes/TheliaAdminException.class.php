@@ -77,4 +77,6 @@ class TheliaAdminException extends Exception
     
     const CANNOT_CHANGE_SUPERADMINISTRATOR_PERMISSIONS = 800;
     
+    const BAD_PROFILE_FORMULATION = 900;
+    
 }
