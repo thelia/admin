@@ -51,11 +51,13 @@ switch($action){
 </head>
 
 <body>
+    
     <?php
         $menu = "catalogue";
         $breadcrumbs = Breadcrumb::getInstance()->getCategoryList($parent);
         require_once("entete.php");
     ?>
+    
         <div class="row-fluid">
             <div class="span12">
                 <div class="bigtable">
