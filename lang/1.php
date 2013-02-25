@@ -367,6 +367,7 @@
 			'Droits_profil' => 'PROFIL',
 			'Personalized_profile' => 'Personaliser le profil',
 			'Gestion_profils' => 'Gestion des profils',
+			'DeleteAdminWarning' => 'Voulez vous vraiment supprimer l\'administrateur suivant ?',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURATION',

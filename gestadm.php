@@ -92,6 +92,15 @@ require_once("entete.php");
                                     <?php
                                     }
                                     ?>
+                                    <?php
+                                    if($admin->id != $_SESSION['util']->id) {
+                                    ?>
+                                        <a class="btn btn-mini js-delete-admin" title="<?php echo trad("supprimer", "admin"); ?>" href="#deleteModal" data-toggle="modal" admin-info="<?php echo $admin->nom ?> <?php echo $admin->prenom ?>" admin-id="<?php echo $admin->id ?>">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    <?php
+                                    }
+                                    ?>
                                     </div>
                                 </td>
                                 
@@ -229,12 +238,35 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+    
+    <!-- client delation -->
+    <div class="modal hide" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><?php echo trad('Cautious', 'admin'); ?></h3>
+        </div>
+        <div class="modal-body">
+            <p><?php echo trad('DeleteAdminWarning', 'admin'); ?></p>
+            <p id="adminDelationInfo"></p>
+        </div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Non', 'admin'); ?></a>
+            <a class="btn btn-primary" id="adminDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
+        </div>
+    </div>
+    
 <?php require_once("pied.php"); ?> 
 </body>
 <script type="text/javascript">
     $(".js-edit-admin").click(function(){
         $("#admin_id").attr("value",$(this).attr("admin-id"));
         $("#editAdmin").modal("show");
+    });
+    
+    $('.js-delete-admin').click(function()
+    {
+        $('#adminDelationInfo').html($(this).attr('admin-info'));
+        $('#adminDelationLink').attr('href', 'gestadm.php?action=delete&administrateur=' + $(this).attr('admin-id'));
     });
     
     <?php if($request->get("action") == "ajouter" && $errorCode > 0): ?>

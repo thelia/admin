@@ -353,6 +353,7 @@
 			'Droits_profil' => 'PROFILE',
 			'Personalized_profile' => 'Personalized profile',
 			'Gestion_profils' => 'Manage profiles',
+                        'DeleteClientWarning' => 'Are you sure you want to delete the folowing administrator :',
 
 			//cache
 			'CONFIGURATION' => 'IMPOSTAZIONE',
