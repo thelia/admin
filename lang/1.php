@@ -366,6 +366,7 @@
 			'Change_password' => 'Changer le mot de passe',
 			'Droits_profil' => 'PROFIL',
 			'Personalized_profile' => 'Personaliser le profil',
+			'Gestion_profils' => 'Gestion des profils',
 
 			//Parseur + cache
 			'CONFIGURATION' => 'CONFIGURATION',

@@ -93,7 +93,7 @@ require_once("entete.php");
                 </table>
             </div>
             
-            <div class="bigtable js-not-for-superadmin" style="<?php if($profilAdministrateur == AdministrateurAdmin::ID_SUPERADMINISTRATEUR) { echo "display: none"; } ?>">
+            <div class="bigtable js-not-for-superadmin" style="<?php if($profilAdministrateur == ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) { echo "display: none"; } ?>">
                 <table class="table table-striped">
                     <thead>
                         <caption>
@@ -127,7 +127,7 @@ require_once("entete.php");
                 </table>
             </div>
             
-            <div class="bigtable js-not-for-superadmin" style="<?php if($profilAdministrateur == AdministrateurAdmin::ID_SUPERADMINISTRATEUR) { echo "display: none;"; } ?>">
+            <div class="bigtable js-not-for-superadmin" style="<?php if($profilAdministrateur == ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) { echo "display: none;"; } ?>">
                 <table class="table table-striped">
                     <thead>
                         <caption>
@@ -189,7 +189,7 @@ require_once("entete.php");
     
     
 <script stype="text/javascript">
-var superadministrateurId = <?php echo AdministrateurAdmin::ID_SUPERADMINISTRATEUR; ?>;
+var superadministrateurId = <?php echo ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR; ?>;
 jQuery(function($)
 {
     $('select[name="profil"]').change(function(e)

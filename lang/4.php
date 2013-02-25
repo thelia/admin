@@ -352,6 +352,7 @@
 			'Change_password' => 'Change password',
 			'Droits_profil' => 'PROFILE',
 			'Personalized_profile' => 'Personalized profile',
+			'Gestion_profils' => 'Manage profiles',
 
 			//cache
 			'CONFIGURATION' => 'IMPOSTAZIONE',

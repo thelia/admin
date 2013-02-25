@@ -402,6 +402,7 @@
 			'Change_password' => 'Change password',
 			'Droits_profil' => 'PROFILE',
 			'Personalized_profile' => 'Personalized profile',
+			'Gestion_profils' => 'Manage profiles',
 
 			//listdos
 			'LISTE_DOSSIERS_CONTENU' => 'CONTENT FOLDERS LIST',

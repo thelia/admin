@@ -39,8 +39,8 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
                     {
                         AdministrateurAdmin::getInstance($id)->modify(
                             $nom, 
-                            $request->request->get("prenom[".$id."]", null, true), 
-                            $request->request->get("identifiant[".$id."]", null, true), 
+                            $request->request->get("prenom[".$id."]", null, true),
+                            $request->request->get("identifiant[".$id."]", null, true),
                             $request->request->get("lang[".$id."]", null, true)
                         );
                     } catch(TheliaAdminException $e) {

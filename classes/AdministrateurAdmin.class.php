@@ -1,12 +1,10 @@
 <?php
 
 // /!\ Patch include profil
-require_once __DIR__ . '/../../classes/Profil.php';
+require_once __DIR__ . '/../../classes/Profil.class.php';
 
 class AdministrateurAdmin extends Administrateur
 {
-    const ID_SUPERADMINISTRATEUR = 1;
-    
     public function __construct($id = 0) {
         parent::__construct();
         
@@ -179,7 +177,7 @@ class AdministrateurAdmin extends Administrateur
             $this->maj();
         }
         
-        if($this->profil != self::ID_SUPERADMINISTRATEUR) {
+        if($this->profil != ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) {
             foreach($this->query_liste("SELECT * FROM " . Autorisation::TABLE) as $row) {
                 $autorisation_administrateur = new Autorisation_administrateur();
                 $autorisation_administrateur->charger($row->id, $this->id);
@@ -247,8 +245,8 @@ class AdministrateurAdmin extends Administrateur
     {
         $this->verifyLoaded();
         
-        if($this->profil == self::ID_SUPERADMINISTRATEUR)
-            return self::ID_SUPERADMINISTRATEUR;
+        if($this->profil == ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR)
+            return ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR;
         
         $adminProfile = array();
         foreach($this->query_liste("SELECT autorisation, lecture, ecriture FROM " . Autorisation_administrateur::TABLE . " WHERE administrateur=" . $this->id . " ORDER BY autorisation ASC") as $authProfil)
@@ -258,7 +256,7 @@ class AdministrateurAdmin extends Administrateur
         }
         
             
-        foreach($this->query_liste("SELECT * FROM " . Profil::TABLE . " WHERE id <> " . self::ID_SUPERADMINISTRATEUR) as $profil)
+        foreach($this->query_liste("SELECT * FROM " . Profil::TABLE . " WHERE id <> " . ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) as $profil)
         {
             $thisProfile = array();
             //echo "SELECT autorisation, lecture, ecriture FROM " . Autorisation_profil::TABLE . " WHERE profil=" . $profil->id . " ORDER BY autorisation ASC";

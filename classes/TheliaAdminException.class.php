@@ -75,4 +75,6 @@ class TheliaAdminException extends Exception
     const EMAIL_FORMAT_ERROR = 701;
     const EMAIL_ALREADY_EXISTS = 702;
     
+    const CANNOT_CHANGE_SUPERADMINISTRATOR_PERMISSIONS = 800;
+    
 }
