@@ -114,6 +114,10 @@ $statAdmin = new StatAdmin();
     )
     ?>
         <div id="wrapper" class="container <?php if(preg_match("`([^\/]*).php`", $_SERVER['PHP_SELF'], $page) && in_array($page[1], $cataloguePage)) echo "catalogue"; ?>"> <!--div id="subwrapper"> -->
+<div class="row-fluid">
+    <div class="span12">
 <?php    
     ActionsAdminModules::instance()->inclure_module_admin("entete");
-?>
+?>  
+    </div>
+</div>
