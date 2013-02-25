@@ -60,6 +60,8 @@ class AdministrateurAdmin extends Administrateur
             $_SESSION["util"] = new Administrateur();
             $_SESSION["util"] = $admin;
         }
+        
+        ActionsModules::instance()->appel_module("modAdmin", $request, $this);
     }
     
     /**
@@ -82,6 +84,8 @@ class AdministrateurAdmin extends Administrateur
         $this->motdepasse = $password;
         $this->crypter();
         $this->maj();
+        
+        ActionsModules::instance()->appel_module("modAdmin", $request, $this);
         
         $this->redirect();
     }
@@ -110,6 +114,8 @@ class AdministrateurAdmin extends Administrateur
         } catch(Exception $e) {
             throw new TheliaAdminException("impossible to delete admin's auth", TheliaAdminException::ADMIN_IMPOSSIBLE_DETELE_AUTH);
         }
+        
+        ActionsModules::instance()->appel_module("beforeDeleteAdmin", $request, $this);
         
         parent::delete();
         
@@ -155,11 +161,13 @@ class AdministrateurAdmin extends Administrateur
             $authAdmin->add();
         }
         
+        ActionsModules::instance()->appel_module("addAdmin", $request, $this);
+        
         redirige("gestadm_droits.php?administrateur=" . $this->id);
     }
     
     public function changePermissions($profil, $generalPermissions, $pluginsPermissions)
-    {   
+    {
         $this->verifyLoaded();
         
         if($generalPermissions === null) $generalPermissions = array();
@@ -226,6 +234,8 @@ class AdministrateurAdmin extends Administrateur
                 }
             }
         }
+        
+        ActionsModules::instance()->appel_module("changePermissionsAdmin", $request, $this);
         
         redirige('gestadm_droits.php?administrateur=' . $this->id);
     }
