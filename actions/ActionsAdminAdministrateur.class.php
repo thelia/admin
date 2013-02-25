@@ -55,7 +55,7 @@ class ActionsAdminAdministrateur extends ActionsAdminBase
 
                 redirige("gestadm.php");
                 break;
-            case "supprimer":
+            case "delete":
                 AdministrateurAdmin::getInstance($request->query->get("administrateur"))->delete();
                 break;
             case "ajouter":
