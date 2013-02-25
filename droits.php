@@ -4,8 +4,12 @@ require_once("../fonctions/divers.php");
 if (!est_autorise("acces_configuration"))
     exit;
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-$currentProfil = new Profil();
-$currentProfil->charger_id($request->get("profil", ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR));
+
+$currentProfil = new ProfilAdmin();
+$currentProfil->charger_id($request->get("profil", 0));
+
+if(!$currentProfil->id)
+    $currentProfil->chargerPermier(array(ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR));
 
 try
 {
@@ -79,7 +83,7 @@ require_once("entete.php");
                 </table>
             </div>
             
-            <div class="bigtable js-not-for-superadmin" style="<?php if($currentProfil->id == ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) { echo "display: none"; } ?>">
+            <div class="bigtable js-not-for-superadmin">
                 <table class="table table-striped">
                     <thead>
                         <caption>

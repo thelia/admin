@@ -24,6 +24,20 @@ class ProfilAdmin extends Profil
         return new ProfilAdmin($id);
     }
     
+    /**
+     * 
+     * @param array $excludesId liste d'id à exclure
+     * @return type
+     */
+    public function chargerPermier($excludesId)
+    {
+        $where = '';
+        if(count($excludesId)>0)
+            $where = "WHERE id NOT IN (" . implode(',', $excludesId) . ")";
+        
+        return $this->getVars("SELECT * from `$this->table` $where ORDER BY id ASC LIMIT 1");
+    }
+    
     public function getPermissionIdList()
     {
         $this->verifyLoaded();
