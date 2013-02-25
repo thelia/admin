@@ -259,17 +259,13 @@ class AdministrateurAdmin extends Administrateur
         foreach($this->query_liste("SELECT * FROM " . Profil::TABLE . " WHERE id <> " . ProfilAdmin::ID_PROFIL_SUPERADMINISTRATEUR) as $profil)
         {
             $thisProfile = array();
-            //echo "SELECT autorisation, lecture, ecriture FROM " . Autorisation_profil::TABLE . " WHERE profil=" . $profil->id . " ORDER BY autorisation ASC";
+            
             foreach($this->query_liste("SELECT autorisation, lecture, ecriture FROM " . Autorisation_profil::TABLE . " WHERE profil=" . $profil->id . " ORDER BY autorisation ASC") as $authProfil)
             {
                 if($authProfil->lecture . $authProfil->ecriture !== '00')
                     $thisProfile[$authProfil->autorisation] = $authProfil->lecture . $authProfil->ecriture;
             }
-            
-           // var_dump($thisProfile);
-            
-            
-            
+           
             if(
                 !key_exists(
                     0,
@@ -282,9 +278,8 @@ class AdministrateurAdmin extends Administrateur
             {
                 return $profil->id;
             }
-            //echo '<hr />';
         }
-        //exit;
+        
         return 0;
     }
     
