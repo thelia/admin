@@ -157,7 +157,7 @@ class AdministrateurAdmin extends Administrateur
             $authAdmin->add();
         }
         
-        $this->redirect();
+        redirige("gestadm_droits.php?administrateur=" . $this->id);
     }
     
     public function changePermissions($profil, $generalPermissions, $pluginsPermissions)

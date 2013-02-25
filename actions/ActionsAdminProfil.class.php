@@ -34,6 +34,7 @@ class ActionsAdminProfil extends ActionsAdminBase
                 ProfilAdmin::getInstance($request->request->get("profil"))->modifiy(
                     $request->request->get("droits_g")
                 );
+                redirige("droits.php");
                 break;
                 
         }
