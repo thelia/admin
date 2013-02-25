@@ -1,4 +1,8 @@
 <?php
+
+if(file_exists(__DIR__ . '/../../classes/Profil.php'))
+    require_once __DIR__ . '/../../classes/Profil.php'; 
+
 class ProfilAdmin extends Profil
 {
     const ID_PROFIL_SUPERADMINISTRATEUR = 1;

@@ -1,7 +1,5 @@
 <?php
-
-// /!\ Patch include profil
-require_once __DIR__ . '/../../classes/Profil.class.php';
+require_once __DIR__ . '/ProfilAdmin.class.php';
 
 class AdministrateurAdmin extends Administrateur
 {
