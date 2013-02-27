@@ -157,7 +157,7 @@ require_once("entete.php");
     <div class="row-fluid">
         <div class="span12">
             <?php
-                ActionsAdminModules::instance()->inclure_module_admin("gestadmdroits");
+                ActionsAdminModules::instance()->inclure_module_admin("droits");
             ?>
         </div>
     </div>
