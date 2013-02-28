@@ -30,12 +30,13 @@ class Breadcrumb
      * @param string $display
      * @param string $edit
      */
-    protected function addValue($url, $display, $edit = "")
+    protected function addValue($url, $display, $edit = "", $browse = "")
     {
         array_push($this->breadcrumb, array(
             "url" => $url,
             "display" => $display,
-            "edit" => $edit
+            "edit" => $edit,
+            "browse" => $browse,
         ));
     }
     
@@ -54,7 +55,7 @@ class Breadcrumb
      * 
      * @param int $parent
      */
-    public function getCategoryList($parent, $edit = true)
+    public function getCategoryList($parent, $edit = true, $browse = false)
     {
         $this->addValue("parcourir.php", trad('Gestion_catalogue', 'admin'));
         
@@ -62,7 +63,7 @@ class Breadcrumb
         {
             if ($breadcrumb->rubrique == $parent)
             {
-                $this->addValue("" , $breadcrumb->titre, ($edit === true)?"rubrique_modifier.php?id=".$breadcrumb->rubrique:"");
+                $this->addValue("" , $breadcrumb->titre, ($edit === true)?"rubrique_modifier.php?id=".$breadcrumb->rubrique:"", ($browse === true)?"parcourir.php?parent=".$breadcrumb->rubrique:"");
             } else {
                 $this->addValue("parcourir.php?parent=".$breadcrumb->rubrique, $breadcrumb->titre );
             }
