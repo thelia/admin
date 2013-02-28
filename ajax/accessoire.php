@@ -60,14 +60,20 @@
             $accessoire->add();
 
             lister_accessoires($produit->ref);
+            
+            ActionsModules::instance()->appel_module("modprod", $produit);
 	}
 ?>
 <?php
 	function accessoire_supprimer(){
 		$accessoire = new Accessoire();
 		$accessoire->charger($_GET['id']);
+                $produit = new Produit();
+                $produit->charger($accessoire->produit);
 		$accessoire->delete();
 
 		lister_accessoires($_GET['ref']);
+                
+                ActionsModules::instance()->appel_module("modprod", $produit);
 	}
 ?>

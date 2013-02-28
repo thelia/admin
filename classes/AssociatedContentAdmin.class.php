@@ -44,6 +44,10 @@ class AssociatedContentAdmin extends Contenuassoc {
         return $return;
     }
     
+    /**
+     * 
+     * todo : utiliser cette methode pour la gestion des contenus associés aux produit // actuellement uniquement pour rubrique
+     */
     public function delete($associatedContentToDeleteId)
     {
         if($this->charger($associatedContentToDeleteId))
@@ -64,6 +68,10 @@ class AssociatedContentAdmin extends Contenuassoc {
         }
     }
     
+    /**
+     * 
+     * todo : utiliser cette methode pour la gestion des contenus associés aux produit // actuellement uniquement pour rubrique
+     */
     public function add($contentToAddId, $type, $object)
     {
         if ($type == 1)
