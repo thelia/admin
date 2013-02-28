@@ -61,6 +61,8 @@ class ProductAdmin extends Produit {
     public function changeColumn($column, $value){
         $this->$column = $value;
         $this->maj();
+        
+        ActionsModules::instance()->appel_module("modprod", new Produit($this->ref));
     }
     
     public function delete($parent,$id = 0){
