@@ -222,8 +222,10 @@ class ProductAdmin extends Produit {
         $this->getImageFile()->ajouter("photo", array("jpg", "gif", "png", "jpeg"), "uploadimage");
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
-        
-        ActionsModules::instance()->appel_module("modprod", $this);
+
+        $produit = new Produit($this->ref);
+
+        ActionsModules::instance()->appel_module("modprod", $produit);
         
         if ($urlsuiv)
         {
