@@ -39,6 +39,9 @@ $statAdmin = new StatAdmin();
                                 <?php if($breadcrumb["edit"] != ""): ?>
                                     (<a href="<?php echo $breadcrumb["edit"]; ?>"><?php echo trad('editer', 'admin'); ?></a>)
                                 <?php endif; ?>
+                                    <?php if($breadcrumb["browse"] != ""): ?>
+                                    (<a href="<?php echo $breadcrumb["browse"]; ?>"><?php echo trad('parcourir', 'admin'); ?></a>)
+                                <?php endif; ?>
                             </li>
                         <?php else: ?>
                             <li><a href="<?php echo $breadcrumb["url"] ?>"><?php echo $breadcrumb["display"]; ?></a><span class="divider">/</span></li>

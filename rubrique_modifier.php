@@ -35,7 +35,7 @@ $rubriquedesc = new Rubriquedesc($rubrique->id, $lang);
     <body>
 <?php
 $menu = "catalogue";
-$breadcrumbs = Breadcrumb::getInstance()->getCategoryList($rubrique->id, false);
+$breadcrumbs = Breadcrumb::getInstance()->getCategoryList($rubrique->id, false, true);
 require_once("entete.php");
 ?>
     <div class="row-fluid">
