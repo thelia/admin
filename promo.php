@@ -313,6 +313,10 @@ foreach(PromoAdmin::getInstance()->getList($pagination->getStarted(), $paginatio
         
 </div>
     
+<div id="module_bloc" style="display:none">
+test
+</div>
+    
 <?php require_once("pied.php"); ?>
 <link type="text/css" href="js/jquery-ui-1.9.1/css/ui-lightness/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-ui-1.9.1/js/jquery-ui-1.9.1.custom.min.js"></script>
@@ -350,78 +354,81 @@ jQuery(function($)
         
         var promoId = $(this).attr('promo-id');
         
-        Thelia_promo.generateRow(
-            $(this).attr('promo-code'),
-            $(this).attr('promo-type'),
-            $(this).attr('promo-valeur'),
-            $(this).attr('promo-mini'),
-            $(this).attr('promo-actif'),
-            $(this).attr('promo-nb-util'),
-            $(this).attr('promo-limite'),
-            $(this).attr('promo-date-expi'),
-            function(rowResult)
-            {
-                /*valid*/
-                
-                $('.control-group').removeClass('error');
-                
-                /*do few cheking*/
-                var allGood = true;
-                if(!(rowResult.type.val()==1 || rowResult.type.val()==2))
+        Thelia_promo.generateRowModule($(this).attr('promo-id')).insertAfter(
+            Thelia_promo.generateRow(
+                $(this).attr('promo-code'),
+                $(this).attr('promo-type'),
+                $(this).attr('promo-valeur'),
+                $(this).attr('promo-mini'),
+                $(this).attr('promo-actif'),
+                $(this).attr('promo-nb-util'),
+                $(this).attr('promo-limite'),
+                $(this).attr('promo-date-expi'),
+                function(rowResult)
                 {
-                    allGood = false;
-                    rowResult.type.parent().addClass('error');
-                }
-                if(parseFloat(rowResult.valeur.val()) != rowResult.valeur.val())
+                    /*valid*/
+
+                    $('.control-group').removeClass('error');
+
+                    /*do few cheking*/
+                    var allGood = true;
+                    if(!(rowResult.type.val()==1 || rowResult.type.val()==2))
+                    {
+                        allGood = false;
+                        rowResult.type.parent().addClass('error');
+                    }
+                    if(parseFloat(rowResult.valeur.val()) != rowResult.valeur.val())
+                    {
+                        allGood = false;
+                        rowResult.valeur.parent().addClass('error');
+                    }
+                    if(parseFloat(rowResult.mini.val()) != rowResult.mini.val())
+                    {
+                        allGood = false;
+                        rowResult.mini.parent().addClass('error');
+                    }
+                    if(!(rowResult.actif.val()==='0' || rowResult.actif.val()==1))
+                    {
+                        allGood = false;
+                        rowResult.actif.parent().addClass('error');
+                    }
+                    if(!(rowResult.limite.val()==='0' || rowResult.limite.val()==1) || (rowResult.limite.val()==1 && parseFloat(rowResult.nombreLimite.val()) != rowResult.nombreLimite.val()))
+                    {
+                        allGood = false;
+                        if(rowResult.limite.val()==='0')
+                            rowResult.limite.parent().parent().addClass('error');
+                        else
+                            rowResult.limite.parent().parent().parent().addClass('error');
+                    }
+                    masqueDate = /^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/;
+                    if(!(rowResult.expiration.val()==='0' || rowResult.expiration.val()==1) || (rowResult.expiration.val()==1 && !masqueDate.test(rowResult.dateExpi.val())))
+                    {
+                        allGood = false;
+                        if(rowResult.expiration.val()==='0')
+                            rowResult.expiration.parent().parent().addClass('error');
+                        else
+                            rowResult.expiration.parent().parent().parent().addClass('error');
+                    }
+
+                    if(allGood)
+                    {
+                        /*send the mashed potatoes*/
+                        Thelia_promo.generateForm(promoId).appendTo($('body')).submit();
+                    }
+
+                },
+                function()
                 {
-                    allGood = false;
-                    rowResult.valeur.parent().addClass('error');
+                    /*cancel*/
+                    $('#js_promo_' + promoId).show();
+                    $('#promo_edit_row').unbind().remove();
+                    $('#promo_edit_row_module').unbind().remove();
+                    $('.js-edit-promo, .js-delete-promo').removeClass('disabled');
+                    cancelModal = false;
                 }
-                if(parseFloat(rowResult.mini.val()) != rowResult.mini.val())
-                {
-                    allGood = false;
-                    rowResult.mini.parent().addClass('error');
-                }
-                if(!(rowResult.actif.val()==='0' || rowResult.actif.val()==1))
-                {
-                    allGood = false;
-                    rowResult.actif.parent().addClass('error');
-                }
-                if(!(rowResult.limite.val()==='0' || rowResult.limite.val()==1) || (rowResult.limite.val()==1 && parseFloat(rowResult.nombreLimite.val()) != rowResult.nombreLimite.val()))
-                {
-                    allGood = false;
-                    if(rowResult.limite.val()==='0')
-                        rowResult.limite.parent().parent().addClass('error');
-                    else
-                        rowResult.limite.parent().parent().parent().addClass('error');
-                }
-                masqueDate = /^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/;
-                if(!(rowResult.expiration.val()==='0' || rowResult.expiration.val()==1) || (rowResult.expiration.val()==1 && !masqueDate.test(rowResult.dateExpi.val())))
-                {
-                    allGood = false;
-                    if(rowResult.expiration.val()==='0')
-                        rowResult.expiration.parent().parent().addClass('error');
-                    else
-                        rowResult.expiration.parent().parent().parent().addClass('error');
-                }
-                
-                if(allGood)
-                {
-                    /*send the mashed potatoes*/
-                    Thelia_promo.generateForm(promoId).appendTo($('body')).submit();
-                }
-                
-            },
-            function()
-            {
-                /*cancel*/
-                $('#js_promo_' + promoId).show();
-                $('#promo_edit_row').unbind().remove();
-                $('.js-edit-promo, .js-delete-promo').removeClass('disabled');
-                cancelModal = false;
-            }
-        ).insertAfter('#js_promo_' + promoId);
-            
+            ).insertAfter('#js_promo_' + promoId) 
+        );
+        
         $('#js_promo_' + promoId).hide();
     });
     
@@ -568,6 +575,17 @@ var Thelia_promo = {
                                 quit_callback();
                             })
                         )
+                    )
+                );
+    },
+    generateRowModule: function(id)
+    {
+        return $('<tr />').attr('id', 'promo_edit_row_module').addClass('warning').append(
+                    $('<td />').attr('colspan', '9').load(
+                        'ajax/promo.php',
+                        {
+                            id : id
+                        }
                     )
                 );
     },
