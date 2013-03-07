@@ -110,7 +110,7 @@ class PromoAdmin extends Promo
             $this->datefin = date('Y-m-d', strtotime($this->datefin));
             parent::maj();
             
-            ActionsModules::instance()->appel_module("majpromo", $promo);
+            ActionsModules::instance()->appel_module("majpromo", $this);
             
             redirige("promo.php");
         }
