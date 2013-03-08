@@ -671,7 +671,7 @@
                         'date_Fevrier' => 'Février',
                         'date_Mars' => 'Mars',
                         'date_Avril' => 'Avril',
-                        'date_Mai' => 'Mail',
+                        'date_Mai' => 'Mai',
                         'date_Juin' => 'Juin',
                         'date_Juillet' => 'Juillet',
                         'date_Aout' => 'Août',
