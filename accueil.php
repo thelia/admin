@@ -28,7 +28,7 @@
         </div>
     </div>
  <?php
-	ActionsAdminModules::instance()->inclure_module_admin("accueil");
+	ActionsAdminModules::instance()->inclure_module_admin("accueil_top");
 
 
 	$snoopy = new Snoopy();
@@ -251,6 +251,9 @@
                         </div>
 		</div>
 	</div>
+<?php
+    ActionsAdminModules::instance()->inclure_module_admin("accueil");
+?>
 <?php require_once("pied.php");?>
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.min.js"></script><![endif]-->
 <script src="js/jqplot/jquery.jqplot.min.js"></script>

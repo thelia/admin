@@ -23,9 +23,9 @@
 			'INFORMATIONS_SITE' => 'INFORMATIONS SITE',
 			'STATISTIQUES_DE_VENTE' => 'STATISTIQUES DE VENTE',
 			'INFOS_THELIA' => 'INFOS THELIA',
-                        'CA_30J' => 'C.A. des 30 derniers jours',
-                        'CA_TTC' => 'C. A. TTC',
-                        'CA_PREC' => 'C. A. TTC pr&eacute;c&eacute;dent',
+            'CA_30J' => 'C.A. TTC des 30 derniers jours',
+            'CA_TTC' => 'C. A. TTC',
+            'CA_PREC' => 'C. A. TTC pr&eacute;c&eacute;dent',
 
 			//accessoire
 			'Chercher_un_produit' => 'Chercher un produit:',
