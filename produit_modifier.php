@@ -410,7 +410,8 @@ require_once("entete.php");
                                 <?php foreach (ProductAdmin::getInstanceByRef($produit->ref)->getImageList($lang) as $image): ?>
                                 <div class="row-fluid js-bloc-image" js-image-id="<?php echo $image['id'] ?>">
                                     <div class="span3" style="position: relative;">
-                                        <img class="js-image" src="<?php echo  $image["fichier"] ?>">
+                                        <img class="js-image" src="../fonctions/redimlive.php?nomorig=<?php echo
+                                        $image["nomFichier"] ?>&type=produit&width=250&height=250&exact=1">
                                         <img style="display: none; position: absolute;" class="js-image-delation" src="gfx/interdit-150x150.png" />
                                         <input type="hidden" class="js-delete-input" name="image_to_delete_<?php echo $image['id'] ?>" value="0" />
                                         <input type="hidden" class="js-rank-input" name="rank_<?php echo $image['id'] ?>" value="<?php echo $image['classement'] ?>" />
