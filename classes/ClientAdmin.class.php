@@ -250,7 +250,7 @@ class ClientAdmin extends Client
         {
             $this->maj();
 
-            ActionsModules::instance()->appel_module("modcli", $this);
+            ActionsModules::instance()->appel_module("modcli", new Client($this->id));
         }
         else
         {

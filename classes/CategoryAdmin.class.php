@@ -98,7 +98,7 @@ class CategoryAdmin extends Rubrique
             
             $rubriquedesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutrub", $rubriquedesc);
+            ActionsModules::instance()->appel_module("ajoutrub", new Rubrique($this->id));
             
             redirige("rubrique_modifier.php?id=" . $this->id);
         }
@@ -218,7 +218,7 @@ class CategoryAdmin extends Rubrique
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
         
-        ActionsModules::instance()->appel_module("modrub", $this);
+        ActionsModules::instance()->appel_module("modrub", new Rubrique($this->id));
         
         if ($urlsuiv)
         {

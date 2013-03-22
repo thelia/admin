@@ -97,7 +97,7 @@ class ContentAdmin extends Contenu {
             
             $contentdesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutcont", $this);
+            ActionsModules::instance()->appel_module("ajoutcont", new Contenu($this->id));
             
             redirige('contenu_modifier.php?id='.$this->id.'&dossier='.$this->dossier);
         }
@@ -161,7 +161,7 @@ class ContentAdmin extends Contenu {
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
         
-        ActionsModules::instance()->appel_module("modcont", $this);
+        ActionsModules::instance()->appel_module("modcont", new Contenu($this->id));
         
         if ($urlsuiv)
         {

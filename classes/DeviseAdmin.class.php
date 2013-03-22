@@ -50,7 +50,7 @@ class DeviseAdmin extends Devise
 
         $this->maj();
 
-        ActionsModules::instance()->appel_module("moddevise", $this);
+        ActionsModules::instance()->appel_module("moddevise", new Devise($this->id));
    }
    
     /**
@@ -81,9 +81,9 @@ class DeviseAdmin extends Devise
     */
     public function supprimer() {
         if($this->id == "") throw new TheliaAdminException("Devise not found", TheliaAdminException::DEVISE_NOT_FOUND);
-
+        $devise = new Devise($this->id);
         parent::delete();
-        ActionsModules::instance()->appel_module("suppdevise", $this);
+        ActionsModules::instance()->appel_module("suppdevise", $devise);
         
         $this->redirect();
     }

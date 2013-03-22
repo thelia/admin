@@ -82,8 +82,9 @@ class CaracteristiqueAdmin extends Caracteristique
     public function delete()
     {
         $this->verifyLoaded();
+        $caracteristique = new Caracteristique($this->id);
         parent::delete();
-        ActionsModules::instance()->appel_module("suppcaracteristique", $this);
+        ActionsModules::instance()->appel_module("suppcaracteristique", $caracteristique);
     }
     
     /**
@@ -126,7 +127,7 @@ class CaracteristiqueAdmin extends Caracteristique
             }
         }
         
-        ActionsModules::instance()->appel_module("ajcaracteristique", $this);
+        ActionsModules::instance()->appel_module("ajcaracteristique", new Caracteristique($this->id));
         
         redirige("caracteristique_modifier.php?id=".$this->id);
     }
@@ -315,7 +316,7 @@ class CaracteristiqueAdmin extends Caracteristique
             $caracdesc->add();
         }
         
-        ActionsModules::instance()->appel_module("modcaracteristique", $this);
+        ActionsModules::instance()->appel_module("modcaracteristique", new Caracteristique($this->id));
         
         //Caracdispdesc
         if(!empty($caracdisp) && is_array($caracdisp))

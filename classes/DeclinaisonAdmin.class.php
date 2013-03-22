@@ -43,7 +43,7 @@ class DeclinaisonAdmin extends Declinaison
             $declinaisondesc->id = $declinaisondesc->add();
         }
         
-        ActionsModules::instance()->appel_module("moddeclinaison", $this);
+        ActionsModules::instance()->appel_module("moddeclinaison", new Declinaison($this->id));
         
         //declidisp
         
@@ -116,9 +116,10 @@ class DeclinaisonAdmin extends Declinaison
     }
     
     public function delete() {
+        $declinaison = new Declinaison($this->id);
         parent::delete();
         
-        ActionsModules::instance()->appel_module("suppdeclinaison", $this);
+        ActionsModules::instance()->appel_module("suppdeclinaison", $declinaison);
     }
     
     public function getMaxRank()
