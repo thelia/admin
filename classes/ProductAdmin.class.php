@@ -69,8 +69,10 @@ class ProductAdmin extends Produit {
         if($id > 0){
             $this->charger_id($id);
         }
-
+        $produit = new Produit($this->ref);
         parent::delete();
+
+        ActionsModules::instance()->appel_module("supprod", $produit);
         
         redirige('parcourir.php?parent='.$parent);
     }
@@ -156,7 +158,7 @@ class ProductAdmin extends Produit {
             
             $productdesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutprod", $this);
+            ActionsModules::instance()->appel_module("ajoutprod", new Produit($this->ref));
             
             redirige('produit_modifier.php?ref='.$this->ref.'&rubrique='.$this->rubrique);
         }
@@ -225,9 +227,7 @@ class ProductAdmin extends Produit {
         $this->updateDocuments($documents);
         $this->getDocumentFile()->ajouter("document_", array(), "uploaddocument");
 
-        $produit = new Produit($this->ref);
-
-        ActionsModules::instance()->appel_module("modprod", $produit);
+        ActionsModules::instance()->appel_module("modprod", new Produit($this->ref));
         
         if ($urlsuiv)
         {

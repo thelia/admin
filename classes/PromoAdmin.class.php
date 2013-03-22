@@ -57,7 +57,7 @@ class PromoAdmin extends Promo
             $this->actif = -1;
             $this->maj();
 
-            ActionsModules::instance()->appel_module("suppromo", $this);
+            ActionsModules::instance()->appel_module("suppromo", new Promo($this->code));
         }
         
         redirige("promo.php");
@@ -81,7 +81,7 @@ class PromoAdmin extends Promo
             $this->datefin = date('Y-m-d', strtotime($this->datefin));
             $this->id = parent::add();
             
-            ActionsModules::instance()->appel_module("ajoutpromo", $this);
+            ActionsModules::instance()->appel_module("ajoutpromo", new Promo($this->code));
             
             redirige("promo.php");
         }
@@ -110,7 +110,7 @@ class PromoAdmin extends Promo
             $this->datefin = date('Y-m-d', strtotime($this->datefin));
             parent::maj();
             
-            ActionsModules::instance()->appel_module("majpromo", $this);
+            ActionsModules::instance()->appel_module("majpromo", new Promo($this->code));
             
             redirige("promo.php");
         }

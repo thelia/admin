@@ -25,9 +25,10 @@ class VariableAdmin extends Variable
     public function delete() {
         if($this->id > 0)
         {
+            $variable = new Variable($this->nom);
             parent::delete();
 
-            ActionsModules::instance()->appel_module("delvariable", $this);
+            ActionsModules::instance()->appel_module("delvariable", $variable);
         }
         
         redirige("variable.php");
@@ -63,7 +64,7 @@ class VariableAdmin extends Variable
         {
             parent::add();
             
-            ActionsModules::instance()->appel_module("addvariable", $variable);
+            ActionsModules::instance()->appel_module("addvariable", new Variable($this->nom));
             
             redirige("variable.php");
         }
@@ -82,7 +83,7 @@ class VariableAdmin extends Variable
                 $this->valeur = $request->request->get("valeur_" . $this->id);
                 $this->maj();
                 
-                ActionsModules::instance()->appel_module("modvariable", $this);
+                ActionsModules::instance()->appel_module("modvariable", new Variable($this->nom));
             }
         }
             

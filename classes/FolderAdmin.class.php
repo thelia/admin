@@ -87,7 +87,7 @@ class FolderAdmin extends Dossier
             
             $dossierdesc->reecrire();
 
-            ActionsModules::instance()->appel_module("ajoutdos", $dossierdesc);
+            ActionsModules::instance()->appel_module("ajoutdos", new Dossier($this->id));
             
             redirige("dossier_modifier.php?id=" . $this->id);
         }
