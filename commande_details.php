@@ -50,6 +50,7 @@ $moduletransportdesc->charger($moduletransport->nom);
 $promoutil = new Promoutil();
 $promoutil->charger_commande($commande->id);
 
+
 $adrFacturation = new Venteadr($commande->adrfact);
 $adrLivraison = new Venteadr($commande->adrlivr);
 
@@ -205,7 +206,7 @@ catch(TheliaAdminException $e)
                         </tr>
                         <tr>
                             <td><strong><?php echo trad('Code_promo', 'admin'); ?></strong></td>
-                            <td><?php if($promoutil->id){ $promoutil->code; ?> (<?php echo $promoutil->valeur; echo($promoutil->type==Promo::TYPE_SOMME)?'€':'%'; ?>) <?php } ?></td>
+                            <td><?php if($promoutil->id){ echo $promoutil->code; ?> (<?php echo $promoutil->valeur; echo($promoutil->type==Promo::TYPE_SOMME)?'€':'%'; ?>) <?php } ?></td>
                         </tr>
                         <tr>
                             <td><strong><?php echo trad('Total_avec_remise', 'admin'); ?></strong></td>
