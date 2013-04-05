@@ -7,6 +7,7 @@ require_once __DIR__ . "/../fonctions/divers.php";
 
 $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
+
 if (false == $lang = $request->get("lang", false))
     $lang = ActionsLang::instance()->get_id_langue_courante();
 if (false == $tab = $request->get("tab", false))
@@ -105,6 +106,7 @@ require_once("entete.php");
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>">
                 <input type="hidden" name="action" value="modifier">
                 <input type="hidden" name="tab" value="<?php echo $tab; ?>">
+                <input type="hidden" name="dossier" value="<?php echo $contenu->dossier; ?>" >
                 <p>
                     <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
                 </p>
