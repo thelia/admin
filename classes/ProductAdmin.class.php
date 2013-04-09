@@ -176,7 +176,6 @@ class ProductAdmin extends Produit {
     
     public function modify($lang, $price, $price2, $ecotaxe, $promo, $category, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {
-        Tlog::debug($caracteristique);
         if($this->id == '')
         {
             throw new TheliaAdminException("Product not found", TheliaAdminException::PRODUCT_NOT_FOUND);
