@@ -122,7 +122,7 @@ require_once("entete.php");
                     </tr>
                     <tr>
                         <td><?php echo trad('URL du site', 'admin'); ?></td>
-                        <td><input name="urlsite" class="input-xlarge urlsite" type="text" value="<?php echo  Variable::lire('urlsite'); ?>" <?php if(ActionsAdminLang::instance()->get_action_si_trad_absente() != 2) echo 'disabled="disabled"'; ?> ></td>
+                        <td><input name="urlsite" class="input-xlarge urlsite" type="text" value="<?php echo  Variable::lire('urlsite'); ?>" <?php if(ActionsAdminLang::instance()->get_un_domaine_par_langue() == 1) echo 'disabled="disabled"'; ?> ></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -134,7 +134,7 @@ require_once("entete.php");
                     ?>
                         <tr>
                             <td><?php echo($lang->description); ?></td>
-                            <td><input class="input-xlarge urllangue" type="text" name="url[<?php echo($lang->id); ?>]" value="<?php echo  ($lang->url); ?>" <?php if(ActionsAdminLang::instance()->get_action_si_trad_absente() != 1) echo 'disabled="disabled"'; ?>></td>
+                            <td><input class="input-xlarge urllangue" type="text" name="url[<?php echo($lang->id); ?>]" value="<?php echo  ($lang->url); ?>" <?php if(ActionsAdminLang::instance()->get_un_domaine_par_langue() == 0) echo 'disabled="disabled"'; ?>></td>
                         </tr>
                     <?php
                         }
@@ -205,6 +205,7 @@ require_once("entete.php");
                $("#deleteLink").attr("href","langue.php?action=supprimer&id="+$(this).attr("lang-id"));
                $("#deleteLang").modal("show");
             });
+
 	});
     
     </script>
