@@ -176,6 +176,7 @@ class ProductAdmin extends Produit {
     
     public function modify($lang, $price, $price2, $ecotaxe, $promo, $category, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {
+        Tlog::debug($caracteristique);
         if($this->id == '')
         {
             throw new TheliaAdminException("Product not found", TheliaAdminException::PRODUCT_NOT_FOUND);
@@ -241,11 +242,11 @@ class ProductAdmin extends Produit {
 
     protected function checkCaracteristique($caracteristique)
     {
-        
-        
+
+        $this->query("delete from ".Caracval::TABLE." where produit=" . $this->id);
         foreach($caracteristique as $index => $value)
         {
-            $this->query("delete from ".Caracval::TABLE." where produit=" . $this->id . " and caracteristique=" . $index);
+
             if ( is_array($value) )
             {
                 foreach ($value as $caracdisp)
