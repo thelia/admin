@@ -29,7 +29,7 @@ class ActionsAdminModules extends ActionsModules {
 
 		return self::$instance;
 	}
-        
+
         public function action(Request $request)
         {
             switch($request->get("action"))
@@ -232,7 +232,7 @@ class ActionsAdminModules extends ActionsModules {
 		else {
 			throw new TheliaException(trad("Module %s incompatible avec votre version de Thelia", 'admin', $nom_module), TheliaException::MODULE_INCOMPATIBLE);
 		}
-                
+
                 redirige("plugins.php");
 	}
 
@@ -302,7 +302,7 @@ class ActionsAdminModules extends ActionsModules {
 			if ($existe_toujours)
 				throw new TheliaException(trad("Echec de la suppression du répertoire du module %s", 'admin', $nom_module) , TheliaException::MODULE_ERR_SUPPRESSION_REPERTOIRE);
 		}
-                
+
                 redirige("plugins.php");
 	}
 
@@ -321,22 +321,22 @@ class ActionsAdminModules extends ActionsModules {
 			$path_zip = "$this->plugins_base_dir/$fichier_zip";
 
 			if (@copy($uploadedfile, $path_zip)) {
-                                
+
 				$archive = new PclZip($path_zip);
 
 				$resul = $archive->extract(PCLZIP_OPT_PATH, $this->plugins_base_dir);
 
 				@unlink($path_zip);
-                                
+
 				if ($resul == 0) {
 					throw new TheliaException($archive->errorInfo(true), TheliaException::MODULE_ECHEC_INSTALL);
 				}
-                                
+
 				// Vérifier qu'on peut instancier le plugin. Retrouver tout d'abord le repertoire du plugin
 				$tmp = preg_split ("/[\/\\\:]/", $resul[0]['stored_filename']);
-                                
+
 				$module_name = $tmp[0];
-                                
+
 
 				try {
 
@@ -433,7 +433,7 @@ class ActionsAdminModules extends ActionsModules {
 	 * @param Module $module le module concerné
 	 * @throws TheliaException si le descripteur XML n'existe pas ou est invalide
 	 */
-	private function lire_descripteur_xml($module) {
+	protected function lire_descripteur_xml($module) {
 
 		if (! isset($module->xml)) {
 			$fic_xml = $this->lire_chemin_module($module->nom) . '/plugin.xml';
