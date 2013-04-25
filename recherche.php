@@ -366,7 +366,13 @@ if(count($contentResult) > 0)
 
     </div>
 </div>
-        
+
+<div class="row-fluid">
+    <div class="span12">
+        <?php ActionsAdminModules::instance()->inclure_module_admin("recherche"); ?>
+    </div>
+</div>
+
     
 <?php require_once("pied.php"); ?>
 <link type="text/css" href="js/jquery-ui-1.9.1/css/ui-lightness/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
