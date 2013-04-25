@@ -9,8 +9,6 @@ if (!est_autorise("acces_catalogue"))
 use Symfony\Component\HttpFoundation\Request;
 $request = Request::createFromGlobals();
 
-error_reporting(E_ALL);
-
 try {
     ActionsAdminPromo::getInstance()->action($request);
 } catch (TheliaAdminException $e) {
