@@ -32,7 +32,7 @@ class ClientAdmin extends Client
         return new ClientAdmin(0, $ref);
     }
     
-    public function deleteORder($id)
+    public function deleteOrder($id)
     {
         $commande = new Commande();
         if($commande->charger($id))
@@ -235,6 +235,8 @@ class ClientAdmin extends Client
             $addressToAdd->client = $this->id;
             $addressToAdd->id = $addressToAdd->add();
 
+            ActionsModules::instance()->appel_module("aj_adresselivraison", $addressToEdit);
+
         }
         else
         {
@@ -276,6 +278,11 @@ class ClientAdmin extends Client
     
     public function subSendMailCreation($corps, $client, $password)
     {
+        $raisondesc = new Raisondesc($client->raison, ActionsLang::instance()->get_id_langue_courante());
+
+        $paysdesc = new Paysdesc();
+        $paysdesc->charger($client->pays);
+
         $corps = str_replace("__NOMSITE__",Variable::lire("nomsite"),$corps);
         $corps = str_replace("__EMAIL__",$client->email,$corps);
         $corps = str_replace("__MOTDEPASSE__",$password,$corps);
@@ -288,7 +295,7 @@ class ClientAdmin extends Client
         $corps = str_replace("__VILLE__",$client->ville,$corps);
         $corps = str_replace("__CPOSTAL__",$client->cpostal,$corps);
         $corps = str_replace("__TELEPHONE__",$client->telfixe,$corps);
-        $corps = str_replace("__CIVILITE__",$raison[$client->raison],$corps);
+        $corps = str_replace("__CIVILITE__",$raisondesc->court,$corps);
         $corps = str_replace("__PAYS__",$paysdesc->titre,$corps);
     }
     

@@ -13,8 +13,8 @@ if(!empty($action))
             $tempcli = new Client();
             if($tempcli->charger_ref($ref))
             {
-                ActionsModules::instance()->appel_module("supcli", $tempcli);
                 $tempcli->delete();
+                ActionsModules::instance()->appel_module("supcli", $tempcli);
             }
             break;
         case 'addCustomer':
