@@ -145,7 +145,7 @@ switch($action){
                                         <img src="../fonctions/redimlive.php?nomorig=<?php echo $produit["image"]["fichier"];?>&type=produit&width=51&height=51&exact=1" title="<?php echo $produit["ref"]; ?>">
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $produit["ref"]; ?></td>
+                                <td><?php echo ProductAdmin::truncate($produit["ref"], 20); ?></td>
                                 <td><?php echo $produit["titre"]; ?></td>
                                 <td><?php echo $produit["stock"]; ?></td>
                                 <td><?php echo $produit["prix"]; ?></td>
