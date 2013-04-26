@@ -155,6 +155,8 @@ class DeclinaisonAdmin extends Declinaison
                    $rubdeclinaison->add();
             }
         }
+
+        ActionsModules::instance()->appel_module("ajdeclinaison", new Declinaison($this->id));
         
         redirige("declinaison_modifier.php?id=".$this->id."&lang=".ActionsAdminLang::instance()->get_id_langue_courante());
         

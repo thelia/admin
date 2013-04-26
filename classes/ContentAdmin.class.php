@@ -56,7 +56,10 @@ class ContentAdmin extends Contenu {
     {
         if($this->id > 0)
         {
-            parent::delete();
+            $contenu = new Contenu($this->id);
+            $contenu->delete();
+
+            ActionsModules::instance()->appel_module("supcont", $contenu);
         }
         else
         {

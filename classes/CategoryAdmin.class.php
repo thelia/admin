@@ -48,7 +48,10 @@ class CategoryAdmin extends Rubrique
     {
         if($this->id > 0)
         {
-            parent::delete();
+            $rubrique = new Rubrique($this->id);
+            $rubrique->delete();
+
+            ActionsModules::instance()->appel_module("suprub", $rubrique);
         }
         else
         {
