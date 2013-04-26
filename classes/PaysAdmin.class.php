@@ -22,7 +22,7 @@ class PaysAdmin extends Pays
     
     public function getList()
     {
-        $query = "SELECT p.id, p.tva, p.defaut, p.isocode, p.isoalpha2, p.isoalpha3, ps.titre FROM ".Pays::TABLE." p LEFT JOIN ".Paysdesc::TABLE." ps on p.id=ps.pays WHERE  ps.lang=".ActionsLang::instance()->get_id_langue_courante()." order by ps.titre";
+        $query = "SELECT p.id, p.tva, p.defaut, p.isocode, p.isoalpha2, p.isoalpha3, ps.titre, p.boutique FROM ".Pays::TABLE." p LEFT JOIN ".Paysdesc::TABLE." ps on p.id=ps.pays WHERE  ps.lang=".ActionsLang::instance()->get_id_langue_courante()." order by ps.titre";
         
         return $this->query_liste($query);
     }
@@ -39,7 +39,20 @@ class PaysAdmin extends Pays
         $this->defaut = 1;
         $this->maj();
     }
-    
+
+    public function changeBoutique()
+    {
+        $this->disableActualBoutique();
+        $this->boutique = 1;
+        $this->maj();
+    }
+
+    public function disableActualBoutique()
+    {
+        $query = "UPDATE ".Pays::TABLE." set boutique=0 where boutique=1";
+        $this->query($query);
+    }
+
     public function disableActualDefault()
     {
         $query = "UPDATE ".Pays::TABLE." set defaut=0 where defaut=1";

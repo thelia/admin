@@ -27,6 +27,9 @@ class ActionsAdminPays extends ActionsAdminBase
             case "changeDefault":
                 PaysAdmin::getInstance($request->query->get("id"))->changeDefault();
                 break;
+            case "changeBoutique":
+                PaysAdmin::getInstance($request->query->get("id"))->changeBoutique();
+                break;
             case "deleteCountry":
                 PaysAdmin::getInstance($request->query->get("id"))->delete();
                 break;

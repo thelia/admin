@@ -42,6 +42,7 @@ require_once("entete.php");
                     <th><?php echo trad('Nom', 'admin'); ?></th>
                     <th><?php echo trad('TVA', 'admin'); ?></th>
                     <th><?php echo trad('Défaut', 'admin'); ?></th>
+                    <th><?php echo trad('Boutique', 'admin'); ?></th>
                     <th><?php echo trad('N° ISO', 'admin'); ?></th>
                     <th><?php echo trad('Codes ISO', 'admin'); ?></th>
                     <th>&nbsp;</th>
@@ -53,6 +54,8 @@ require_once("entete.php");
                         <td><?php echo $pays->titre; ?></td>
                         <td><input type="checkbox" name="tva" value="<?php echo $pays->id; ?>" <?php if($pays->tva): ?> checked="checked" <?php endif; ?>></td>
                         <td><input type="radio" name="defaut" value="<?php echo $pays->id; ?>" <?php if($pays->defaut): ?> checked="checked" <?php endif; ?>></td>
+                        <td><input type="radio" name="boutique" value="<?php echo $pays->id; ?>" <?php if
+                            ($pays->boutique): ?> checked="checked" <?php endif; ?>></td>
                         <td><?php echo $pays->isocode; ?></td>
                         <td><?php echo $pays->isoalpha2 ?>/<?php echo $pays->isoalpha3; ?></td>
                         <td>
@@ -168,6 +171,16 @@ require_once("entete.php");
                    action : "changeDefault",
                    id : $(this).attr('value')
                }
+            });
+        });
+
+        $("#table-pays input[name=boutique]").click(function(){
+            $.ajax({
+                url : "ajax/pays.php",
+                data : {
+                    action : "changeBoutique",
+                    id : $(this).attr('value')
+                }
             });
         });
         
