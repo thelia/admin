@@ -587,4 +587,11 @@ class ProductAdmin extends Produit {
         
         return $retour;
     }
+
+    public static function truncate($string, $length)
+    {
+        if (strlen($string) < $length) return $string;
+
+        return substr($string, 0, $length) . "...";
+    }
 }
