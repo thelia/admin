@@ -64,6 +64,10 @@ class ActionsAdminModules extends ActionsModules {
 
                     redirige("plugins.php#mod_".$request->query->get("id"));
                 break;
+                case 'changeClassementPlugin' :
+                    $module = new Modules();
+                    $module->modifier_classement($request->request->get("plugin_id"), $request->request->get("newClassement"));
+                break;
             }
         }
 

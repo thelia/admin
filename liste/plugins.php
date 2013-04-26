@@ -56,8 +56,7 @@ function afficher_liste_plugins($type, $label) {
                 </td>
                 <td>
                     <a href="plugins.php?id=<?php echo($plugin->id); ?>&action=modclassement&type=M"><i class="icon-arrow-up"></i></a>
-                    <span class="object_classement_editable" object-action="changeClassementCategory"
-                          object-name="category_id" object-id="<?php echo $rubrique["id"]; ?>"><?php echo $plugin->classement; ?></span>
+                    <span class="object_classement_editable" object-action="changeClassementPlugin" object-id="<?php echo $plugin->id; ?>"><?php echo $plugin->classement; ?></span>
                     <a href="plugins.php?id=<?php echo($plugin->id); ?>&action=modclassement&type=D"><i class="icon-arrow-down"></i></a>
                 </td>
                 <td>

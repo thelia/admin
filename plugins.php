@@ -77,11 +77,31 @@ require_once("entete.php");
         </div>
     </div>
     <?php endif; ?>
-<?php require_once("pied.php"); ?> 
-</body>
+<?php require_once("pied.php"); ?>
+<script type="text/javascript" src="js/Thelia.js"></script>
+<script type="text/javascript" src="js/jeditable.min.js"></script>
 <script type="text/javascript">
+
+    $('.object_classement_editable').editable(function(value, settings){
+        var form = Thelia.generateForm({
+            action : $(this).attr('object-action'),
+            object_id : $(this).attr('object-id'),
+            object_name : "plugin_id",
+            value : value,
+            target: "plugins.php"
+        });
+
+        $(this).prepend(form);
+        form.submit();
+    },{
+        onblur : 'submit',
+        select : true
+    });
+
+
     <?php if($errorCode > 0): ?>
-        $("#error-plugin").modal("show");
-   <?php endif; ?>
+    $("#error-plugin").modal("show");
+    <?php endif; ?>
 </script>
+</body>
 </html>
