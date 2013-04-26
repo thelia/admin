@@ -78,8 +78,8 @@ class ProductAdmin extends Produit {
     }
     
     public function modifyOrder($type, $parent){
-        $this->changer_classement($this->ref, $type);
-        
+        $this->changer_classement($this->id, $type);
+
         redirige('parcourir.php?parent='.$parent);
     }
     

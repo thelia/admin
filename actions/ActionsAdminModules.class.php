@@ -58,6 +58,12 @@ class ActionsAdminModules extends ActionsModules {
                                 }
                         }
                 break;
+                case 'modclassement' :
+                    $module = new Modules($request->query->get("id"));
+                    $module->changer_classement($request->query->get("id"), $request->query->get("type"));
+
+                    redirige("plugins.php#mod_".$request->query->get("id"));
+                break;
             }
         }
 
