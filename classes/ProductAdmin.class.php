@@ -214,7 +214,7 @@ class ProductAdmin extends Produit {
         
         $produitdesc->chapo = str_replace("\n", "<br />", $chapo);
         $produitdesc->titre = $title;
-        $produitdesc->postscriptum = $postscriptum;
+        $produitdesc->postscriptum = str_replace("\n", "<br />", $postscriptum);
         $produitdesc->description = $description;
 
         $this->maj();
