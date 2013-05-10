@@ -13,6 +13,7 @@ $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("transport_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_transports', 'admin'));
 require_once("entete.php");
@@ -22,6 +23,9 @@ require_once("entete.php");
             <h3><?php echo trad('Gestion_transports', 'admin'); ?></h3>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("transport");
+?>
     <div class="row-fluid">
         <div class="span7">
             <table class="table table-striped">
@@ -94,6 +98,11 @@ require_once("entete.php");
         </div>
     </div>
     <?php } ?>
+    
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("transport_bottom");
+?>
+    
 <?php require_once("pied.php"); ?> 
     <?php if (false !== $id = $request->query->get("id", false)){  ?>
     <script type="text/javascript">

@@ -36,6 +36,7 @@ $langs = LangAdmin::getInstance()->getList();
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadmin_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_administrateurs', 'admin'));
 require_once("entete.php");
@@ -53,6 +54,9 @@ require_once("entete.php");
                 </a>
             </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadm");
+?>
             <div class="bigtable">
                 
                 <table class="table table-striped">
@@ -254,7 +258,9 @@ require_once("entete.php");
             <a class="btn btn-primary" id="adminDelationLink"><?php echo trad('Oui', 'admin'); ?></a>
         </div>
     </div>
-    
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadm_bottom");
+?>    
 <?php require_once("pied.php"); ?> 
 </body>
 <script type="text/javascript">

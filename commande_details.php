@@ -89,11 +89,15 @@ catch(TheliaAdminException $e)
 
 <body>
     <?php
+	ActionsAdminModules::instance()->inclure_module_admin("commande_details_top");
         $menu = "commande";
         $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Gestion_commandes', 'admin'), "commande.php");
         require_once("entete.php");
     ?>
         <div class="row-fluid">
+        <?php
+                ActionsAdminModules::instance()->inclure_module_admin("commande_details");
+        ?>
             <div class="span8">
                 <table class="table table-striped">
                     <caption>
@@ -708,6 +712,9 @@ if($next!==false || $previous!==false)
                 </div>
             </div>
         </div>
+<?php
+        ActionsAdminModules::instance()->inclure_module_admin("commande_details_bottom");
+?>
 <?php require_once("pied.php");?> 
 <script type="text/javascript">
 $(document).ready(function(){

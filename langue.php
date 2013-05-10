@@ -53,6 +53,7 @@ $langs = LangAdmin::getInstance()->getList();
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("langue_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_langue', 'admin'));
 require_once("entete.php");
@@ -69,6 +70,9 @@ require_once("entete.php");
                     <i class="icon-plus-sign"></i>
                 </a>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("langue");
+?>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -184,6 +188,9 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("langue_bottom");
+?>
 <?php require_once("pied.php"); ?> 
     <script type="text/javascript"> 
         $(document).ready(function() {

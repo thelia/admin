@@ -17,6 +17,7 @@
 
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("accueil_top");
 	$menu="accueil";
         $breadcrumbs = Breadcrumb::getInstance()->getHomeList();
 	require_once("entete.php");
@@ -28,7 +29,7 @@
         </div>
     </div>
  <?php
-	ActionsAdminModules::instance()->inclure_module_admin("accueil_top");
+	ActionsAdminModules::instance()->inclure_module_admin("accueil");
 
 
 	$snoopy = new Snoopy();
@@ -252,7 +253,7 @@
 		</div>
 	</div>
 <?php
-    ActionsAdminModules::instance()->inclure_module_admin("accueil");
+    ActionsAdminModules::instance()->inclure_module_admin("accueil_bottom");
 ?>
 <?php require_once("pied.php");?>
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/jqplot/excanvas.min.js"></script><![endif]-->

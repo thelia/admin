@@ -13,6 +13,7 @@ if (!est_autorise("acces_configuration"))
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("configuration_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Configuration', 'admin'));
 require_once("entete.php");
@@ -22,6 +23,9 @@ require_once("entete.php");
             <h3><?php echo trad('Configuration', 'admin'); ?></h3>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("configuration");
+?>
     <div class="row-fluid">
         <div class="span4">
             <div class="littletable">
@@ -105,6 +109,9 @@ require_once("entete.php");
             </div>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("configuration_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 </body>
 </html>

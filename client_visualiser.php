@@ -53,6 +53,7 @@ $paysdesc->charger($client->pays);
 
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("client_visualiser");
 $menu = "client";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Gestion_clients', 'admin'), "client.php");
 require_once("entete.php");
@@ -76,6 +77,9 @@ require_once("entete.php");
                             </a>
                         </div>
                     </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("client_visualiser");
+?>
                     <table class="table table-striped">
                         <tbody>
                             <tr>
@@ -911,6 +915,10 @@ while($rListCountries && $theCountry = $paysdesc->fetch_object($rListCountries, 
             
         </div>
     </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("client_visualiser");
+?>
     
 <?php require_once("pied.php");?>
 

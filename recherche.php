@@ -28,6 +28,7 @@ try {
 
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("recherche_top");
 $menu = "";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Resultats_recherche', 'admin'));
 require_once("entete.php");
@@ -42,6 +43,11 @@ $clientResult = ClientAdmin::getInstance()->getSearchList($request->query->get('
         <h3><?php echo strtoupper(trad((count($clientResult) > 0?'RESULTATS_CLIENTS':'AUCUN_RESULTATS_CLIENTS'), 'admin')); ?></h3>
     </div>
 </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("recherche");
+?>
+
 <div class="row-fluid">
     <div class="span12">
 <?php
@@ -371,6 +377,9 @@ if(count($contentResult) > 0)
     </div>
 </div>
 
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("recherche_bottom");
+?>
     
 <?php require_once("pied.php"); ?>
 <link type="text/css" href="js/jquery-ui-1.9.1/css/ui-lightness/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />

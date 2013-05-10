@@ -69,6 +69,7 @@ switch($action){
 
 <body>
     <?php
+	ActionsAdminModules::instance()->inclure_module_admin("listdos_top");
         $menu = "contenu";
         $breadcrumbs = Breadcrumb::getInstance()->getFolderList($parent);
         require_once("entete.php");
@@ -87,7 +88,9 @@ switch($action){
                                 </a>
                             </div>
                         </h3>
-                        
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("listdos");
+?>                        
                     </caption>
                     <thead>
                         <tr>
@@ -256,6 +259,9 @@ switch($action){
             </div>
             </form>
         </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("listdos_bottom");
+?>
         
 <?php require_once("pied.php");?> 
 <script type="text/javascript" src="js/Thelia.js"></script>

@@ -15,6 +15,7 @@ ActionsAdminZone::getInstance()->action($request);
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("zone_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_zones_livraison', 'admin'));
 require_once("entete.php");
@@ -27,6 +28,9 @@ require_once("entete.php");
                     <i class="icon-plus-sign icon-white"></i>
                 </a>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("zone");
+?>
             <div class="bigtable">
                 <table class="table table-striped">
                     <thead>
@@ -115,6 +119,11 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+    
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("zone_bottom");
+?>
+    
 <?php require_once("pied.php"); ?> 
     <?php if(false !== $request->query->get("id", false) && $request->query->get("action") == "showZone"): ?>
     <script type="text/javascript">

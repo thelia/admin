@@ -22,6 +22,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_declinaison', 'admin'));
 require_once("entete.php");
@@ -35,6 +36,9 @@ require_once("entete.php");
                 </a>
             </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison");
+?>
             <div class="bigtable">
                 <table class="table table-striped">
                     <thead>
@@ -106,6 +110,9 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
     $(document).ready(function(){

@@ -34,6 +34,7 @@ $dossierdesc = new Dossierdesc($dossier->id, $lang);
 
     <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("dossier_modifier_top");
 $menu = "contenu";
 $breadcrumbs = Breadcrumb::getInstance()->getFolderList($dossier->id, false);
 require_once("entete.php");
@@ -43,6 +44,9 @@ require_once("entete.php");
             <h3><?php echo trad('DESCRIPTION_G_DOSSIER', 'admin'); ?></h3>
         </div>
     </div>        
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("dossier_modifier");
+?>
     <div class="row-fluid">
         <div class="span4 offset5">
             <div class="row-fluid">
@@ -317,7 +321,9 @@ require_once("entete.php");
         <a class="btn btn-primary" id="changeLangLink"><?php echo trad('Oui', 'admin'); ?></a>
     </div>
 </div>
-
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("dossier_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 $(document).ready(function(){

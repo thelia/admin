@@ -28,6 +28,7 @@ ActionsAdminModules::instance()->mettre_a_jour();
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("plugins_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_plugins', 'admin'));
 require_once("entete.php");
@@ -41,6 +42,10 @@ require_once("entete.php");
                 </a>
             </div>
             </h3>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("plugins");
+?>
                 
             <?php echo afficher_plugins(); ?>
         </div>
@@ -77,6 +82,9 @@ require_once("entete.php");
         </div>
     </div>
     <?php endif; ?>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("plugins_bottom");
+?>
 <?php require_once("pied.php"); ?>
 <script type="text/javascript" src="js/Thelia.js"></script>
 <script type="text/javascript" src="js/jeditable.min.js"></script>

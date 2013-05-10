@@ -41,6 +41,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadm_droits_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getMultipleList(
     array(trad('Configuration', 'admin'), 'configuration.php'),
@@ -54,7 +55,9 @@ require_once("entete.php");
             <h3><?php echo trad('Gestion_droit', 'admin'); ?> : <?php echo $administrateur->prenom; ?> <?php echo $administrateur->nom; ?></h3>
         </div>
     </div>
-    
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadm_droits");
+?>    
     <form method="post" action="gestadm_droits.php">
 
         <input type="hidden" name="administrateur" value="<?php echo $administrateur->id; ?>" />
@@ -184,6 +187,9 @@ require_once("entete.php");
     </p>
 
     </form>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("gestadm_droits_bottom");
+?>
     
 <?php require_once("pied.php"); ?> 
     
