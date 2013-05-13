@@ -7,7 +7,9 @@ function activemenu($menu,$verif){
 
 $statAdmin = new StatAdmin();
 ?>
-
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("entete_top");
+?>
 <div class="topbar">
     <div class="container">
   <p>Thelia Version <?php echo rtrim(preg_replace("/(.)/", "$1.", Variable::lire('version')), "."); ?></p>
@@ -27,6 +29,9 @@ $statAdmin = new StatAdmin();
 <?php } ?>
     </div>
 </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("entete_brandbar");
+?>
 	<div class="brandbar">
             <div class="container">
 		<a class="brand" href="accueil.php"><img src="img/logo-thelia-34px.png" alt="THELIA solution e-commerce"/></a>
@@ -55,6 +60,9 @@ $statAdmin = new StatAdmin();
                 </dl>
             </div>
 	</div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("entete_navbar");
+?>
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container">
@@ -120,7 +128,7 @@ $statAdmin = new StatAdmin();
 <div class="row-fluid">
     <div class="span12">
 <?php    
-    ActionsAdminModules::instance()->inclure_module_admin("entete");
+    ActionsAdminModules::instance()->inclure_module_admin("entete_bottom");
 ?>  
     </div>
 </div>

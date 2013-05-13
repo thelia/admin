@@ -50,9 +50,14 @@ catch(TheliaAdminException $e)
 
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("commande_creer_top");
 $menu = "commande";
 $breadcrumbs = Breadcrumb::getInstance()->getOrderList(trad('Creation_commande', 'admin'), "client.php");
 require_once("entete.php");
+?>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("commande_creer");
 ?>
     <form method="POST" action="commande_creer.php">
         <input type="hidden" name="action" value="createOrder" />
@@ -721,7 +726,9 @@ if($createError && $panier)
             <button class="btn btn-primary" id="btn_ajout_produit" style="display: none;"><?php echo trad('Ajouter', 'admin'); ?></button>
         </div>
     </div>
-    
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("commande_creer_bottom");
+?>    
 <?php require_once("pied.php");?>
 
     

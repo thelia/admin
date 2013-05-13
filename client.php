@@ -88,7 +88,7 @@ else $ordclassement = "ORDER BY nom ASC";
 <body>
 <?php
 
-
+	ActionsAdminModules::instance()->inclure_module_admin("client_top");
 $menu = "client";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Gestion_clients', 'admin'));
 require_once("entete.php");
@@ -106,6 +106,9 @@ require_once("entete.php");
                     </a>
                 </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("client");
+?>
             <div class="bigtable">
             <table class="table table-striped" id="clientTable">
                 <thead>
@@ -393,6 +396,9 @@ while($rListCountries && $theCountry = $paysdesc->fetch_object($rListCountries, 
             
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("client_bottom");
+?>
 <?php require_once("pied.php");?>
 <script type="text/javascript">
 jQuery(function($)

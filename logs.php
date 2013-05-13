@@ -26,6 +26,7 @@ $adm->prepare_page();
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("logs_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_log', 'admin'));
 require_once("entete.php");
@@ -33,7 +34,9 @@ require_once("entete.php");
     <div class="row-fluid">
         <div class="span12">
             <h3><?php echo trad('Gestion_log', 'admin'); ?></h3>
-            
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("logs");
+?>            
                 <form method="post" action="logs.php" id="ms_form">
                     <input type="hidden" name="action" value="maj_config">
                 <div class="bigtable">
@@ -228,6 +231,9 @@ require_once("entete.php");
             </div>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("logs_bottom");
+?>  
 <?php require_once("pied.php"); ?> 
     <script type="text/javascript">
         $(document).ready(function(){

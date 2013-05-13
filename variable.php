@@ -26,6 +26,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("variable_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_variables', 'admin'));
 require_once("entete.php");
@@ -39,6 +40,11 @@ require_once("entete.php");
                 </a>
             </div>
             </h3>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("variable");
+?>
+
             <form method="POST" action="variable.php">
                 <input type="hidden" name="action" value="edit" />
             <p>
@@ -132,6 +138,11 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("variable_bottom");
+?>
+
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 jQuery(function($)

@@ -27,6 +27,7 @@ $caractDisp = new Caracteristiquedesc($caract->id, $lang);
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("caracteristique_modifier_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getCaracList($caractDisp->titre);
 require_once("entete.php");
@@ -41,6 +42,9 @@ require_once("entete.php");
                 </a>
             </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("caracteristique_modifier");
+?>
             <p>
                 <button class="btn btn-large btn-block btn-primary" type="submit"><?php echo trad('VALIDER_LES_MODIFICATIONS', 'admin'); ?></button>
             </p>
@@ -192,6 +196,9 @@ require_once("entete.php");
             <a class="btn btn-primary" id="deleteLink"><?php echo trad('Oui', 'admin'); ?></a>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("caracteristique_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript" src="js/Thelia.js"></script>
 <script type="text/javascript" src="js/jeditable.min.js"></script>

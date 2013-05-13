@@ -1,5 +1,8 @@
 </div><!-- fin div id=wrapper -->
 <hr>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("pied_top");
+?>
       <footer class="modal-footer">
 				<div class="container">
 					<p>&copy; Thelia 2012 
@@ -12,7 +15,6 @@
 				</div>
       </footer>
 </div> <!-- fin div class=bg-image -->
-
     
      <?php
  	ActionsAdminModules::instance()->inclure_module_admin("post");
