@@ -11,6 +11,7 @@ if (!est_autorise("acces_modules"))
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("module_liste_top");
 $menu = "plugins";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Gestion_plugins', 'admin'));
 require_once("entete.php");
@@ -18,7 +19,9 @@ require_once("entete.php");
     <div class="row-fluid">
         <div class="span12">
             <h3><?php echo trad('LISTE_MODULES', 'admin'); ?></h3>
-            
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("module_liste");
+?>          
             <table class="table table-striped">
                 <tbody>
 <?php
@@ -52,6 +55,9 @@ foreach(ActionsAdminModules::instance()->lister(false, true) as $module)
             
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("module_liste_bottom");
+?>  
 <?php require_once("pied.php"); ?> 
 </body>
 </html>

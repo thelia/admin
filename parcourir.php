@@ -53,6 +53,7 @@ switch($action){
 <body>
     
     <?php
+	ActionsAdminModules::instance()->inclure_module_admin("parcourir_top");
         $menu = "catalogue";
         $breadcrumbs = Breadcrumb::getInstance()->getCategoryList($parent);
         require_once("entete.php");
@@ -72,7 +73,9 @@ switch($action){
                                 </a>
                             </div>
                         </h3>
-                        
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("parcourir");
+?>                        
                     </caption>
                     <thead>
                         <tr>
@@ -262,7 +265,9 @@ switch($action){
             </div>
             </form>
         </div>
-        
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("parcourir_bottom");
+?>           
 <?php require_once("pied.php");?> 
 <script type="text/javascript" src="js/Thelia.js"></script>
 <script type="text/javascript" src="js/jeditable.min.js"></script>

@@ -65,6 +65,9 @@
 		<?php require_once("title.php");?>
   </head>
   <body>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("index_top");
+?>
       <div class="loginpage">
         <div class="brandbar container">
           <a class="brand" href="index.php"><img src="img/logo-thelia-34px.png" /></a>
@@ -72,7 +75,9 @@
 
 
     <div id="wrapper" class="container">
-
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("index");
+?>
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>Administration Thelia</h1>
@@ -89,6 +94,9 @@
         <?php afficher_feed("http://thelia.net/Flux-rss.html?id_rubrique=8", "picto-formation.gif"); ?>
       </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("index_bottom");
+?>
 <?php require_once("pied.php");?>
       </div>
   </body>

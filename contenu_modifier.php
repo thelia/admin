@@ -35,6 +35,7 @@ $contenudesc = new Contenudesc($contenu->id, $lang);
 
     <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("contenu_modifier_top");
 $menu = "contenu";
 $breadcrumbs = Breadcrumb::getInstance()->getContentListe($request->get('dossier'), $contenudesc->titre);
 require_once("entete.php");
@@ -44,6 +45,9 @@ require_once("entete.php");
             <h3><?php echo trad('DESCRIPTION_G', 'admin'); ?></h3>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("contenu_modifier");
+?>
     <div class="row-fluid">
         <div class="span4 offset5">
             <div class="row-fluid">
@@ -324,7 +328,9 @@ require_once("entete.php");
         <a class="btn btn-primary" id="changeLangLink"><?php echo trad('Oui', 'admin'); ?></a>
     </div>
 </div>
-
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("contenu_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 $(document).ready(function(){

@@ -41,6 +41,7 @@ try {
 
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("promo_top");
 $menu = "paiement";
 $breadcrumbs = Breadcrumb::getInstance()->getSimpleList(trad('Gestion_codes_promos', 'admin'));
 require_once("entete.php");
@@ -58,6 +59,11 @@ require_once("entete.php");
         </h3>
     </div>
 </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("promo");
+?>
+
 <div class="row-fluid">
     <div class="span12">
         <div class="bigtable">
@@ -316,7 +322,11 @@ foreach(PromoAdmin::getInstance()->getList($pagination->getStarted(), $paginatio
 <div id="module_bloc" style="display:none">
 test
 </div>
-    
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("promo_bottom");
+?>
+
 <?php require_once("pied.php"); ?>
 <link type="text/css" href="js/jquery-ui-1.9.1/css/ui-lightness/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-ui-1.9.1/js/jquery-ui-1.9.1.custom.min.js"></script>

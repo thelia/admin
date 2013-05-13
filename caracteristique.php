@@ -25,6 +25,7 @@ try
     </head>
 <body>
 <?php
+        ActionsAdminModules::instance()->inclure_module_admin("caracteristique_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_caracteristiques', 'admin'));
 require_once("entete.php");
@@ -39,6 +40,9 @@ require_once("entete.php");
                     </a>
                 </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("caracteristique");
+?>
             <div class="bigtable">
                 <table class="table table-striped">
                     <thead>
@@ -114,6 +118,9 @@ require_once("entete.php");
             <a class="btn btn-primary" id="deleteLink"><?php echo trad('Oui', 'admin'); ?></a>
         </div>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("caracteristique_bottom");
+?>
 <?php require_once("pied.php"); ?> 
     <script type="text/javascript">
         $(document).ready(function(){

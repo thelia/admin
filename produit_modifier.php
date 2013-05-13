@@ -44,6 +44,7 @@ $produitdesc->postscriptum = str_replace("<br />", "\n", $produitdesc->postscrip
 
     <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("produit_modifier_top");
 $menu = "catalogue";
 $breadcrumbs = Breadcrumb::getInstance()->getProductList($request->get('rubrique'), $produitdesc->titre);
 require_once("entete.php");
@@ -53,6 +54,9 @@ require_once("entete.php");
                     <h3><?php echo trad('Reference', 'admin'); ?> : <?php echo $produit->ref; ?></h3>
                 </div>
             </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("produit_modifier");
+?>
             <div class="row-fluid">
                 <div class="span4 offset5">
                     <div class="row-fluid">
@@ -555,6 +559,9 @@ require_once("entete.php");
                     <a class="btn btn-primary" id="changeLangLink"><?php echo trad('Oui', 'admin'); ?></a>
                 </div>
             </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("produit_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
 $(document).ready(function(){

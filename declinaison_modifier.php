@@ -28,9 +28,13 @@ $declinaisondesc = new Declinaisondesc($declinaison->id, $lang);
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison_modifier_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getDecliList($declinaisondesc->titre);
 require_once("entete.php");
+?>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison_modifier");
 ?>
     <form method="post" action="declinaison_modifier.php">
     <div class="row-fluid">
@@ -182,6 +186,9 @@ require_once("entete.php");
         </div>
         </form>
     </div>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("declinaison_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript" src="js/Thelia.js"></script>
 <script type="text/javascript" src="js/jeditable.min.js"></script>

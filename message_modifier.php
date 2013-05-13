@@ -26,6 +26,7 @@ $messagedesc = new Messagedesc($message->id, $lang);
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("message_modifier_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_messages', 'admin'), 'message.php', trad('modifier', 'admin'));
 require_once("entete.php");
@@ -33,6 +34,9 @@ require_once("entete.php");
     <div class="row-fluid">
         <div class="span12">
             <h3><?php echo trad('MODIFICATION_MESSAGE', 'admin'); ?></h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("message_modifier");
+?>
             <form method="post" action="message_modifier.php">
             <input type="hidden" name="action" value="modifier">
             <input type="hidden" name="id" value="<?php echo $message->id; ?>">
@@ -102,6 +106,9 @@ require_once("entete.php");
         </div>
     </div>
     <?php endif; ?>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("message_modifier_bottom");
+?>
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
     $(document).ready(function(){

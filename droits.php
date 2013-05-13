@@ -31,6 +31,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("droits_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getMultipleList(
     array(trad('Configuration', 'admin'), 'configuration.php'),
@@ -50,6 +51,10 @@ require_once("entete.php");
             </h3>
         </div>
     </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("droits");
+?>
     
     <form method="post" action="droits.php">
         <input type="hidden" name="action" value="modify" />
@@ -231,7 +236,10 @@ require_once("entete.php");
         </div>
     </form>
     </div>
-    
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("droits_bottom");
+?>    
     
 <?php require_once("pied.php"); ?> 
     

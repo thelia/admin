@@ -30,6 +30,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("smtp_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion_mail', 'admin'));
 require_once("entete.php");
@@ -37,6 +38,9 @@ require_once("entete.php");
     <div class="row-fluid">
         <div class="span12">
             <h3><?php echo trad('LISTE_VARIABLES', 'admin'); ?></h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("smtp");
+?>
             <form method="POST" action="smtp.php">
                 <input type="hidden" name="action" value="edit" />
             <p>
@@ -125,7 +129,10 @@ require_once("entete.php");
             </form> 
         </div>
     </div>
-    
+ 
+ <?php
+	ActionsAdminModules::instance()->inclure_module_admin("smtp_bottom");
+?>   
     
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">

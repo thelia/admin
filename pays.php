@@ -21,6 +21,7 @@ try
     </head>
 <body>
 <?php
+	ActionsAdminModules::instance()->inclure_module_admin("pays_top");
 $menu = "configuration";
 $breadcrumbs = Breadcrumb::getInstance()->getConfigurationList(trad('Gestion des pays', 'admin'));
 require_once("entete.php");
@@ -35,6 +36,9 @@ require_once("entete.php");
                     </a>
                 </div>
             </h3>
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("pays");
+?>   
             <div class="bigtable">
             <table class="table table-striped" id="table-pays">
                 <thead>
@@ -154,6 +158,11 @@ require_once("entete.php");
         </div>
         </form>    
     </div>
+
+<?php
+	ActionsAdminModules::instance()->inclure_module_admin("pays_bottom");
+?>
+
 <?php require_once("pied.php"); ?> 
 <script type="text/javascript">
     $(document).ready(function(){
