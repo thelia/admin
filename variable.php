@@ -63,7 +63,7 @@ require_once("entete.php");
                     <tr>
                         <td><?php echo $variable["nom"]; ?></td>
                         <td>
-                            <input class="span11 js-edit" type="text" name="valeur_<?php echo $variable["id"]; ?>" variable-original="<?php echo htmlentities($variable["valeur"], ENT_QUOTES); ?>" variable-id="<?php echo $variable["id"]; ?>" id="js_edit_<?php echo $variable["id"]; ?>" value="<?php echo htmlentities($variable["valeur"], ENT_QUOTES); ?>" />
+                            <input class="span11 js-edit" type="text" name="valeur_<?php echo $variable["id"]; ?>" variable-original="<?php echo htmlentities($variable["valeur"], ENT_QUOTES, "UTF-8"); ?>" variable-id="<?php echo $variable["id"]; ?>" id="js_edit_<?php echo $variable["id"]; ?>" value="<?php echo htmlentities($variable["valeur"], ENT_QUOTES, "UTF-8"); ?>" />
                         </td>
                         <td>
                             <div class="btn-group">
