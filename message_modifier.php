@@ -74,7 +74,7 @@ require_once("entete.php");
                     </tr>
                     <tr>
                         <td><p><?php echo trad('Description', 'admin'); ?></p><p><small><?php echo trad('format_html', 'admin'); ?></small></p></td>
-                        <td><textarea name="description" rows="15" class="span12"><?php echo $messagedesc->description; ?></textarea> </td>
+                        <td><textarea name="description" rows="15" class="span12"><?php echo htmlspecialchars($messagedesc->description) ?></textarea> </td>
                     </tr>
                     <tr>
                         <td><p><?php echo trad('Description', 'admin'); ?></p><p><small><?php echo trad('format_text', 'admin'); ?></small></p></td>
