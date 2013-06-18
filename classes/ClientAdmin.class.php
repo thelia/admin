@@ -163,7 +163,7 @@ class ClientAdmin extends Client
         $this->ville = $ville;
         $this->pays = $pays;
         $this->telfixe = $telfixe;
-        $this->telpORt = $telpORt;
+        $this->telport = $telpORt;
         if($this->email != $email)
         {
             $this->email = '';
