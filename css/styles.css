@@ -218,9 +218,6 @@ a {
 }
 .row-fluid .span12 .table-striped thead {
 	color: #5A6876;
-	background: -webkit-gradient(linear, left top, left bottom, from(#42505D), to(#72808E));
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
 	border-bottom: 2px solid #A5CED8;
 	font-size: 12px;
 }
@@ -229,17 +226,11 @@ a {
 	border: none!important;
 	border-radius: 0px!important;
 	color: #5A6876;
-	background: -webkit-gradient(linear, left top, left bottom, from(#42505D), to(#72808E));
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
 	border-bottom: 2px solid #A5CED8;
 }
 .bigtable thead {
 	font-size: 18px!important;
 	color: #5A6876;
-	background: -webkit-gradient(linear, left top, left bottom, from(#42505D), to(#72808E));
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
 	border-bottom: 2px solid #A5CED8;
 }
 .bigtable thead tr {
