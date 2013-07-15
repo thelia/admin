@@ -136,11 +136,12 @@ require_once("entete.php");
                         foreach($results as $caracdisp)
                         {
                             $caracdispdesc = new Caracdispdesc($caracdisp->id, $lang);
+                            $defaultCaracdispdesc = new Caracdispdesc($caracdisp->id, LangAdmin::getDefaultLangInstance()->id);
                     ?>
                     <tr>
                         <td>ID : <?php echo $caracdisp->id; ?></td>
                         <td><input type="text" name="caracdispdesc_titre[<?php echo $caracdisp->id; ?>]" value="<?php
-                            echo  htmlspecialchars($caracdispdesc->titre); ?>"></td>
+                            echo  htmlspecialchars($caracdispdesc->titre); ?>" placeholder="<?php echo $defaultCaracdispdesc->titre; ?>"></td>
                         <td>
                             <a href="caracteristique_modifier.php?id=<?php echo $caract->id; ?>&cacacdispdesc=<?php echo $caracdispdesc->id; ?>&lang=<?php echo $lang ?>&type=M&action=modClassementCaracdisp"><i class="icon-arrow-up"></i></a>
                             <span class="object_classement_editable" object-action="setclassementcaracdisp" object-name="caracdispdesc" object-id="<?php echo $caracdispdesc->id; ?>"><?php echo intval($caracdispdesc->classement); ?></span>
