@@ -23,12 +23,22 @@ if (!isset($tab))
 
 $errorCode = 0;
 $errorMessage = '';
+$errorDuplicate = 0;
 
 try {
     ActionsAdminProduct::getInstance()->action($request);
 } catch (TheliaAdminException $e) {
-    $errorCode = $e->getCode();
-    $errorMessage = $e->getMessage();
+    switch($e->getCode()) {
+        case TheliaAdminException::REF_ALREADY_EXISTS:
+        case TheliaAdminException::REF_EMPTY:
+            $errorDuplicate = $e->getCode();
+            $duplicate = $request->request->get('duplicate');
+            break;
+        default :
+            $errorCode = $e->getCode();
+            $errorMessage = $e->getMessage();
+            break;
+    }
 }
 
 $produit = new Produit($request->get('ref'));
@@ -81,6 +91,11 @@ require_once("entete.php");
                                     <?php
                                     }
                                     ?>
+                                </li>
+                                <li class="">
+                                    <a href="#duplicateModal" target="_blank" title="<?php echo trad('duplicate', 'admin'); ?>" class="change-page" data-toggle="modal">
+                                        <i class="icon-folder-close"></i>
+                                    </a>
                                 </li>
                                 <li class="">
                                     <a href="<?php echo urlfond("produit", "id_produit=$produit->id&id_rubrique=$produit->rubrique", true); ?>" target="_blank" title="<?php echo trad('preview', 'admin'); ?>" class="change-page">
@@ -559,6 +574,51 @@ require_once("entete.php");
                     <a class="btn btn-primary" id="changeLangLink"><?php echo trad('Oui', 'admin'); ?></a>
                 </div>
             </div>
+
+            <!-- duplicate product -->
+            <div class="modal hide fade" id="duplicateModal">
+                <form method="POST" action="produit_modifier.php">
+                    <input type="hidden" name="action" value="duplicateProduct" />
+                    <input type="hidden" name="ref" value="<?php echo $produit->ref; ?>" />
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3><?php echo trad('Duplicate_intro', 'admin'); ?></h3>
+                    </div>
+                    <div class="modal-body">
+
+                        <?php if($errorDuplicate){ ?>
+                            <div class="alert alert-block alert-error fade in">
+                                <h4 class="alert-heading"><?php echo trad('Cautious', 'admin'); ?></h4>
+                                <p><?php echo trad('check_information', 'admin'); ?></p>
+                                <?php if($errorDuplicate == TheliaAdminException::REF_ALREADY_EXISTS || $errorDuplicate == TheliaAdminException::REF_EMPTY) { ?>
+                                    <p><?php echo trad('duplicate_error_ref', 'admin'); ?></p>
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
+
+                        <h4><?php echo trad('duplicate_ask','admin') ?></h4>
+                        <div>
+                            <p><input type="checkbox" name="duplicate[description]" checked="checked"> <?php echo trad('duplicate_desciption_g', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[info]" checked="checked"> <?php echo trad('duplicate_info', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[features]"> <?php echo trad('duplicate_features', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[variants]"> <?php echo trad('duplicate_variants', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[accessories]"> <?php echo trad('duplicate_accessories', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[accessories_auto]"> <?php echo trad('duplicate_accessories_auto', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[associated_contents]"> <?php echo trad('duplicate_associated_contents', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[pictures]"> <?php echo trad('duplicate_pictures', 'admin'); ?></p>
+                            <p><input type="checkbox" name="duplicate[documents]"> <?php echo trad('duplicate_documents', 'admin'); ?></p>
+                        </div>
+                        <h4><?php echo trad('duplicate_new_ref','admin') ?></h4>
+                        <div class="<?php if($errorDuplicate && ($errorDuplicate == TheliaAdminException::REF_ALREADY_EXISTS || $errorDuplicate == TheliaAdminException::REF_EMPTY)){ ?>control-group error<?php } ?>">
+                            <input type="text" name="duplicate[ref]" placeholder="<?php echo $produit->ref ?>" value="<?php echo $duplicate['ref'] ?>"> <i class=""></i>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn" data-dismiss="modal" aria-hidden="true"><?php echo trad('Cancel', 'admin'); ?></a>
+                        <button type="submit" class="btn btn-primary"><?php echo trad('Duplicate', 'admin'); ?></button>
+                    </div>
+                </form>
+            </div>
 <?php
 	ActionsAdminModules::instance()->inclure_module_admin("produit_modifier_bottom");
 ?>
@@ -791,6 +851,12 @@ $(document).ready(function(){
     <?php if($errorCode > 0): ?>
         $('#product_error').modal('show');
     <?php endif; ?>
+
+    <?php if($errorDuplicate > 0): ?>
+        $('#duplicateModal').modal('show');
+    <?php endif; ?>
+
+
 });
 </script>
 </body>

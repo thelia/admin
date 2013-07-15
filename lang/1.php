@@ -713,6 +713,23 @@
                         'next' => 'suivant',
                         'previous' => 'précédent',
                         'preview' => 'visualiser',
+                        'duplicate' => 'dupliquer',
+
+                        //duplication
+                        'Duplicate' => 'Dupliquer',
+                        'Duplicate_intro' => 'Dupliquer un produit',
+                        'duplicate_ask' => 'Que voulez-vous dupliquer ?',
+                        'duplicate_desciption_g' => 'Desciption générale (titre, desciption, etc.)',
+                        'duplicate_info' => 'Informations (prix, poids, en promo, etc.)',
+                        'duplicate_features' => 'Caractéristiques',
+                        'duplicate_variants' => 'Déclinaisons',
+                        'duplicate_accessories' => 'Accessoire',
+                        'duplicate_accessories_auto' => 'Automatiquement associer le produit dupliqué au nouveau produit',
+                        'duplicate_associated_contents' => 'Contenus associés',
+                        'duplicate_pictures' => 'Images',
+                        'duplicate_documents' => 'Documents',
+                        'duplicate_new_ref' => 'Référence pour le nouveau produit',
+                        'duplicate_error_ref' => 'La référence est vide ou existe déjà',
 		);
 
 ?>

@@ -610,6 +610,7 @@
                         'next' => 'avanti',
                         'previous' => 'indietro',
                         'preview' => 'previsualizzazione',
+                        'duplicate' => 'duplicate',
 		);
 
 ?>

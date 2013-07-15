@@ -47,6 +47,22 @@ class ActionsAdminProduct extends ActionsAdminBase
                         $request->request->get('tab')
                 );
                 break;
+            case "duplicateProduct" :
+                $productAdmin = ProductAdmin::getInstanceByRef($request->request->get('ref'));
+                $duplicate = $request->request->get('duplicate');
+                $productAdmin->duplicate(
+                    isset($duplicate['ref']) ? $duplicate['ref'] : null,
+                    isset($duplicate['description']) && $duplicate['description'] == 'on',
+                    isset($duplicate['info']) && $duplicate['info'] == 'on',
+                    isset($duplicate['features']) && $duplicate['features'] == 'on',
+                    isset($duplicate['variants']) && $duplicate['variants'] == 'on',
+                    isset($duplicate['accessories']) && $duplicate['accessories'] == 'on',
+                    isset($duplicate['accessories_auto']) && $duplicate['accessories_auto'] == 'on',
+                    isset($duplicate['associated_contents']) && $duplicate['associated_contents'] == 'on',
+                    isset($duplicate['pictures']) && $duplicate['pictures'] == 'on',
+                    isset($duplicate['documents']) && $duplicate['documents'] == 'on'
+                );
+                break;
         }
     }
     

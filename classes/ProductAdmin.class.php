@@ -173,7 +173,173 @@ class ProductAdmin extends Produit {
         
         return $this->get_result($this->query($qRanking), 0, 'maxRanking');
     }
-    
+
+    public function duplicate($duplicateRef, $duplicateDescription, $duplicateInfos, $duplicateFeatures, $duplicateVariants, $duplicateAccessories, $autoAccessories, $duplicateAssociatedContents, $duplicatePictures, $duplicateDocuments)
+    {
+        $ref = self::cleanRef($duplicateRef);
+
+        if($ref == '' || self::exist_ref($ref)){
+            throw new TheliaAdminException("Ref already exists", TheliaAdminException::REF_ALREADY_EXISTS);
+        }
+
+        $duplicatedProduct = new Produit($this->ref);
+        $duplicatedProduct->id = '';
+        $duplicatedProduct->ref = $ref;
+        $duplicatedProduct->datemodif = '0000-00-00 00:00:00';
+        $duplicatedProduct->ligne = 0;
+        $duplicatedProduct->stock = 0;
+        $duplicatedProduct->classement = $this->getMaxRanking($duplicatedProduct->rubrique) + 1;
+
+        if(!$duplicateInfos) {
+
+            $duplicatedProduct->prix = 0;
+            $duplicatedProduct->ecotaxe = 0;
+            $duplicatedProduct->promo = 0;
+            $duplicatedProduct->prix2 = 0;
+            $duplicatedProduct->nouveaute = 0;
+            $duplicatedProduct->perso = 0;
+            $duplicatedProduct->garantie = 0;
+            $duplicatedProduct->poids = 0;
+            $duplicatedProduct->tva = 0;
+        }
+
+        $duplicatedProduct->id = $duplicatedProduct->add();
+
+        if($duplicateDescription) {
+            foreach($this->query_liste("SELECT * FROM " . Produitdesc::TABLE . " WHERE produit='$this->id'", 'Produitdesc') as $produitdesc) {
+                $produitdesc->id = '';
+                $produitdesc->produit = $duplicatedProduct->id;
+                $produitdesc->add();
+            }
+        } else {
+            $produitdesc = new Produitdesc();
+            $produitdesc->produit = $duplicatedProduct->id;
+            $produitdesc->add();
+        }
+
+        if($duplicateFeatures) {
+            foreach($this->query_liste("SELECT * FROM " . Caracval::TABLE . " WHERE produit='$this->id'", 'Caracval') as $caracval) {
+                $caracval->id = '';
+                $caracval->produit = $duplicatedProduct->id;
+                $caracval->add();
+            }
+        }
+
+        if($duplicateVariants) {
+            foreach($this->query_liste("SELECT * FROM " . Stock::TABLE . " WHERE produit='$this->id'", 'Stock') as $stock) {
+                $stock->id = '';
+                $stock->produit = $duplicatedProduct->id;
+                $stock->valeur = 0;
+                $stock->add();
+            }
+            foreach($this->query_liste("SELECT * FROM " . Exdecprod::TABLE . " WHERE produit='$this->id'", 'Exdecprod') as $exdecprod) {
+                $exdecprod->id = '';
+                $exdecprod->produit = $duplicatedProduct->id;
+                $exdecprod->add();
+            }
+        }
+
+        if($duplicateAccessories) {
+            foreach($this->query_liste("SELECT * FROM " . Accessoire::TABLE . " WHERE produit='$this->id'", 'Accessoire') as $accessoire) {
+                $accessoire->id = '';
+                $accessoire->produit = $duplicatedProduct->id;
+                $accessoire->add();
+            }
+        }
+
+        if($autoAccessories) {
+            $accessoire = new AccessoireAdmin();
+            $accessoire->produit = $duplicatedProduct->id;
+            $accessoire->accessoire = $this->id;
+            $accessoire->classement = $accessoire->getMaxRanking($duplicatedProduct->id);
+            $accessoire->add();
+
+            $accessoire = new AccessoireAdmin();
+            $accessoire->produit = $this->id;
+            $accessoire->accessoire = $duplicatedProduct->id;
+            $accessoire->classement = $accessoire->getMaxRanking($this->id);
+            $accessoire->add();
+        }
+
+        if($duplicateAssociatedContents) {
+            foreach($this->query_liste("SELECT * FROM " . Contenuassoc::TABLE . " WHERE type=1 AND objet='$this->id'", 'Contenuassoc') as $contenuassoc) {
+                $contenuassoc->id = '';
+                $contenuassoc->objet = $duplicatedProduct->id;
+                $contenuassoc->add();
+            }
+        }
+
+        if($duplicatePictures) {
+            foreach($this->query_liste("SELECT * FROM " . Image::TABLE . " WHERE produit='$this->id'", 'ImageAdmin') as $image) {
+
+                $imagePath = sprintf(__DIR__ . "/../../client/gfx/photos/produit/%s", $image->fichier);
+
+                if(file_exists($imagePath)) {
+                    $increment = 0;
+                    do {
+                        $increment++;
+                        $duplicatedName = 'D' . $increment . '_' . $image->fichier;
+                        $exists = file_exists($duplicatedName);
+                    } while($exists);
+
+                    $duplicatedImagePath = sprintf(__DIR__ . "/../../client/gfx/photos/produit/%s", $duplicatedName);
+
+                    copy($imagePath, $duplicatedImagePath);
+
+                    $image->fichier = $duplicatedName;
+
+                    $originalId = $image->id;
+                    $image->id = '';
+                    $image->produit = $duplicatedProduct->id;
+                    $image->classement = $image->getMaxRanking('produit', $duplicatedProduct->id);
+                    $image->id = $image->add();
+
+                    foreach($this->query_liste("SELECT * FROM " . Imagedesc::TABLE . " WHERE image='$originalId'", 'Imagedesc') as $imagedesc) {
+                        $imagedesc->id = '';
+                        $imagedesc->image = $image->id;
+                        $imagedesc->add();
+                    }
+                }
+            }
+        }
+
+        if($duplicateDocuments) {
+            foreach($this->query_liste("SELECT * FROM " . Document::TABLE . " WHERE produit='$this->id'", 'DocumentAdmin') as $document) {
+
+                $documentPath = sprintf(__DIR__ . "/../../client/document/%s", $document->fichier);
+
+                if(file_exists($documentPath)) {
+                    $increment = 0;
+                    do {
+                        $increment++;
+                        $duplicatedName = 'D' . $increment . '_' . $document->fichier;
+                        $exists = file_exists($duplicatedName);
+                    } while($exists);
+
+                    $duplicatedDocumentPath = sprintf(__DIR__ . "/../../client/gfx/photos/produit/%s", $duplicatedName);
+
+                    copy($documentPath, $duplicatedDocumentPath);
+
+                    $document->fichier = $duplicatedName;
+
+                    $originalId = $document->id;
+                    $document->id = '';
+                    $document->produit = $duplicatedProduct->id;
+                    $document->classement = $document->getMaxRanking('produit', $duplicatedProduct->id);
+                    $document->id = $document->add();
+
+                    foreach($this->query_liste("SELECT * FROM " . Documentdesc::TABLE . " WHERE document='$originalId'", 'Documentdesc') as $documentdesc) {
+                        $documentdesc->id = '';
+                        $documentdesc->document = $document->id;
+                        $documentdesc->add();
+                    }
+                }
+            }
+        }
+
+        redirige('produit_modifier.php?ref='.$duplicatedProduct->ref.'&rubrique='.$duplicatedProduct->rubrique);
+    }
+
     public function modify($lang, $price, $price2, $ecotaxe, $promo, $category, $new, $perso, $weight, $stock, $tva, $online, $title, $chapo, $description, $postscriptum, $urlsuiv, $rewriteurl, $caracteristique, $declinaison, $images, $documents, $tab)
     {
         if($this->id == '')

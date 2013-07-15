@@ -663,5 +663,6 @@
                         'next' => 'siguiente',
                         'previous' => 'preceder',
                         'preview' => 'visualizar',
+                        'duplicate' => 'duplicate',
 		);
 ?>
