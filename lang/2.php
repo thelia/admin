@@ -680,5 +680,21 @@
                         'previous' => 'previous',
                         'preview' => 'preview',
                         'duplicate' => 'duplicate',
+
+                        //duplication
+                        'Duplicate' => 'Duplicate',
+                        'Duplicate_intro' => 'Duplicate a product',
+                        'duplicate_ask' => 'What do you want to duplicate ?',
+                        'duplicate_desciption_g' => 'General description (title, description, etc.)',
+                        'duplicate_info' => 'Information (price, weight, in promo, etc.)',
+                        'duplicate_features' => 'Features',
+                        'duplicate_variants' => 'Variants',
+                        'duplicate_accessories' => 'Accessories',
+                        'duplicate_accessories_auto' => 'Automatically associate the duplicated product with the new product',
+                        'duplicate_associated_contents' => 'Associated contents',
+                        'duplicate_pictures' => 'Pictures',
+                        'duplicate_documents' => 'Documents',
+                        'duplicate_new_ref' => 'New product reference',
+                        'duplicate_error_ref' => 'reference is empty or already exists.',
 		);
 ?>

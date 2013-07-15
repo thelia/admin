@@ -719,7 +719,7 @@
                         'Duplicate' => 'Dupliquer',
                         'Duplicate_intro' => 'Dupliquer un produit',
                         'duplicate_ask' => 'Que voulez-vous dupliquer ?',
-                        'duplicate_desciption_g' => 'Desciption générale (titre, desciption, etc.)',
+                        'duplicate_desciption_g' => 'Desciption générale (titre, description, etc.)',
                         'duplicate_info' => 'Informations (prix, poids, en promo, etc.)',
                         'duplicate_features' => 'Caractéristiques',
                         'duplicate_variants' => 'Déclinaisons',
