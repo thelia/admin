@@ -25,6 +25,8 @@ try {
 
 $dossier = new Dossier($request->query->get("id"));
 $dossierdesc = new Dossierdesc($dossier->id, $lang);
+$dossierdesc->chapo = str_replace('<br />', "\n", $dossierdesc->chapo);
+$dossierdesc->postscriptum = str_replace('<br />', "\n", $dossierdesc->postscriptum);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
