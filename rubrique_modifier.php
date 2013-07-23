@@ -25,6 +25,8 @@ try {
 
 $rubrique = new Rubrique($request->query->get("id"));
 $rubriquedesc = new Rubriquedesc($rubrique->id, $lang);
+$rubriquedesc->chapo = str_replace('<br />', "\n", $rubriquedesc->chapo);
+$rubriquedesc->postscriptum = str_replace('<br />', "\n", $rubriquedesc->postscriptum);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
