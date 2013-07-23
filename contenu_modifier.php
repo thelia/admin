@@ -26,6 +26,8 @@ try {
 
 $contenu = new Contenu($request->query->get("id"));
 $contenudesc = new Contenudesc($contenu->id, $lang);
+$contenudesc->chapo = str_replace('<br />', "\n", $contenudesc->chapo);
+$contenudesc->postscriptum = str_replace('<br />', "\n", $contenudesc->postscriptum);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
