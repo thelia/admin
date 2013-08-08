@@ -439,9 +439,13 @@ if($next!==false || $previous!==false)
                         </table>
                         </div>
                     </div>
+                    <?php
+                        ActionsAdminModules::instance()->inclure_module_admin("commandedetails_aside");
+                    ?>
                 </div>
             </div>
         </div>
+        
         <div class="row-fluid">
             <div class="span12">
                 <?php
