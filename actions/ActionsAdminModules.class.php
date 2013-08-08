@@ -81,11 +81,11 @@ class ActionsAdminModules extends ActionsModules {
 		try {
 			$this->lire_descripteur_xml($modules);
 
-			if ($modules->xml->nom != "") return $modules->xml->nom;
+			return ($modules->xml->descriptif->titre != "") ? $modules->xml->descriptif->titre : $modules->xml->nom ;
+                
+                } catch (Exception $e) {}
 
-		} catch (Exception $e) {}
-
-		return $modules->nom;
+		return $modules->xml->descriptif->titre;
 	}
 
 	/**
