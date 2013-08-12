@@ -29,7 +29,7 @@ function afficher_liste_plugins($type, $label) {
             <tr class="<?php if ($plugin->actif != 1) echo "warning"; else echo "success" ?>">
                 <td class="span9">
                     <strong><?php echo ActionsAdminModules::instance()->lire_titre_module($plugin); ?><?php echo $plugin->xml->version != '' ? " v".$plugin->xml->version : ''?></strong>
-                    <p><small><?php echo ($plugin->xml->description != "")?$plugin->xml->description:trad('Description non disponible', 'admin') ?></small></p>
+                    <p><small><?php echo ($plugin->xml->descriptif->description != "")?$plugin->xml->descriptif->description:trad('Description non disponible', 'admin') ?></small></p>
                 </td>
                 <td>
                     <?php if ($plugin->activable && $plugin->type != Modules::FILTRE) { ?>
