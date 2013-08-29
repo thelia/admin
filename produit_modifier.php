@@ -329,7 +329,7 @@ require_once("entete.php");
                                         foreach ($produit->query_liste($query) as $row) {
 
                                             $declinaisondesc->charger($row->declinaison);
-                                            $query2 = "select * from " . Declidisp::TABLE . " where declinaison=" . $row->declinaison;
+                                            $query2 = "select d.* from " . Declidisp::TABLE . " d left join ". Declidispdesc::TABLE . " dd on dd.declidisp=d.id where dd.lang=" . $lang . " and declinaison=" . $row->declinaison . " order by dd.classement";
                                             $resul2 = $produit->query($query2);
                                             ?>
                                             <table class="table table-striped">
