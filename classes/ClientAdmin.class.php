@@ -297,6 +297,8 @@ class ClientAdmin extends Client
         $corps = str_replace("__TELEPHONE__",$client->telfixe,$corps);
         $corps = str_replace("__CIVILITE__",$raisondesc->court,$corps);
         $corps = str_replace("__PAYS__",$paysdesc->titre,$corps);
+        
+        return $corps;
     }
     
     public function redirect()
