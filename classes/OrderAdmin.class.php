@@ -228,7 +228,7 @@ class OrderAdmin extends Commande
                 $order->remise = $total;
             
             $order->port = $fraisport;
-            
+            $order->total = $total;
             $order->maj();
             
             ActionsModules::instance()->appel_module("aprescommandeadmin", $order);
@@ -236,9 +236,12 @@ class OrderAdmin extends Commande
             if($callMail)
                 ActionsModules::instance()->instancier($module_paiement->nom)->mail($order);
 
-            if($callPayment)
+            if($callPayment){
+        	$_SESSION['navig']->commande = $order;
+	        $_SESSION['navig']->client = $client;
+    		$_SESSION['navig']->connect = 1;
                 ActionsModules::instance()->instancier($module_paiement->nom)->paiement($order);
-            else
+            }else
                 self::getInstance($order->id)->redirect();
         }
         else
