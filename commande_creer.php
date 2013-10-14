@@ -820,7 +820,7 @@ if($createError && $client_selected) {
                                         $('#productToAdd_titre').val(v.titre);
                                         $('#productToAdd_quantite').val(1);
                                         
-                                        manageStock(v.stock, v.promo?v.prix2:v.prix);
+                                        manageStock(v.stock, v.promo==1?v.prix2:v.prix);
                                         
                                         $('#productToAdd_tva').val(v.tva);
 
@@ -1174,7 +1174,7 @@ function loadFastBrowser(root)
                             $('#productToAdd_titre').val(v.titre);
                             $('#productToAdd_quantite').val(1);
                             
-                            manageStock(v.variants, v.promo?v.prix2:v.prix);
+                            manageStock(v.variants, v.promo==1?v.prix2:v.prix);
                             
                             $('#productToAdd_tva').val(v.tva);
                             
