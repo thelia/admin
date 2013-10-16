@@ -72,21 +72,21 @@ class ActionsAdminModules extends ActionsModules {
         }
 
 	/**
-	 * @method string Retourne le titre du module, en fonction du contenu du fichier XML
-	 * @param Modules le module concerné
-	 * @return string le titre du module
-	 */
-	public function lire_titre_module($modules) {
+         * @method string Retourne le titre du module, en fonction du contenu du fichier XML
+         * @param Modules le module concerné
+         * @return string le titre du module
+         */
+        public function lire_titre_module($modules) {
 
-		try {
-			$this->lire_descripteur_xml($modules);
+                try {
+                        $this->lire_descripteur_xml($modules);
 
-			return ($modules->xml->descriptif->titre != "") ? $modules->xml->descriptif->titre : $modules->xml->nom ;
-                
+                        if ($modules->xml->nom != "") return $modules->xml->nom;
+
                 } catch (Exception $e) {}
 
-		return $modules->xml->descriptif->titre;
-	}
+                return $modules->nom;
+        }
 
 	/**
 	 * @method bool determiner si le fichier xxx_adminyyy existe sur un module
