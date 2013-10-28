@@ -107,7 +107,12 @@ class PromoAdmin extends Promo
         
         if($this->type!=="" && $this->valeur!=="" && $this->mini!=="" && $this->limite !=="" && $this->datefin!=="" && $this->actif!=="")
         {
-            $this->datefin = date('Y-m-d', strtotime($this->datefin));
+        	$this->datefin = strtotime($this->datefin);
+        	if($this->datefin !== false){
+	        	$this->datefin = date('Y-m-d', $this->datefin);
+        	}else{
+	        	$this->datefin = '0000-00-00';
+        	}
             parent::maj();
             
             ActionsModules::instance()->appel_module("majpromo", new Promo($this->code));
