@@ -1,3 +1,4 @@
+</div>
 </div><!-- fin div id=wrapper -->
 <hr>
 <?php
