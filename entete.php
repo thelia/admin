@@ -35,25 +35,6 @@ $statAdmin = new StatAdmin();
 	<div class="brandbar">
             <div class="container">
 		<a class="brand" href="accueil.php"><img src="img/logo-thelia-34px.png" alt="THELIA solution e-commerce"/></a>
-                <?php if(isset($breadcrumbs) && is_array($breadcrumbs)): ?>
-                <ul class="breadcrumb">
-                    <?php foreach($breadcrumbs as $breadcrumb): ?>
-                        <?php if($breadcrumb["url"] == ""): ?>
-                            <li class="active">
-                                <?php echo $breadcrumb["display"]; ?>
-                                <?php if($breadcrumb["edit"] != ""): ?>
-                                    (<a href="<?php echo $breadcrumb["edit"]; ?>"><?php echo trad('editer', 'admin'); ?></a>)
-                                <?php endif; ?>
-                                    <?php if($breadcrumb["browse"] != ""): ?>
-                                    (<a href="<?php echo $breadcrumb["browse"]; ?>"><?php echo trad('parcourir', 'admin'); ?></a>)
-                                <?php endif; ?>
-                            </li>
-                        <?php else: ?>
-                            <li><a href="<?php echo $breadcrumb["url"] ?>"><?php echo $breadcrumb["display"]; ?></a><span class="divider">/</span></li>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </ul>
-                <?php endif; ?>
 		<dl class="Blocmoncompte">
                     <dt><?php echo($_SESSION["util"]->prenom); ?> <?php echo($_SESSION["util"]->nom); ?></dt>
                     <dt class="deconnexion"><a href="index.php?action=deconnexion" ><?php echo trad('Deconnexion', 'admin'); ?></a></dt>
@@ -124,11 +105,38 @@ $statAdmin = new StatAdmin();
         "dossier_modifier"
     )
     ?>
-        <div id="wrapper" class="container <?php if(preg_match("`([^\/]*).php`", $_SERVER['PHP_SELF'], $page) && in_array($page[1], $cataloguePage)) echo "catalogue"; ?>"> <!--div id="subwrapper"> -->
-<div class="row-fluid">
-    <div class="span12">
-<?php    
-    ActionsAdminModules::instance()->inclure_module_admin("entete_bottom");
-?>  
+    <br/>
+    <div class="container">
+        <?php if(isset($breadcrumbs) && is_array($breadcrumbs)): ?>
+            <ul class="breadcrumb">
+                <?php foreach($breadcrumbs as $breadcrumb): ?>
+                    <?php if($breadcrumb["url"] == ""): ?>
+                        <li class="active">
+                            <?php echo $breadcrumb["display"]; ?>
+                            <?php if($breadcrumb["edit"] != ""): ?>
+                                (<a href="<?php echo $breadcrumb["edit"]; ?>"><?php echo trad('editer', 'admin'); ?></a>)
+                            <?php endif; ?>
+                            <?php if($breadcrumb["browse"] != ""): ?>
+                                (<a href="<?php echo $breadcrumb["browse"]; ?>"><?php echo trad('parcourir', 'admin'); ?></a>)
+                            <?php endif; ?>
+                        </li>
+                    <?php else: ?>
+                        <li><a href="<?php echo $breadcrumb["url"] ?>"><?php echo $breadcrumb["display"]; ?></a><span class="divider">/</span></li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
     </div>
-</div>
+
+    <div id="wrapper" class="container"> <!--div id="subwrapper"> -->
+        <div class="<?php if(preg_match("`([^\/]*).php`", $_SERVER['PHP_SELF'], $page) && in_array($page[1], $cataloguePage)) echo "catalogue"; ?>">
+
+        <?php if(ActionsAdminModules::instance()->inclure_module_admin("entete_bottom")){ ?>
+            <div class="row-fluid">
+                <div class="span12">
+                    <?php
+                    ActionsAdminModules::instance()->inclure_module_admin("entete_bottom");
+                    ?>
+                </div>
+            </div>
+        <?php } ?>
