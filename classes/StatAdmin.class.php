@@ -119,15 +119,20 @@ class StatAdmin extends Baseobj {
         return $nbCommande ? ($ca/$nbCommande):0;
     }
     
-    public function getDetailTurnover($nbDays = 30){
-        $date = date('Y-m-d', strtotime('-'.$nbDays.' day'));
+    public function getDetailTurnover($nbDays = 30)
+    {
+        $date = new DateTime();
+        $date->setTime(0, 0, 0);
+        $date->modify("-$nbDays day");
+
         $return = array();
-        for($i = $nbDays; $i > 0; $i--)
+        for($i = 0; $i < $nbDays; $i++)
         {
-            $date = date("Y-m-d", strtotime($date)+86400);
+            $date->modify("+1 day");
+
             $return[] = array(
-                "date" => $date,
-                "ca" => formatter_somme($this->getTurnoverByDate($date) + $this->getChippingPrice(null, $date) - $this->getDiscount(null, $date))
+                "date" => $date->format('Y-m-d'),
+                "ca" => formatter_somme($this->getTurnoverByDate($date->format('Y-m-d')) + $this->getChippingPrice(null, $date->format('Y-m-d')) - $this->getDiscount(null, $date->format('Y-m-d')))
             );
         }
         
