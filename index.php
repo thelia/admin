@@ -65,39 +65,40 @@
 		<?php require_once("title.php");?>
   </head>
   <body>
-<?php
-	ActionsAdminModules::instance()->inclure_module_admin("index_top");
-?>
-      <div class="loginpage">
-        <div class="brandbar container">
-          <a class="brand" href="index.php"><img src="img/logo-thelia-34px.png" /></a>
-        </div>
-
-
-    <div id="wrapper" class="container">
-<?php
-	ActionsAdminModules::instance()->inclure_module_admin("index");
-?>
-      <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>Administration Thelia</h1>
-				<form action="accueil.php" method="post" class="well form-inline">
-					<input type="text" class="input" placeholder="Nom d'utilisateur" name="identifiant" />
-					<input type="password" class="input" placeholder="Mot de passe" name="motdepasse" />
-					<input name="action" type="hidden" value="identifier" />
-					<button type="submit" class="btn btn-primary">Connexion &raquo;</button>
-				</form>
+  <?php
+  ActionsAdminModules::instance()->inclure_module_admin("index_top");
+  ?>
+  <div class="loginpage">
+      <div class="brandbar">
+          <div class="container">
+              <a class="brand" href="accueil.php">
+                  v. <?php echo rtrim(preg_replace("/(.)/", "$1.", Variable::lire('version')), "."); ?>
+              </a>
+          </div>
       </div>
+      <div id="wrapper" class="container">
+          <?php
+          ActionsAdminModules::instance()->inclure_module_admin("index");
+          ?>
+          <!-- Main hero unit for a primary marketing message or call to action -->
+          <div class="hero-unit">
+              <h1>Administration Thelia</h1>
+              <form action="accueil.php" method="post" class="well form-inline">
+                  <input type="text" class="input" placeholder="Nom d'utilisateur" name="identifiant" />
+                  <input type="password" class="input" placeholder="Mot de passe" name="motdepasse" />
+                  <input name="action" type="hidden" value="identifier" />
+                  <button type="submit" class="btn btn-primary">Connexion &raquo;</button>
+              </form>
+          </div>
 
-      <!-- Example row of columns -->
-      <div class="row-fluid">  
-        <?php afficher_feed("http://thelia.net/Flux-rss.html?id_rubrique=8", "picto-formation.gif"); ?>
+          <!-- Example row of columns -->
+          <div class="row-fluid">
+              <?php afficher_feed("http://thelia.net/Flux-rss.html?id_rubrique=8", "picto-formation.gif"); ?>
+          </div>
       </div>
-    </div>
-<?php
-	ActionsAdminModules::instance()->inclure_module_admin("index_bottom");
-?>
-<?php require_once("pied.php");?>
-      </div>
+      <?php
+      ActionsAdminModules::instance()->inclure_module_admin("index_bottom");
+      ?>
+      <?php require_once("pied.php");?>
   </body>
 </html>
