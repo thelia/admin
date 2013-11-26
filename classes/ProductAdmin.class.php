@@ -485,7 +485,13 @@ class ProductAdmin extends Produit {
             $param_old = Produitdesc::calculer_clef_url_reecrite($this->id, $this->rubrique);
             $param_new = Produitdesc::calculer_clef_url_reecrite($this->id, $category);
             
-            $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
+            //$query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
+            /* @author etienne
+             * We need to edit params for all rewriting rules since :
+             *  - inactive rules are redirected to new url based on these params
+             *  - params are the same no matter the lang
+             */
+            $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old'";
 
             $resul_reec = $this->query($query_reec);
 
