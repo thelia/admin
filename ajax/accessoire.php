@@ -25,7 +25,7 @@
 		$produit = new Produit();
 		$produit->charger($_GET['ref']);
 
-		$query = "select * from $produit->table where rubrique=\""  . $_GET['id_rubrique'] . "\"";
+        $query = "select * from $produit->table p LEFT JOIN " . Produitdesc::TABLE . " pd ON p.id=pd.produit AND pd.lang='" . $_SESSION['util']->lang . "' where p.rubrique=\""  . $_GET['id_rubrique'] . "\" ORDER BY pd.titre";
 		$resul = $produit->query($query);
 
 		while($resul && $row = $produit->fetch_object($resul)){
