@@ -203,7 +203,14 @@ class ContentAdmin extends Contenu {
             $param_old = Contenudesc::calculer_clef_url_reecrite($this->id, $this->oldFolder);
             $param_new = Contenudesc::calculer_clef_url_reecrite($this->id, $folder);
 
-            $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
+            //$query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old' and lang=$lang and actif=1";
+            /* @author etienne
+             * We need to edit params for all rewriting rules since :
+             *  - inactive rules are redirected to new url based on these params
+             *  - params are the same no matter the lang
+             */
+            $query_reec = "select * from ".Reecriture::TABLE." where param='&$param_old'";
+
             $resul_reec = $this->query($query_reec);
             while($resul_reec && $row_reec = $this->fetch_object($resul_reec)) {
 
