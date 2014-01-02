@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . "/../auth.php");
 
-if(! est_autorise("acces_commande")) exit;
+if(! est_autorise("acces_commandes")) exit;
 
 header('Content-Type: text/html; charset=utf-8');
 
