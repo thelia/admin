@@ -29,6 +29,7 @@ if($statutch)
 
 if (isset($colis) && $colis != "") {
         $commande->colis = $colis;
+        $commande->statut = 4;
         $commande->maj();
         ActionsModules::instance()->appel_module("statut", $commande, $commande->statut);
 }
@@ -409,6 +410,11 @@ if($next!==false || $previous!==false)
                                             <input type="hidden" name="ref" value="<?php echo $commande->ref; ?>">
                                             <select name="statutch" id="statutch" class="input-medium">
                                             <?php foreach($statusArray as $statusDesc): ?>
+                                            if(($commande->statut == 1 || $commande->statut == 2) && $statusDesc->statut > 2 && $statusDesc->statut != 5 )continue;
+                                            
+                                            if($commande->statut == 5 && !($statusDesc->statut == 1 || $statusDesc->statut == 5 ))continue;
+                                            if($statusDesc->statut == 3 )continue;
+                                             ?>
                                                 <option value="<?php echo $statusDesc->statut; ?>" <?php if($statusDesc->statut == $commande->statut) echo 'selected="selected"'; ?>><?php echo $statusDesc->titre; ?></option>
                                             <?php endforeach; ?>
                                             </select>
