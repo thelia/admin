@@ -29,6 +29,7 @@ if($statutch)
 
 if (isset($colis) && $colis != "") {
         $commande->colis = $colis;
+        $commande->statut = 4;
         $commande->maj();
         ActionsModules::instance()->appel_module("statut", $commande, $commande->statut);
 }
@@ -415,6 +416,7 @@ if($next!==false || $previous!==false)
                                         </form>
                                     </td>
                                 </tr>
+                                <?php  if($commande->statut >= 2 && $commande->statut != 5){ ?>
                                 <tr>
                                     <td><strong><?php echo trad('SUIVI_COLIS', 'admin'); ?></strong></td>
                                     <td>
@@ -427,6 +429,7 @@ if($next!==false || $previous!==false)
                                         </form>
                                     </td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td><strong><?php echo trad('Facture', 'admin'); ?></strong></td>
                                     <td><a href="../client/pdf/facture.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
