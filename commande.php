@@ -44,11 +44,23 @@
     else if($classement == "statut") {
             $critere = "statut";
             $order = "asc";
+    }else if($classement == "paiement") {
+            $critere = "paiement";
+            $order = "asc";
     }
     else {
             $critere = "date";
             $order = "desc";
     }
+    if(isset($_GET['order']))
+    	$order = $_GET['order'];
+    else{
+    	$_GET['order'] = $order = "desc";
+    }
+    if($order == "desc")
+	    $orderdifferent = "asc";
+   	else
+   		$orderdifferent = "desc";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -82,11 +94,12 @@ require_once("entete.php");
                 <thead>
                     <tr>
                         <th><?php echo trad('Num_commande', 'admin'); ?></th>
-                        <th><?php echo trad('Date_Heure', 'admin'); ?></th>
+                        <th><a href="commande.php?statut=<?php echo $_GET['statut']; ?>" title=""><?php echo trad('Date_Heure', 'admin'); ?></a></th>
                         <th><?php echo trad('Societe', 'admin'); ?></th>
-                        <th><?php echo trad('Nom', 'admin'); ?></th>
+                        <th><a href="commande.php?statut=<?php echo $_GET['statut']; ?>&amp;classement=client&amp;order=<?php echo $orderdifferent; ?>" title=""><?php echo trad('Nom', 'admin'); ?></a></th>
                         <th><?php echo trad('Montant', 'admin'); ?></th>
-                        <th><?php echo trad('Statut', 'admin'); ?></th>
+                        <th><a href="commande.php?statut=<?php echo $_GET['statut']; ?>&amp;classement=paiement&amp;order=<?php echo $orderdifferent; ?>" title=""><?php echo trad('Paiement', 'admin'); ?></a></th>
+                        <th><a href="commande.php?statut=<?php echo $_GET['statut']; ?>&amp;classement=statut&amp;order=<?php echo $orderdifferent; ?>" title=""><?php echo trad('Statut', 'admin'); ?></a></th>
                         <th><?php echo trad('Annuler', 'admin'); ?></th>
                     </tr>
                 </thead>
@@ -98,6 +111,7 @@ require_once("entete.php");
                         <td><?php echo $commande['client']['entreprise']; ?></td>
                         <td><a href="client_visualiser.php?ref=<?php echo $commande['client']['ref'] ?>"><?php echo $commande['client']['nom'].' '.$commande['client']['prenom']; ?></a></td>
                         <td><?php echo $commande['total']; ?></td>
+                        <td><?php echo $commande['paiement']; ?></td>
                         <td><?php echo $commande['titre']; ?></td>
                         <td>
                             <div class="btn-group">
@@ -125,13 +139,13 @@ require_once("entete.php");
                         </li>
                     <?php else: ?>
                         <li>
-                            <a href="commande.php?page=<?php echo $pagination->getPreviousPage(); ?>&statut=<?php echo $statut; ?>">Prev</a>
+                            <a href="commande.php?page=<?php echo $pagination->getPreviousPage(); ?>&statut=<?php echo $statut; ?>&classement=<?php echo $_REQUEST['classement'];?>&order=<?php echo $_REQUEST['order'];?>">Prev</a>
                         </li>   
                     <?php endif; ?>
                         
                     <?php if($pagination->getTotalPages() > $pagination->getMaxPagesDisplayed() && $pagination->getCurrentPage() > 1): ?>
                         <li>
-                            <a href="commande.php?page=1&statut=<?php echo $statut; ?>">...</a>
+                            <a href="commande.php?page=1&statut=<?php echo $statut; ?>&classement=<?php echo $_REQUEST['classement'];?>&order=<?php echo $_REQUEST['order'];?>">...</a>
                         </li>
                     <?php endif; ?>
                     
@@ -139,14 +153,14 @@ require_once("entete.php");
                         <?php if($pagination->getCurrentPage() == $i): ?>
                             <li class="active"><a><?php echo $i; ?></a></li>
                         <?php else: ?>
-                            <li><a href="commande.php?page=<?php echo $i; ?>&statut=<?php echo $statut; ?>"><?php echo $i; ?></a></li>
+                            <li><a href="commande.php?page=<?php echo $i; ?>&statut=<?php echo $statut; ?>&classement=<?php echo $_REQUEST['classement'];?>&order=<?php echo $_REQUEST['order'];?>"><?php echo $i; ?></a></li>
                         <?php endif; ?>
                     
                     <?php endfor; ?>
                         
                     <?php if($pagination->getTotalPages() > $pagination->getMaxPagesDisplayed() && $pagination->getCurrentPage() < $pagination->getTotalPages()): ?>
                         <li>
-                            <a href="commande.php?page=<?php echo $pagination->getTotalPages(); ?>&statut=<?php echo $statut; ?>">...</a>
+                            <a href="commande.php?page=<?php echo $pagination->getTotalPages(); ?>&statut=<?php echo $statut; ?>&classement=<?php echo $_REQUEST['classement'];?>&order=<?php echo $_REQUEST['order'];?>">...</a>
                         </li>
                     <?php endif; ?>
                         
@@ -156,7 +170,7 @@ require_once("entete.php");
                         </li>
                     <?php else: ?>
                         <li>
-                            <a href="commande.php?page=<?php echo $pagination->getNextPage(); ?>&statut=<?php echo $statut; ?>">Next</a>
+                            <a href="commande.php?page=<?php echo $pagination->getNextPage(); ?>&statut=<?php echo $statut; ?>&classement=<?php echo $_REQUEST['classement'];?>&order=<?php echo $_REQUEST['order'];?>">Next</a>
                         </li>
                     <?php endif; ?>
                 </ul>
