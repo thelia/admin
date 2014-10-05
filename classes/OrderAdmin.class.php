@@ -309,6 +309,15 @@ class OrderAdmin extends Commande
             $thisOrderArray['statut'] = $theOrder->statut;
             $thisOrderArray['id'] = $theOrder->id;
             
+            $modules = new Modules();
+	    $modules->charger_id($theOrder->paiement);
+	    try {
+		$tmpobj = ActionsAdminModules::instance()->instancier($modules->nom);
+		$thisOrderArray['paiement'] = $tmpobj->getTitre();
+	    } catch (Exception $ex) {
+		$thisOrderArray['paiement'] = trad('Inconnu', 'admin');
+	    }
+            
             $return[] = $thisOrderArray;
 
 	}
