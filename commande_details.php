@@ -429,7 +429,11 @@ if($next!==false || $previous!==false)
                                 </tr>
                                 <tr>
                                     <td><strong><?php echo trad('Facture', 'admin'); ?></strong></td>
-                                    <td><a href="../client/pdf/facture.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a></td>
+                                    <td>
+                                    <?php if($commande->facture){ ?>
+                                    <a href="../client/pdf/facture.php?ref=<?php echo($commande->ref); ?>" target="_blank"><?php echo trad('Visualiser_format_PDF', 'admin'); ?></a>
+                                    <?php }else{ echo trad('En attente de paiement', 'admin'); } ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong><?php echo trad('Bon_livraison', 'admin'); ?></strong></td>
